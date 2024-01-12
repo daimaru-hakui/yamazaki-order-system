@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.18",
     "@prisma/client": "^5.8.0",
     "firebase": "^10.7.1",
     "firebase-admin": "^12.0.0",
