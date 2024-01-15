@@ -1,10 +1,9 @@
-import OfficeList from "@/components/orders/office-list";
+import OrderNewArea from "@/components/orders/order-new-area";
 
 export default function OrderNewPage() {
-
   return (
     <div className="mx-auto max-w-[calc(700px)]">
-      <OfficeList />
+      <OrderNewArea />
     </div>
   );
 }

@@ -19,7 +19,7 @@ export default function Navbar() {
           {session.data?.user && (
             <>
               {navbarLinks.map(({ name, path }) => (
-                <Link href={path} key={name}>
+                <Link href={path} key={name} className="text-sm">
                   <button>{name}</button>
                 </Link>
               ))}

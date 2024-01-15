@@ -12,10 +12,11 @@ datasource db {
 }
 
 model User {
-  id String @id @unique
-  email String @unique
+  id       String   @id @unique
+  email    String   @unique
   username String?
-  role UserRole @default(USER)
+  role     UserRole @default(USER)
+
   @@map("users")
 }
 
@@ -23,4 +24,83 @@ enum UserRole {
   USER
   ADMIN
   MEMBER
+}
+
+model Size {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String?
+  skus        Sku[]
+}
+
+model Color {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String?
+  skus        Sku[]
+
+  @@map("colors")
+}
+
+model Category {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  products    Product[]
+
+  @@map("categories")
+}
+
+model Sku {
+  id       Int       @id @default(autoincrement())
+  size     Size      @relation(fields: [sizeId], references: [id])
+  sizeId   Int       @map("size_id")
+  color    Color     @relation(fields: [colorId], references: [id])
+  colorId  Int       @map("color_id")
+  price    Int       @default(0)
+  products Product[]
+
+  @@map("skus")
+}
+
+model Product {
+  id              Int               @id @default(autoincrement())
+  name            String
+  description     String?
+  sku             Sku               @relation(fields: [skuId], references: [id])
+  skuId           Int               @map("sku_id")
+  category        Category          @relation(fields: [categoryId], references: [id])
+  categoryId      Int               @map("cateogry_id")
+  customerProduct CustomerProduct[]
+
+  @@map("products")
+}
+
+model Customer {
+  id              Int               @id @default(autoincrement())
+  name            String
+  address         String?
+  tel             String?
+  orders          Order[]
+  customerProduct CustomerProduct[]
+
+  @@map("customers")
+}
+
+model CustomerProduct {
+  id         Int      @id @default(autoincrement())
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId Int      @map("customer_id")
+  product    Product  @relation(fields: [productId], references: [id])
+  productId  Int      @map("product_id")
+
+  @@map("customer_product")
+}
+
+model Order {
+  id         Int      @id @default(autoincrement())
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId Int      @map("customer_id")
+
+  @@map("orders")
 }

@@ -1,4 +1,4 @@
-import OfficeList from "@/components/orders/office-list";
+import OfficeList from "@/components/orders/customer-list";
 
 export default function OrdersPage() {
 
