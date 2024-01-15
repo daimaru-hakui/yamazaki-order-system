@@ -1,7 +1,9 @@
 import { withAuth } from "next-auth/middleware";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
-export default withAuth(function middleware(req: NextRequest) {}, {
+export default withAuth(function middleware(req: NextRequest) {
+  console.log(req)
+}, {
   callbacks: {
     authorized: ({ req, token }) => {
       if (req.nextUrl.pathname.startsWith("/") && token === null) {
@@ -16,5 +18,5 @@ export default withAuth(function middleware(req: NextRequest) {}, {
 });
 
 export const config = {
-  matcher: ["/", "/dashboard/:path*", "/((?!.*signup).*)/"],
+  matcher: ['/((?!.*login).*)/'],
 };
