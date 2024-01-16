@@ -1,6 +1,7 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { auth } from "@/firebase/server";
+import { db } from "@/db";
 
 export const options: NextAuthOptions = {
   providers: [
@@ -34,6 +35,19 @@ export const options: NextAuthOptions = {
       return { ...token, ...user };
     },
     async session({ session, token }) {
+      const data = await db.user.findFirst({
+        where: { id: token.uid },
+      });
+
+      if (!data) {
+        await db.user.create({
+          data: {
+            id: token.uid,
+            email: token.email || "",
+          },
+        });
+      }
+
       session.user.emailVerified = token.emailVerified;
       session.user.uid = token.uid;
       return session;

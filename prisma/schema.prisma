@@ -31,6 +31,8 @@ model Size {
   name        String
   description String?
   skus        Sku[]
+
+  @@map("sizes")
 }
 
 model Color {
@@ -58,17 +60,18 @@ model Sku {
   color    Color     @relation(fields: [colorId], references: [id])
   colorId  Int       @map("color_id")
   price    Int       @default(0)
-  products Product[]
+  // products Product[]
 
   @@map("skus")
 }
 
 model Product {
   id              Int               @id @default(autoincrement())
+  number          String
   name            String
   description     String?
-  sku             Sku               @relation(fields: [skuId], references: [id])
-  skuId           Int               @map("sku_id")
+  // sku             Sku               @relation(fields: [skuId], references: [id])
+  // skuId           Int               @map("sku_id")
   category        Category          @relation(fields: [categoryId], references: [id])
   categoryId      Int               @map("cateogry_id")
   customerProduct CustomerProduct[]

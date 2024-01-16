@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <SessionProvider>
       <html lang="en">
-        <body className={`${inter.className} relative`}>
+        <body className={`${inter.className} relative bg-gray-50`}>
           <Navbar />
           <div>{children}</div>
         </body>
