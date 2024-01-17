@@ -3,16 +3,15 @@ import { db } from "@/db";
 export default async function ProductMastersPage() {
   const products = await db.product.findMany({
     include: {
-      category: {
-        select: {
-          name: true,
-        },
-      },
+      category: true,
     },
-    orderBy:{
-        name:'asc'
-    }
+    orderBy: {
+      productName: "asc",
+    },
   });
+
+  if (!products) {
+  }
 
   return (
     <div className="mx-auto max-w-[calc(600px)]">
@@ -22,17 +21,20 @@ export default async function ProductMastersPage() {
             <th>品番</th>
             <th>品名</th>
             <th>カテゴリー</th>
-            <th>備考</th>
             <th>編集</th>
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => (
+          {products?.map((product) => (
             <tr key={product.id}>
-              <td>{product.number}</td>
-              <td>{product.name}</td>
-              <td>{product.category.name}</td>
-              <td></td>
+              <td>{product.productNumber}</td>
+              <td>{product.productName}</td>
+              <td>{product.category?.name}</td>
+              <td>
+                <button className="px-3 py-1 text-white text-sm rounded bg-blue-500">
+                  詳細
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>

@@ -5,5 +5,5 @@ export default function ProductMasterLayout({
 }: {
   children: ReactNode;
 }) {
-  return <div className="max-w-[calc(800px)] mx-auto">{children}</div>;
+  return <div className="max-w-[calc(700px)] mx-auto">{children}</div>;
 }

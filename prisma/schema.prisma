@@ -54,26 +54,27 @@ model Category {
 }
 
 model Sku {
-  id       Int       @id @default(autoincrement())
-  size     Size      @relation(fields: [sizeId], references: [id])
-  sizeId   Int       @map("size_id")
-  color    Color     @relation(fields: [colorId], references: [id])
-  colorId  Int       @map("color_id")
-  price    Int       @default(0)
-  // products Product[]
+  id        Int     @id @default(autoincrement())
+  size      Size    @relation(fields: [sizeId], references: [id])
+  sizeId    Int     @map("size_id")
+  color     Color   @relation(fields: [colorId], references: [id])
+  colorId   Int     @map("color_id")
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int     @map("product_id")
+  price     Int     @default(0)
 
+  @@unique([sizeId, colorId, productId],name:"skuIdentifier")
   @@map("skus")
 }
 
 model Product {
   id              Int               @id @default(autoincrement())
-  number          String
-  name            String
+  productNumber   String            @map("product_number")
+  productName     String            @map("product_name")
   description     String?
-  // sku             Sku               @relation(fields: [skuId], references: [id])
-  // skuId           Int               @map("sku_id")
-  category        Category          @relation(fields: [categoryId], references: [id])
-  categoryId      Int               @map("cateogry_id")
+  category        Category?         @relation(fields: [categoryId], references: [id])
+  categoryId      Int?              @map("cateogry_id")
+  skus            Sku[]
   customerProduct CustomerProduct[]
 
   @@map("products")
