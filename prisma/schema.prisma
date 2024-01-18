@@ -36,10 +36,11 @@ model Size {
 }
 
 model Color {
-  id          Int     @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   name        String
   description String?
-  skus        Sku[]
+  // skus        Sku[]
+  Products    Product[]
 
   @@map("colors")
 }
@@ -54,16 +55,18 @@ model Category {
 }
 
 model Sku {
-  id        Int     @id @default(autoincrement())
-  size      Size    @relation(fields: [sizeId], references: [id])
-  sizeId    Int     @map("size_id")
-  color     Color   @relation(fields: [colorId], references: [id])
-  colorId   Int     @map("color_id")
-  product   Product @relation(fields: [productId], references: [id])
-  productId Int     @map("product_id")
-  price     Int     @default(0)
+  id          Int     @id @default(autoincrement())
+  productCode String? @map("product_code")
+  janCode     String? @map("jan_code")
+  product     Product @relation(fields: [productId], references: [id])
+  productId   Int     @map("product_id")
+  size        Size    @relation(fields: [sizeId], references: [id])
+  sizeId      Int     @map("size_id")
+  // color       Color?  @relation(fields: [colorId], references: [id])
+  // colorId     Int?    @map("color_id")
+  price       Int     @default(0)
 
-  @@unique([sizeId, colorId, productId],name:"skuIdentifier")
+  @@unique([sizeId, productId], name: "skuIdentifier")
   @@map("skus")
 }
 
@@ -72,11 +75,14 @@ model Product {
   productNumber   String            @map("product_number")
   productName     String            @map("product_name")
   description     String?
-  category        Category?         @relation(fields: [categoryId], references: [id])
-  categoryId      Int?              @map("cateogry_id")
+  category        Category          @relation(fields: [categoryId], references: [id])
+  categoryId      Int               @map("cateogry_id")
+  color           Color             @relation(fields: [colorId], references: [id])
+  colorId         Int               @map("color_id")
   skus            Sku[]
   customerProduct CustomerProduct[]
 
+  @@unique([productNumber, colorId, categoryId])
   @@map("products")
 }
 

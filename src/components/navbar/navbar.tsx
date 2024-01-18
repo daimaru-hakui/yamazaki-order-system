@@ -2,6 +2,7 @@
 import { signOut, useSession } from "next-auth/react";
 import { navbarLinks } from "@/utils/links";
 import Link from "next/link";
+import { Button } from "@nextui-org/react";
 
 export default function Navbar() {
   const session = useSession();
@@ -23,12 +24,7 @@ export default function Navbar() {
                   <button>{name}</button>
                 </Link>
               ))}
-              <button
-                className="py-1 px-4 text-white bg-blue-500 hover:bg-blue-700 rounded"
-                onClick={logout}
-              >
-                logout
-              </button>
+              <Button color="primary" size="sm" onClick={logout}>logout</Button>
             </>
           )}
         </div>
