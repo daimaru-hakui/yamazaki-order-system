@@ -1,4 +1,6 @@
 import ProductEditForm from "@/components/product-masters/product-edit-form";
+import ProductEditSkuAddModal from "@/components/product-masters/product-edit-sku-add-modal";
+import ProductEditTable from "@/components/product-masters/product-edit-sku-table";
 import ProductShowTable from "@/components/product-masters/product-show-table";
 import { db } from "@/db";
 import Link from "next/link";
@@ -18,12 +20,7 @@ export default async function ProductMasterEditPage({
   });
   const colors = await db.color.findMany();
   const categories = await db.category.findMany();
-  const defaultValues = {
-    productNumber: product?.productNumber,
-    productName: product?.productName,
-    colorId: product?.colorId,
-    categoryId: product?.categoryId,
-  };
+  const sizes = await db.size.findMany();
 
   const skus = await db.sku.findMany({
     where: {
@@ -38,25 +35,33 @@ export default async function ProductMasterEditPage({
       },
       size: true,
     },
+    orderBy: {
+      displayOrder: "asc",
+    },
   });
 
   return (
     <div className="mx-auto max-w-[calc(600px)]">
       <div className="flex flex-col gap-6 p-6 rounded-lg bg-white shadow-md">
-        <div className="flex flex-start">
-          <Link href={`/product-masters`} className="flex items-center gap-3">
+        <div className="flex justify-center gap-6 relative">
+          <Link
+            href={`/product-masters`}
+            className="flex items-center gap-3 absolute left-0"
+          >
             <AiOutlineArrowLeft className="text-xl" />
             戻る
           </Link>
+          <div>編集画面</div>
         </div>
         <ProductEditForm
+          id={id}
           product={product}
           colors={colors}
           categories={categories}
-          defaultValues={defaultValues}
         />
       </div>
-      <ProductShowTable skus={skus} />
+      <ProductEditTable skus={skus} sizes={sizes} />
+      <ProductEditSkuAddModal id={id} sizes={sizes}/>
     </div>
   );
 }

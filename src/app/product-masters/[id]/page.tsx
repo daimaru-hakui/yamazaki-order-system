@@ -12,6 +12,16 @@ export default async function ProductShowPage({
 }: ProductMasterShowPage) {
   const id = parseInt(params.id);
 
+  const product = await db.product.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      color: true,
+      category: true,
+    },
+  });
+
   const skus = await db.sku.findMany({
     where: {
       productId: id,
@@ -25,31 +35,44 @@ export default async function ProductShowPage({
       },
       size: true,
     },
+    orderBy: {
+      displayOrder: "asc",
+    },
   });
 
   return (
     <div className="mx-auto max-w-[calc(600px)]">
       <div className="flex flex-col gap-6 p-6 rounded-lg bg-white shadow-md">
-        <div className="flex flex-start">
-          <Link href={`/product-masters`} className="flex items-center gap-3">
+        <div className="flex justify-center gap-6 relative">
+          <Link
+            href={`/product-masters`}
+            className="flex items-center gap-3 absolute left-0"
+          >
             <AiOutlineArrowLeft className="text-xl" />
             戻る
           </Link>
+          <div>詳細画面</div>
         </div>
         <dl>
           <dt className="text-xs">品番/品名</dt>
           <dd className="text-xl">
-            {skus[0].product.productNumber}
-            <span className="ml-3">{skus[0].product?.productName}</span>
+            {product?.productNumber}
+            <span className="ml-3">{product?.productName}</span>
           </dd>
         </dl>
         <dl>
           <dt className="text-xs">カラー</dt>
-          <dd className="text-xl">{skus[0].product?.color.name}</dd>
+          <dd className="text-xl">{product?.color.name}</dd>
         </dl>
         <dl>
           <dt className="text-xs">カテゴリー</dt>
-          <dd className="text-xl">{skus[0].product?.category.name}</dd>
+          <dd className="text-xl">{product?.category.name}</dd>
+        </dl>
+        <dl>
+          <dt className="text-xs">備考</dt>
+          <dd className="text-xl">
+            {product?.description || "未記入"}
+          </dd>
         </dl>
       </div>
       <ProductShowTable skus={skus} />

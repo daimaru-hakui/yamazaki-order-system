@@ -22,7 +22,7 @@ interface ProductListTableProps {
 }
 export default function ProductListTable({ products }: ProductListTableProps) {
   return (
-    <Table>
+    <Table aria-label="product list table" className="mt-3">
       <TableHeader>
         <TableColumn>品番</TableColumn>
         <TableColumn>品名</TableColumn>
@@ -45,7 +45,7 @@ export default function ProductListTable({ products }: ProductListTableProps) {
                 <AiOutlineEdit className="text-xl cursor-pointer" />
               </Link>
               <AiOutlineDelete
-                className="text-xl cursor-pointer"
+                className="text-xl cursor-pointer text-red-600"
                 onClick={() => deleteProduct(product.id)}
               />
             </TableCell>

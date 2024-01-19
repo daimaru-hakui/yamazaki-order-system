@@ -7,15 +7,16 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  // url = "file./dev.db"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id       String   @id @unique
-  email    String   @unique
-  username String?
-  role     UserRole @default(USER)
+  id        String   @id @unique
+  email     String   @unique
+  username  String?
+  role      UserRole @default(USER)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
   @@map("users")
 }
@@ -39,7 +40,6 @@ model Color {
   id          Int       @id @default(autoincrement())
   name        String
   description String?
-  // skus        Sku[]
   Products    Product[]
 
   @@map("colors")
@@ -55,16 +55,17 @@ model Category {
 }
 
 model Sku {
-  id          Int     @id @default(autoincrement())
-  productCode String? @map("product_code")
-  janCode     String? @map("jan_code")
-  product     Product @relation(fields: [productId], references: [id])
-  productId   Int     @map("product_id")
-  size        Size    @relation(fields: [sizeId], references: [id])
-  sizeId      Int     @map("size_id")
-  // color       Color?  @relation(fields: [colorId], references: [id])
-  // colorId     Int?    @map("color_id")
-  price       Int     @default(0)
+  id           Int      @id @default(autoincrement())
+  productCode  String?  @map("product_code")
+  janCode      String?  @map("jan_code")
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId    Int      @map("product_id")
+  size         Size     @relation(fields: [sizeId], references: [id], onDelete: Cascade)
+  sizeId       Int      @map("size_id")
+  price        Int      @default(0)
+  displayOrder Int      @default(100) @map("display_order")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at")
 
   @@unique([sizeId, productId], name: "skuIdentifier")
   @@map("skus")
@@ -81,6 +82,8 @@ model Product {
   colorId         Int               @map("color_id")
   skus            Sku[]
   customerProduct CustomerProduct[]
+  createdAt       DateTime          @default(now()) @map("created_at")
+  updatedAt       DateTime          @default(now()) @updatedAt @map("updated_at")
 
   @@unique([productNumber, colorId, categoryId])
   @@map("products")
@@ -93,6 +96,8 @@ model Customer {
   tel             String?
   orders          Order[]
   customerProduct CustomerProduct[]
+  createdAt       DateTime          @default(now()) @map("created_at")
+  updatedAt       DateTime          @default(now()) @updatedAt @map("updated_at")
 
   @@map("customers")
 }
@@ -111,6 +116,8 @@ model Order {
   id         Int      @id @default(autoincrement())
   customer   Customer @relation(fields: [customerId], references: [id])
   customerId Int      @map("customer_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
 
   @@map("orders")
 }

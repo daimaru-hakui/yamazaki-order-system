@@ -48,7 +48,7 @@ export default function ProductFormItemTable({
   const thStyle = "p-2 text-sm";
 
   return (
-    <table className="table-auto border-collapse min-w-[calc(600px)]">
+    <table aria-label="product show table" className="table-auto border-collapse min-w-[calc(600px)]">
       <thead>
         <tr className="text-left">
           <th className={`${thStyle}`}></th>

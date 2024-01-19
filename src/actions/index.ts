@@ -3,6 +3,8 @@ import { db } from "@/db";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { ProductSchema } from "@/components/product-masters/product-form";
+import { Product, Sku } from "@prisma/client";
+import { ProductAddSkuSchema } from "@/components/product-masters/product-edit-sku-add-modal";
 
 export const createProduct = async (data: ProductSchema) => {
   const productNumber = data.productNumber;
@@ -54,10 +56,72 @@ export const createProduct = async (data: ProductSchema) => {
   redirect(`/product-masters`);
 };
 
+export const updateProduct = async (id: number, data: Product) => {
+  const productNumber = data.productNumber;
+  const productName = data.productName;
+  const categoryId = Number(data.categoryId);
+  const colorId = Number(data.colorId);
+  const description = data.description;
+  const product = await db.product.update({
+    where: {
+      id,
+    },
+    data: {
+      productNumber,
+      productName,
+      categoryId,
+      colorId,
+      description,
+    },
+  });
+  revalidatePath(`/product-masters`);
+  return product;
+};
+
 export const deleteProduct = async (id: number) => {
   await db.product.delete({
     where: { id },
   });
   revalidatePath(`/product-masters`);
   redirect(`/product-masters`);
+};
+
+export const createSku = async (id: number, data: ProductAddSkuSchema) => {
+  db.$transaction(async (prisma) => {
+    const sku = await prisma.sku.findFirst({
+      where: {
+        productId: Number(id),
+        sizeId: Number(data.sizeId),
+      },
+    });
+
+    if (!sku) {
+      await prisma.sku.create({
+        data: {
+          productId: id,
+          janCode: data.janCode,
+          productCode: data.productCode,
+          price: data.price,
+          sizeId: Number(data.sizeId),
+          displayOrder: Number(data.sizeId),
+        },
+      });
+    }
+  });
+
+  revalidatePath(`/product-masters/${id}/edit`);
+};
+
+export const updateSku = async (data: Sku) => {
+  await db.sku.update({
+    where: {
+      id: data.id,
+    },
+    data: {
+      janCode: data.janCode,
+      productCode: data.productCode,
+      price: data.price,
+    },
+  });
+  revalidatePath(`/product-masters/${data.productId}/edit`);
 };

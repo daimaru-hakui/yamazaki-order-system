@@ -17,6 +17,7 @@ export default async function ProductMastersPage() {
 
   return (
     <div className="mx-auto max-w-[calc(600px)]">
+      <div className="text-center font-bold">商品マスター一覧</div>
       <ProductListTable products={products} />
     </div>
   );

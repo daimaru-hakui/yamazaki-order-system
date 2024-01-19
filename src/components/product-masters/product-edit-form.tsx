@@ -1,26 +1,41 @@
 "use client";
-import { Input, Select, SelectItem, Textarea } from "@nextui-org/react";
+import { updateProduct } from "@/actions";
+import { Button, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
 import { Category, Color, Product } from "@prisma/client";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { z } from "zod";
+
+const schema = z.object({
+  productNumber: z.string().min(1, { message: "品番を入力してください" }),
+  productName: z.string(),
+  categoryId: z.number().min(1, { message: "カテゴリーを選択してください" }),
+  colorId: z.number().min(1, { message: "カラーを選択してください" }),
+  description: z.string(),
+});
+
+export type ProductEditSchema = z.infer<typeof schema>;
 
 interface ProductEditFormProps {
+  id: number;
   product: Product | null;
   colors: Color[];
   categories: Category[];
-  defaultValues: {
-    productNumber: string | undefined;
-    productName: string | undefined;
-    colorId: number | undefined;
-    categoryId: number | undefined;
-  };
 }
 
 export default function ProductEditForm({
+  id,
   product,
   colors,
   categories,
-  defaultValues,
 }: ProductEditFormProps) {
+  const defaultValues = {
+    productNumber: product?.productNumber,
+    productName: product?.productName,
+    categoryId: product?.categoryId,
+    colorId: product?.colorId,
+    description: product?.description,
+  };
+
   const {
     register,
     handleSubmit,
@@ -29,11 +44,10 @@ export default function ProductEditForm({
     defaultValues: defaultValues,
   });
 
-  const onSubmit: SubmitHandler<Product> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<Product> = async (data) => {
+    const result = await updateProduct(id, data);
+    console.log(result);
   };
-
-  console.log(product);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
@@ -59,7 +73,7 @@ export default function ProductEditForm({
         placeholder="カラー"
         className="max-w-xs"
         defaultSelectedKeys={String(product?.colorId)}
-        {...register("colorId")}
+        {...register("colorId", { valueAsNumber: true })}
       >
         {colors.map((color) => (
           <SelectItem key={color.id} value={color.id}>
@@ -73,7 +87,7 @@ export default function ProductEditForm({
         placeholder="カテゴリー"
         className="max-w-xs"
         defaultSelectedKeys={String(product?.categoryId)}
-        {...register("categoryId")}
+        {...register("categoryId", { valueAsNumber: true })}
       >
         {categories.map((category) => (
           <SelectItem key={category.id} value={category.id}>
@@ -86,7 +100,19 @@ export default function ProductEditForm({
         labelPlacement="outside"
         placeholder=""
         className="w-full"
+        defaultValue={product?.description || ""}
+        {...register("description")}
       ></Textarea>
+      <div className="text-center">
+        <Button
+          type="submit"
+          size="md"
+          color="primary"
+          aria-labelledby="update-button"
+        >
+          更新
+        </Button>
+      </div>
     </form>
   );
 }

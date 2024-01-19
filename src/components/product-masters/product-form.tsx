@@ -18,9 +18,10 @@ const schema = z.object({
   productName: z.string(),
   categoryId: z.number().min(1, { message: "カテゴリーを選択してください" }),
   colorId: z.number().min(1, { message: "カラーを選択してください" }),
+  description: z.string(),
   items: z.array(
     z.object({
-      janCode:z.string(),
+      janCode: z.string(),
       productCode: z.string(),
       sizeId: z.number().min(1),
       price: z.number(),
@@ -35,6 +36,7 @@ const defaultValues = {
   productName: "",
   categoryId: 0,
   colorId: 0,
+  description:"",
   items: [
     {
       janCode: "",

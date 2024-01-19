@@ -25,7 +25,7 @@ interface ProductShowTableProps {
 
 export default function ProductShowTable({ skus }: ProductShowTableProps) {
   return (
-    <Table className="mt-6">
+    <Table aria-label="product show table"  className="mt-6">
       <TableHeader>
         <TableColumn>JANコード</TableColumn>
         <TableColumn>商品コード</TableColumn>

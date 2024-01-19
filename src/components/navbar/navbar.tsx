@@ -11,7 +11,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="(w-full shadow-sm sticky top-0 bg-white">
+    <header className="(w-full shadow-sm sticky top-0 z-50 bg-white">
       <div className="flex items-center justify-between h-[calc(50px)] p-3">
         <Link href="/">
           <div>山崎製パン オーダーシステム</div>
