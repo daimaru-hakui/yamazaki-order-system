@@ -1,6 +1,5 @@
-import ProductForm from "@/components/product-masters/product-form";
+import ProductForm from "@/components/products/product-create-form";
 import { db } from "@/db";
-import { redirect } from "next/navigation";
 
 export default async function ProductMasterCreatePage() {
   const categories = await db.category.findMany();

@@ -1,5 +1,6 @@
 "use client";
-import { deleteProduct } from "@/actions";
+import { deleteProduct } from "@/actions/delete-product";
+import paths from "@/paths";
 import {
   Table,
   TableBody,
@@ -38,10 +39,10 @@ export default function ProductListTable({ products }: ProductListTableProps) {
             <TableCell>{product.color.name}</TableCell>
             <TableCell>{product.category.name}</TableCell>
             <TableCell className="flex justify-around">
-              <Link href={`/product-masters/${product.id}`}>
+              <Link href={paths.productShow(product.id)}>
                 <AiOutlineEye className="text-xl cursor-pointer" />
               </Link>
-              <Link href={`/product-masters/${product.id}/edit`}>
+              <Link href={paths.productEdit(product.id)}>
                 <AiOutlineEdit className="text-xl cursor-pointer" />
               </Link>
               <AiOutlineDelete

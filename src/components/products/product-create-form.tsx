@@ -5,7 +5,8 @@ import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@nextui-org/react";
-import ProductFormItemTable from "./product-form-item-table";
+import ProductFormItemTable from "./product-create-form-sku-table";
+import { CreateProductSchema } from "@/actions/create-product";
 
 interface ProductFormProps {
   categories: Category[];
@@ -29,8 +30,6 @@ const schema = z.object({
   ),
 });
 
-export type ProductSchema = z.infer<typeof schema>;
-
 const defaultValues = {
   productNumber: "",
   productName: "",
@@ -47,7 +46,7 @@ const defaultValues = {
   ],
 };
 
-export default function ProductForm({
+export default function ProductCreatetForm({
   categories,
   colors,
   sizes,
@@ -59,13 +58,13 @@ export default function ProductForm({
     getValues,
     setValue,
     formState: { errors },
-  } = useForm<ProductSchema>({
+  } = useForm<CreateProductSchema>({
     mode: "onSubmit",
     resolver: zodResolver(schema),
     defaultValues,
   });
 
-  const methods = useFieldArray<ProductSchema>({
+  const methods = useFieldArray<CreateProductSchema>({
     control,
     name: "items",
   });
@@ -79,7 +78,7 @@ export default function ProductForm({
     });
   };
 
-  const onSubmit: SubmitHandler<ProductSchema> = (data: ProductSchema) => {
+  const onSubmit: SubmitHandler<CreateProductSchema> = (data: CreateProductSchema) => {
     console.log(data);
     actions.createProduct(data);
   };

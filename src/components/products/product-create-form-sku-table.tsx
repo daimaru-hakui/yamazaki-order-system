@@ -6,19 +6,19 @@ import {
   UseFormRegister,
   UseFormSetValue,
 } from "react-hook-form";
-import { ProductSchema } from "./product-form";
 import { Size } from "@prisma/client";
 import { AiOutlineCopy, AiFillDelete } from "react-icons/ai";
+import { CreateProductSchema } from "@/actions/create-product";
 
 interface ProductFormItemTableProps {
-  methods: UseFieldArrayReturn<ProductSchema>;
-  register: UseFormRegister<ProductSchema>;
-  getValues: UseFormGetValues<ProductSchema>;
-  setValue: UseFormSetValue<ProductSchema>;
+  methods: UseFieldArrayReturn<CreateProductSchema>;
+  register: UseFormRegister<CreateProductSchema>;
+  getValues: UseFormGetValues<CreateProductSchema>;
+  setValue: UseFormSetValue<CreateProductSchema>;
   sizes: Size[];
 }
 
-export default function ProductFormItemTable({
+export default function ProductCreateFormSkuTable({
   methods,
   register,
   getValues,

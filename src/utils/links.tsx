@@ -1,10 +1,10 @@
 export const navbarLinks = [
   {
-    path: "/product-masters",
+    path: "/products",
     name: "商品一覧",
   },
   {
-    path: "/product-masters/new",
+    path: "/products/new",
     name: "商品登録",
   },
   {

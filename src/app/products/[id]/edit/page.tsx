@@ -1,10 +1,11 @@
-import ProductEditForm from "@/components/product-masters/product-edit-form";
-import ProductEditSkuAddModal from "@/components/product-masters/product-edit-sku-add-modal";
-import ProductEditTable from "@/components/product-masters/product-edit-sku-table";
-import ProductShowTable from "@/components/product-masters/product-show-table";
+import EditProductForm from "@/components/products/product-edit-form";
+import SkuCreateModal from "@/components/products/sku-create-form";
+import ProductEditTable from "@/components/products/product-edit-sku-table";
 import { db } from "@/db";
+import paths from "@/paths";
 import Link from "next/link";
 import { AiOutlineArrowLeft } from "react-icons/ai";
+import SkuCreateForm from "@/components/products/sku-create-form";
 
 interface ProductMasterShowPage {
   params: { id: string };
@@ -15,7 +16,7 @@ export default async function ProductMasterEditPage({
 }: ProductMasterShowPage) {
   const id = parseInt(params.id);
 
-  const product = await db.product.findUnique({
+  const product = await db.product.findFirst({
     where: { id: id },
   });
   const colors = await db.color.findMany();
@@ -45,7 +46,7 @@ export default async function ProductMasterEditPage({
       <div className="flex flex-col gap-6 p-6 rounded-lg bg-white shadow-md">
         <div className="flex justify-center gap-6 relative">
           <Link
-            href={`/product-masters`}
+            href={paths.productAll()}
             className="flex items-center gap-3 absolute left-0"
           >
             <AiOutlineArrowLeft className="text-xl" />
@@ -53,7 +54,7 @@ export default async function ProductMasterEditPage({
           </Link>
           <div>編集画面</div>
         </div>
-        <ProductEditForm
+        <EditProductForm
           id={id}
           product={product}
           colors={colors}
@@ -61,7 +62,7 @@ export default async function ProductMasterEditPage({
         />
       </div>
       <ProductEditTable skus={skus} sizes={sizes} />
-      <ProductEditSkuAddModal id={id} sizes={sizes}/>
+      <SkuCreateForm productId={id} sizes={sizes} />
     </div>
   );
 }

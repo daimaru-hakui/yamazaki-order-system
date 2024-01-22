@@ -1,5 +1,4 @@
 "use client";
-import { createSku } from "@/actions";
 import {
   Modal,
   ModalContent,
@@ -13,47 +12,56 @@ import {
   SelectItem,
 } from "@nextui-org/react";
 import { Size } from "@prisma/client";
+import * as actions from "@/actions/create-sku";
+import FormButton from "../common/form-button";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-const schema = z.object({
-  janCode: z.string(),
-  productCode: z.string(),
-  sizeId: z.number().min(1, { message: "サイズを選択してください" }),
-  price: z.number().min(0, { message: "金額を入力してください" }),
-});
-
-export type ProductAddSkuSchema = z.infer<typeof schema>;
-
-interface ProductEditSkuAddModalProps {
-  id: number;
+interface SkuCreateFormProps {
+  productId: number;
   sizes: Size[];
 }
 
-export default function ProductEditSkuAddModal({
-  id,
-  sizes,
-}: ProductEditSkuAddModalProps) {
-  const { register, handleSubmit } = useForm<ProductAddSkuSchema>({
-    defaultValues: {
-      janCode: "",
-      productCode: "",
-      sizeId: 0,
-      price: 0,
-    },
-  });
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+export const CreateSkuSchema = z.object({
+  janCode: z.string(),
+  productCode: z.string(),
+  sizeId: z.string().nullable(),
+  price: z.number().min(1, { message: "金額を入力してください" }).nullable(),
+});
 
-  const onSubmit: SubmitHandler<ProductAddSkuSchema> = async (
-    data: ProductAddSkuSchema
-  ) => {
-    console.log(data);
-    await createSku(id, data);
-    onOpenChange();
-  };
+export interface CreateSkuFormState {
+  janCode: string;
+  productCode: string;
+  sizeId: string;
+  price: number;
+}
+
+export default function SkuCreateForm({
+  productId,
+  sizes,
+}: SkuCreateFormProps) {
+  const {
+    register,
+    control,
+    handleSubmit,
+    getValues,
+    setValue,
+    formState: { errors },
+  } = useForm<CreateSkuFormState>({
+    mode: "onSubmit",
+    resolver: zodResolver(CreateSkuSchema),
+    defaultValues: {},
+  });
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const focusHandle = (e: any) => {
     e.target.select();
+  };
+
+  const onSubmit: SubmitHandler<CreateSkuFormState> = (data) => {
+    console.log(data)
+    // actions.createSku(productId);
   };
 
   return (
@@ -69,30 +77,34 @@ export default function ProductEditSkuAddModal({
             <>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <ModalHeader className="flex flex-col gap-1">編集</ModalHeader>
-                <ModalBody className="flex flex-row gap-3">
+                <ModalBody className="flex flex-row items-start gap-3">
                   <Input
                     type="text"
                     label="JANコード"
                     labelPlacement={"outside"}
-                    placeholder="JANコード"
+                    // placeholder="JANコード"
+                    isInvalid={!!errors.janCode}
+                    errorMessage={errors.janCode?.message}
                     {...register("janCode")}
                   />
                   <Input
                     type="text"
                     label="商品コード"
                     labelPlacement={"outside"}
-                    placeholder="商品コード"
+                    // placeholder="JANコード"
+                    defaultValue=""
+                    isInvalid={!!errors.productCode}
+                    errorMessage={errors.productCode?.message}
                     {...register("productCode")}
                   />
                   <Select
                     isRequired
                     labelPlacement={"outside"}
                     label="サイズ"
-                    placeholder="サイズ"
-                    className="max-w-xs"
+                    // placeholder="サイズ"
+                    isInvalid={!!errors.sizeId}
+                    errorMessage={errors.sizeId?.message}
                     {...register("sizeId", {
-                      valueAsNumber: true,
-                      required: true,
                     })}
                   >
                     {sizes.map((size) => (
@@ -101,23 +113,32 @@ export default function ProductEditSkuAddModal({
                       </SelectItem>
                     ))}
                   </Select>
+
                   <Input
                     type="number"
                     label="価格"
                     labelPlacement={"outside"}
-                    placeholder="価格"
-                    defaultValue={"0"}
+                    // placeholder="価格"
+                    isInvalid={!!errors.price}
+                    errorMessage={errors.price?.message}
                     onFocus={(e) => focusHandle(e)}
-                    {...register("price", { valueAsNumber: true })}
+                    {...register("price", {
+                      required: true,
+                      valueAsNumber: true,
+                    })}
                   />
                 </ModalBody>
+
+                {/* {formState?.errors._form && (
+                  <div className="mx-6 p-1 rounded bg-red-200 border border-red-500">
+                    {formState?.errors._form.join(", ")}
+                  </div>
+                )} */}
                 <ModalFooter>
                   <Button color="danger" variant="light" onPress={onClose}>
                     閉じる
                   </Button>
-                  <Button type="submit" color="primary">
-                    追加
-                  </Button>
+                  <FormButton>追加</FormButton>
                 </ModalFooter>
               </form>
             </>

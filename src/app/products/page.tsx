@@ -1,7 +1,7 @@
-import ProductListTable from "@/components/product-masters/product-list-table";
+import ProductListTable from "@/components/products/product-list-table";
 import { db } from "@/db";
 
-export default async function ProductMastersPage() {
+export default async function ProductsPage() {
   const products = await db.product.findMany({
     include: {
       category: true,

@@ -1,5 +1,6 @@
-import ProductShowTable from "@/components/product-masters/product-show-table";
+import ProductShowTable from "@/components/products/product-show-table";
 import { db } from "@/db";
+import paths from "@/paths";
 import Link from "next/link";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 
@@ -45,7 +46,7 @@ export default async function ProductShowPage({
       <div className="flex flex-col gap-6 p-6 rounded-lg bg-white shadow-md">
         <div className="flex justify-center gap-6 relative">
           <Link
-            href={`/product-masters`}
+            href={paths.productAll()}
             className="flex items-center gap-3 absolute left-0"
           >
             <AiOutlineArrowLeft className="text-xl" />
