@@ -14,6 +14,9 @@ const paths = {
   productEdit(productId: number) {
     return `/products/${productId}/edit`;
   },
+  customerAll() {
+    return `/customers`;
+  },
   customerShow(customerId: number) {
     return `/customers/${customerId}`;
   },
