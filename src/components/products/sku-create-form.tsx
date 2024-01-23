@@ -13,40 +13,44 @@ import {
 } from "@nextui-org/react";
 import { Size } from "@prisma/client";
 import * as actions from "@/actions/create-sku";
-import FormButton from "../common/form-button";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState, useTransition } from "react";
+import FormButtonClient from "../common/form-button-client";
 
 interface SkuCreateFormProps {
   productId: number;
   sizes: Size[];
 }
 
-export const CreateSkuSchema = z.object({
+const CreateSkuSchema = z.object({
   janCode: z.string(),
   productCode: z.string(),
-  sizeId: z.string().nullable(),
-  price: z.number().min(1, { message: "金額を入力してください" }).nullable(),
+  sizeId: z.string(),
+  price: z
+    .number({
+      invalid_type_error: "数値を入力してください",
+    })
+    .min(1, { message: "金額を入力してください" }),
 });
 
-export interface CreateSkuFormState {
-  janCode: string;
-  productCode: string;
-  sizeId: string;
-  price: number;
-}
+type CreateSkuFormState = z.infer<typeof CreateSkuSchema>;
 
 export default function SkuCreateForm({
   productId,
   sizes,
 }: SkuCreateFormProps) {
+  const [isPending, startTransition] = useTransition();
+  const [formState, setFormState] = useState<{
+    errors: { janCode?: string[]; _form?: string[] };
+  }>({
+    errors: {},
+  });
   const {
     register,
     control,
     handleSubmit,
-    getValues,
-    setValue,
     formState: { errors },
   } = useForm<CreateSkuFormState>({
     mode: "onSubmit",
@@ -58,10 +62,16 @@ export default function SkuCreateForm({
   const focusHandle = (e: any) => {
     e.target.select();
   };
-
-  const onSubmit: SubmitHandler<CreateSkuFormState> = (data) => {
-    console.log(data)
-    // actions.createSku(productId);
+  
+  let result: { errors: {} };
+  const onSubmit: SubmitHandler<CreateSkuFormState> = async (data) => {
+    startTransition(async () => {
+      result = await actions.createSku(productId, data);
+      setFormState(result);
+      if (!result) {
+        onClose();
+      }
+    });
   };
 
   return (
@@ -82,7 +92,7 @@ export default function SkuCreateForm({
                     type="text"
                     label="JANコード"
                     labelPlacement={"outside"}
-                    // placeholder="JANコード"
+                    placeholder="JANコード"
                     isInvalid={!!errors.janCode}
                     errorMessage={errors.janCode?.message}
                     {...register("janCode")}
@@ -91,7 +101,7 @@ export default function SkuCreateForm({
                     type="text"
                     label="商品コード"
                     labelPlacement={"outside"}
-                    // placeholder="JANコード"
+                    placeholder="JANコード"
                     defaultValue=""
                     isInvalid={!!errors.productCode}
                     errorMessage={errors.productCode?.message}
@@ -101,11 +111,10 @@ export default function SkuCreateForm({
                     isRequired
                     labelPlacement={"outside"}
                     label="サイズ"
-                    // placeholder="サイズ"
+                    placeholder="サイズ"
                     isInvalid={!!errors.sizeId}
                     errorMessage={errors.sizeId?.message}
-                    {...register("sizeId", {
-                    })}
+                    {...register("sizeId", {})}
                   >
                     {sizes.map((size) => (
                       <SelectItem key={size.id} value={size.id}>
@@ -115,10 +124,12 @@ export default function SkuCreateForm({
                   </Select>
 
                   <Input
+                    isRequired
                     type="number"
                     label="価格"
                     labelPlacement={"outside"}
-                    // placeholder="価格"
+                    placeholder="価格"
+                    defaultValue="0"
                     isInvalid={!!errors.price}
                     errorMessage={errors.price?.message}
                     onFocus={(e) => focusHandle(e)}
@@ -129,16 +140,18 @@ export default function SkuCreateForm({
                   />
                 </ModalBody>
 
-                {/* {formState?.errors._form && (
-                  <div className="mx-6 p-1 rounded bg-red-200 border border-red-500">
-                    {formState?.errors._form.join(", ")}
+                {formState?.errors._form && (
+                  <div className="m-6 p-1 rounded text-pink-500 bg-pink-200 border border-pink-500">
+                    {formState?.errors._form.join(`, `)}
                   </div>
-                )} */}
+                )}
                 <ModalFooter>
                   <Button color="danger" variant="light" onPress={onClose}>
                     閉じる
                   </Button>
-                  <FormButton>追加</FormButton>
+                  <FormButtonClient isPending={isPending}>
+                    追加
+                  </FormButtonClient>
                 </ModalFooter>
               </form>
             </>

@@ -1,14 +1,25 @@
 "use server";
-import {
-  CreateSkuFormState,
-  CreateSkuSchema,
-} from "@/components/products/sku-create-form";
 import { db } from "@/db";
 import paths from "@/paths";
 import { Sku } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { z } from "zod";
+
+const CreateSkuSchema = z.object({
+  janCode: z.string(),
+  productCode: z.string(),
+  sizeId: z.string().nullable(),
+  price: z
+    .number({
+      required_error: "数値を入力してください",
+      invalid_type_error: "数値を入力してください",
+    })
+    .min(1, { message: "金額を入力してください" }),
+});
+
+type CreateSkuFormState = z.infer<typeof CreateSkuSchema>
 
 export async function createSku(productId: number, data: CreateSkuFormState) {
   const result = CreateSkuSchema.safeParse({
@@ -20,7 +31,7 @@ export async function createSku(productId: number, data: CreateSkuFormState) {
 
   if (!result.success) {
     return {
-      errors: result.error.flatten().fieldErrors,
+      errors: { _form: [result.error.flatten().fieldErrors ]},
     };
   }
 
@@ -61,6 +72,7 @@ export async function createSku(productId: number, data: CreateSkuFormState) {
     });
   } catch {
     (err: unknown) => {
+      console.log("error");
       if (err instanceof Error) {
         return {
           errors: {

@@ -103,12 +103,13 @@ model Customer {
 }
 
 model CustomerProduct {
-  id         Int      @id @default(autoincrement())
+  id         String   @id @default(uuid())
   customer   Customer @relation(fields: [customerId], references: [id])
   customerId Int      @map("customer_id")
   product    Product  @relation(fields: [productId], references: [id])
   productId  Int      @map("product_id")
 
+  @@unique([customerId, productId])
   @@map("customer_product")
 }
 

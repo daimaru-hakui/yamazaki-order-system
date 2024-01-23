@@ -22,7 +22,7 @@ export default function CustomerCard({ customer }: OfficeCardProps) {
   
   return (
     <div
-      className="p-6 border rounded cursor-pointer"
+      className="p-6 border rounded cursor-pointer bg-white"
       onClick={() => addCustomerCart(customer)}
     >
       <div>{customer.name}</div>

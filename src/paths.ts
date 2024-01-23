@@ -22,6 +22,8 @@ const paths = {
   },
   customerCreate() {
     return `/customers/new`;
+  },  customerEdit(customerId:number) {
+    return `/customers/${customerId}/edit`;
   },
 };
 

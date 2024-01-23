@@ -8,6 +8,9 @@ export const navbarLinks = [
     name: "商品登録",
   },
   {
+    path: "/customers",
+    name: "顧客一覧",
+  },  {
     path: "/customers/new",
     name: "顧客登録",
   },

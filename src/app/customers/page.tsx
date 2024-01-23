@@ -1,5 +1,15 @@
-export default function CustomersPage() {
+import CustomerListTable from "@/components/customers/customer-list-table";
+import { db } from "@/db";
+
+export default async function CustomersPage() {
+  const customers = await db.customer.findMany();
+  if (!customers) {
+    return;
+  }
   return (
-    <div><div>customer list</div></div>
+    <div className="mx-auto max-w-[calc(600px)]">
+      <div className="text-center font-bold">顧客一覧</div>
+      <CustomerListTable customers={customers} />
+    </div>
   );
 }

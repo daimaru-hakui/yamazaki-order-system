@@ -43,17 +43,17 @@ export default async function ProductShowPage({
 
   return (
     <div className="mx-auto max-w-[calc(600px)]">
-      <div className="flex flex-col gap-6 p-6 rounded-lg bg-white shadow-md">
-        <div className="flex justify-center gap-6 relative">
-          <Link
-            href={paths.productAll()}
-            className="flex items-center gap-3 absolute left-0"
-          >
-            <AiOutlineArrowLeft className="text-xl" />
-            戻る
-          </Link>
-          <div>詳細画面</div>
-        </div>
+      <div className="flex justify-center gap-6 relative">
+        <Link
+          href={paths.productAll()}
+          className="flex items-center gap-3 absolute left-0"
+        >
+          <AiOutlineArrowLeft className="text-xl" />
+          戻る
+        </Link>
+        <div className="font-bold">詳細画面</div>
+      </div>
+      <div className="flex flex-col gap-6 mt-3 p-6 rounded-xl bg-white shadow-md">
         <dl>
           <dt className="text-xs">品番/品名</dt>
           <dd className="text-xl">
@@ -71,9 +71,7 @@ export default async function ProductShowPage({
         </dl>
         <dl>
           <dt className="text-xs">備考</dt>
-          <dd className="text-xl">
-            {product?.description || "未記入"}
-          </dd>
+          <dd className="text-xl">{product?.description || "未記入"}</dd>
         </dl>
       </div>
       <ProductShowTable skus={skus} />
