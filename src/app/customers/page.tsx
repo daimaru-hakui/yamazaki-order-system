@@ -2,7 +2,13 @@ import CustomerListTable from "@/components/customers/customer-list-table";
 import { db } from "@/db";
 
 export default async function CustomersPage() {
-  const customers = await db.customer.findMany();
+  const customers = await db.customer.findMany({
+    include: {
+      _count: {
+        select: { customerProduct: true }
+      }
+    },
+  });
   if (!customers) {
     return;
   }
