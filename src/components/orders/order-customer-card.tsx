@@ -10,7 +10,7 @@ interface OfficeCardProps {
   customer: Customer;
 }
 
-export default function CustomerCard({ customer }: OfficeCardProps) {
+export default function OrderCustomerCard({ customer }: OfficeCardProps) {
   const cart = useStore((state) => state.cart);
   const setCart = useStore((state) => state.setCart);
   const setActivePage = useStore((state) => state.setActivePage);
@@ -19,7 +19,7 @@ export default function CustomerCard({ customer }: OfficeCardProps) {
     setCart({ ...cart, customer: { id: customer.id, name: customer.name } });
     setActivePage(2);
   };
-  
+
   return (
     <div
       className="p-6 border rounded cursor-pointer bg-white"

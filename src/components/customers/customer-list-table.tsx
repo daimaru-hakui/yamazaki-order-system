@@ -12,8 +12,14 @@ import { Customer } from "@prisma/client";
 import Link from "next/link";
 import { AiOutlineDelete, AiOutlineEdit, AiOutlineEye } from "react-icons/ai";
 
+interface CustomerWithCount extends Customer {
+  _count: {
+    customerProduct: number;
+  };
+}
+
 interface CustomerListTableProps {
-  customers: Customer[];
+  customers: CustomerWithCount[];
 }
 
 export default function CustomerListTable({
@@ -23,14 +29,14 @@ export default function CustomerListTable({
     <Table aria-label="cutomer table" className="mt-3">
       <TableHeader>
         <TableColumn>顧客名</TableColumn>
-        <TableColumn>商品登録</TableColumn>
+        <TableColumn className="text-center">登録商品数</TableColumn>
         <TableColumn className="w-32">action</TableColumn>
       </TableHeader>
       <TableBody>
         {customers.map((customer) => (
           <TableRow key={customer.id}>
             <TableCell>{customer.name}</TableCell>
-            <TableCell>{1}</TableCell>
+            <TableCell className="text-center">{customer._count.customerProduct}</TableCell>
             <TableCell>
               <div className="flex gap-3">
                 <Link href={paths.customerShow(customer.id)}>

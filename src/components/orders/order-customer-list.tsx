@@ -1,11 +1,11 @@
 import { Customer } from "@prisma/client";
-import OfficeCard from "./customer-card";
+import OfficeCard from "./order-customer-card";
 
 interface CustomerListProps {
-  customers:Customer[]
+  customers: Customer[];
 }
 
-export default function CustomerList({customers}:CustomerListProps) {
+export default function OrderCustomerList({ customers }: CustomerListProps) {
   return (
     <div className="flex flex-row gap-3">
       {customers.map((customer) => (
