@@ -22,9 +22,12 @@ const paths = {
   },
   customerCreate() {
     return `/customers/new`;
-  },  customerEdit(customerId:number) {
+  }, customerEdit(customerId: number) {
     return `/customers/${customerId}/edit`;
   },
+  orderCreate() {
+    return `/orders/new`;
+  }
 };
 
 export default paths;
