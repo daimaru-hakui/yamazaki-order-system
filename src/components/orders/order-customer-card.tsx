@@ -1,5 +1,6 @@
 "use client";
 import { useStore } from "@/store";
+import Link from "next/link";
 
 interface Customer {
   id: number;
@@ -17,15 +18,17 @@ export default function OrderCustomerCard({ customer }: OfficeCardProps) {
 
   const addCustomerCart = (customer: Customer) => {
     setCart({ ...cart, customer: { id: customer.id, name: customer.name } });
-    setActivePage(2);
+    // setActivePage(2);
   };
 
   return (
-    <div
-      className="p-6 border rounded cursor-pointer bg-white"
-      onClick={() => addCustomerCart(customer)}
-    >
-      <div>{customer.name}</div>
-    </div>
+    <Link href={`/orders/new/${customer.id}`}>
+      <div
+        className="p-6 border rounded cursor-pointer bg-white"
+        onClick={() => addCustomerCart(customer)}
+      >
+        <div>{customer.name}</div>
+      </div>
+    </Link>
   );
 }

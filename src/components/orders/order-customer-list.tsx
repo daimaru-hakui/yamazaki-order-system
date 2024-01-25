@@ -1,5 +1,5 @@
 import { Customer } from "@prisma/client";
-import OfficeCard from "./order-customer-card";
+import OrderCustomerCard from "./order-customer-card";
 
 interface CustomerListProps {
   customers: Customer[];
@@ -8,8 +8,8 @@ interface CustomerListProps {
 export default function OrderCustomerList({ customers }: CustomerListProps) {
   return (
     <div className="flex flex-row gap-3">
-      {customers.map((customer) => (
-        <OfficeCard key={customer.id} customer={customer} />
+      {customers?.map((customer) => (
+        <OrderCustomerCard key={customer.id} customer={customer} />
       ))}
     </div>
   );

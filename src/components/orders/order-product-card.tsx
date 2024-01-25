@@ -1,4 +1,4 @@
-export default function ProductCard(){
+export default function OrderProductCard(){
     return (
         <div>
             <div>title</div>

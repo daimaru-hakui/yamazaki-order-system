@@ -5,7 +5,7 @@ import Link from "next/link";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 
 interface ProductMasterShowPage {
-  params: { id: string };
+  params: { id: string; };
 }
 
 export default async function ProductShowPage({
@@ -13,7 +13,7 @@ export default async function ProductShowPage({
 }: ProductMasterShowPage) {
   const id = parseInt(params.id);
 
-  const product = await db.product.findUnique({
+  const product = await db.product.findFirst({
     where: {
       id,
     },
@@ -40,6 +40,8 @@ export default async function ProductShowPage({
       displayOrder: "asc",
     },
   });
+
+  await db.$disconnect();
 
   return (
     <div className="mx-auto max-w-[calc(600px)]">
