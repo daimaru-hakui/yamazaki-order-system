@@ -33,14 +33,6 @@ export default async function CustomerEditPage({
     return { ...product, isProduct };
   });
 
-  console.log(filterProducts);
-
-  const customer = await db.customer.findFirst({
-    where: {
-      id: Number(customerId),
-    },
-  });
-
   return (
     <div className="mx-auto max-w-[calc(600px)]">
       <div className="flex justify-center gap-6 relative">

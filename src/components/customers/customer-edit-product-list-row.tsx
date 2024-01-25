@@ -5,7 +5,7 @@ import * as actions from "@/actions";
 import { CustomerProduct, Product } from "@prisma/client";
 
 interface ProductWithColor extends Product {
-  color: { name: string };
+  color: { name: string; };
   customerProduct: CustomerProduct[];
   isProduct: any;
 }
@@ -26,6 +26,7 @@ export default function CustomerEditProductListRow({
       await actions.updateCustomerProduct(customerId, productId);
     });
   };
+  console.log(customerId, product.id);
 
   return (
     <TableRow key={product.id}>
@@ -34,9 +35,9 @@ export default function CustomerEditProductListRow({
       <TableCell>{product.color.name}</TableCell>
       <TableCell>
         <Button
-        //   isLoading={isPending}
-        //   color={product.isProduct ? "primary" : "default"}
-        //   onClick={() => handleClick(Number(customerId), product.id)}
+          isLoading={isPending}
+          color={product.isProduct ? "primary" : "default"}
+          onClick={() => handleClick(Number(customerId), product.id)}
         >
           {product.isProduct ? "登録済" : "未登録"}
         </Button>

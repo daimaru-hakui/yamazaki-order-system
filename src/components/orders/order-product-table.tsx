@@ -54,7 +54,7 @@ export default function OrderProductTable({
                 発注入力
               </ModalHeader>
               <ModalBody>
-                <Table shadow="none">
+                <Table shadow="none" aria-label="order product table">
                   <TableHeader>
                     <TableColumn className="text-center">サイズ</TableColumn>
                     <TableColumn className="text-center">数量入力</TableColumn>
@@ -65,13 +65,13 @@ export default function OrderProductTable({
                     </TableColumn>
                   </TableHeader>
                   <TableBody>
-                    {skus.map((sku) => (
+                    {skus.map((sku, idx) => (
                       <TableRow key={sku.id}>
                         <TableCell className="text-center">
                           <div>{sku.size.name}</div>
                         </TableCell>
                         <TableCell className="flex justify-center">
-                          <OrderProductTableRow sku={sku} />
+                          <OrderProductTableRow sku={sku} idx={idx} />
                         </TableCell>
                         <TableCell className="text-right">1</TableCell>
                         <TableCell className="text-right">1</TableCell>

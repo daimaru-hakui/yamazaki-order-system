@@ -2,15 +2,6 @@
 import paths from "@/paths";
 import { useStore } from "@/store";
 import {
-  Input,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from "@nextui-org/react";
-import {
   Color,
   Customer,
   CustomerProduct,
@@ -29,11 +20,11 @@ export type Inputs = {
     skuId: number;
     quantity: number;
   }[];
-}
+};
 
 interface SkuWithSize extends Sku {
   size: Size;
-  product:Product
+  product: Product;
 }
 
 interface ProductWithColorAndSku extends Product {
@@ -47,10 +38,10 @@ interface CustomerProductWithColor extends CustomerProduct {
 
 interface OrderProductListProps {
   customers:
-    | ({
-        customerProduct: CustomerProductWithColor[];
-      } & Customer)
-    | null;
+  | ({
+    customerProduct: CustomerProductWithColor[];
+  } & Customer)
+  | null;
 }
 
 export default function OrderProductList({ customers }: OrderProductListProps) {
