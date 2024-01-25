@@ -14,23 +14,29 @@ import {
   TableRow,
   useDisclosure,
 } from "@nextui-org/react";
-import { Color, Product, Size, Sku } from "@prisma/client";
-import { ReactNode, useState } from "react";
+import { Product, Size, Sku } from "@prisma/client";
+import { ReactNode } from "react";
+import { FieldValues, UseFormReturn } from "react-hook-form";
+import OrderProductTableRow from "./order-product-table-row";
 
 interface SkuWithSize extends Sku {
   size: Size;
+  product: Product;
 }
 
 interface OrderProductTableProps {
   children: ReactNode;
   skus: SkuWithSize[];
+  methods: UseFormReturn<FieldValues, any, undefined>;
 }
 
 export default function OrderProductTable({
   children,
   skus,
+  methods,
 }: OrderProductTableProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { register } = methods;
   return (
     <>
       <Button color="primary" onPress={onOpen} className="mt-3">
@@ -65,11 +71,7 @@ export default function OrderProductTable({
                           <div>{sku.size.name}</div>
                         </TableCell>
                         <TableCell className="flex justify-center">
-                          <Input
-                            type="number"
-                            size="sm"
-                            className="w-[calc(80px)]"
-                          />
+                          <OrderProductTableRow sku={sku} />
                         </TableCell>
                         <TableCell className="text-right">1</TableCell>
                         <TableCell className="text-right">1</TableCell>
@@ -84,7 +86,7 @@ export default function OrderProductTable({
                   Close
                 </Button>
                 <Button color="primary" onPress={onClose}>
-                  登録
+                  カートに入れる
                 </Button>
               </ModalFooter>
             </>

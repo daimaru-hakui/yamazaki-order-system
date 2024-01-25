@@ -23,7 +23,7 @@ import { AiOutlineArrowLeft } from "react-icons/ai";
 import { useForm, SubmitHandler } from "react-hook-form";
 import OrderProductTable from "./order-product-table";
 
-interface Inputs {
+export type Inputs = {
   customerId: number;
   items: {
     skuId: number;
@@ -33,6 +33,7 @@ interface Inputs {
 
 interface SkuWithSize extends Sku {
   size: Size;
+  product:Product
 }
 
 interface ProductWithColorAndSku extends Product {
@@ -54,6 +55,7 @@ interface OrderProductListProps {
 
 export default function OrderProductList({ customers }: OrderProductListProps) {
   const setCart = useStore((state) => state.setCart);
+  const methods = useForm();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     console.log(data);
@@ -73,12 +75,15 @@ export default function OrderProductList({ customers }: OrderProductListProps) {
       <div className="mt-6 text-2xl">{customers?.name}</div>
       <form className="grid grid-cols-2 gap-6 mt-3">
         {customers?.customerProduct.map((cp) => (
-          <div key={cp.id} className="p-6 rounded-xl bg-white shadow-md">
+          <div key={cp.id} className="p-3 rounded-xl bg-white shadow-md">
             <div className="flex flex-col">
-                  <div>{cp.product.productNumber}</div>
-                  <div>{cp.product.productName}</div>
+              <div>{cp.product.productNumber}</div>
+              <div>
+                {cp.product.productName}
+                <span className="ml-3">{cp.product.color.name}</span>
+              </div>
               <div className="flex flex-col gap-3">
-                <OrderProductTable skus={cp.product.skus}>
+                <OrderProductTable skus={cp.product.skus} methods={methods}>
                   登録
                 </OrderProductTable>
               </div>

@@ -6,13 +6,15 @@ export interface Cart {
     name: string;
   };
   comment: string;
-  items: {
-    code: string;
-    productNumber: string;
-    productName: string;
-    quantity: number;
-    price: number;
-  }[];
+  items:
+    | {
+        skuId: number | undefined;
+        productNumber: string;
+        productName: string;
+        quantity: number;
+        price: number;
+      }[]
+    ;
 }
 
 interface State {
@@ -29,15 +31,7 @@ export const useStore = create<State>((set) => ({
       name: "",
     },
     comment: "",
-    items: [
-      {
-        code: "",
-        productNumber: "",
-        productName: "",
-        quantity: 0,
-        price: 0,
-      },
-    ],
+    items: [],
   },
   setCart: (cart) => set({ cart }),
   activePage: 1,
