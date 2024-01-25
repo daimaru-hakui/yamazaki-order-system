@@ -5,5 +5,5 @@ export default function ProductMasterLayout({
 }: {
   children: ReactNode;
 }) {
-  return <div className="w-full p-6">{children}</div>;
+  return <div className="w-full">{children}</div>;
 }

@@ -7,7 +7,7 @@ interface CustomerListProps {
 
 export default function OrderCustomerList({ customers }: CustomerListProps) {
   return (
-    <div className="flex flex-row gap-3">
+    <div className="grid grid-cols-2 gap-3">
       {customers?.map((customer) => (
         <OrderCustomerCard key={customer.id} customer={customer} />
       ))}

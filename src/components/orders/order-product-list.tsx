@@ -1,44 +1,91 @@
+"use client";
 import paths from "@/paths";
 import { useStore } from "@/store";
-import { Color, Customer, CustomerProduct, Product } from "@prisma/client";
+import {
+  Input,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from "@nextui-org/react";
+import {
+  Color,
+  Customer,
+  CustomerProduct,
+  Product,
+  Size,
+  Sku,
+} from "@prisma/client";
 import Link from "next/link";
+import { AiOutlineArrowLeft } from "react-icons/ai";
+import { useForm, SubmitHandler } from "react-hook-form";
+import OrderProductTable from "./order-product-table";
 
-// interface ProductWithColor extends Product {
-//   color: Color;
-// }
+interface Inputs {
+  customerId: number;
+  items: {
+    skuId: number;
+    quantity: number;
+  }[];
+}
 
-// interface CustomerProductWithColor extends CustomerProduct {
-//   product: ProductWithColor;
-// }
+interface SkuWithSize extends Sku {
+  size: Size;
+}
 
-interface T extends Customer {
-  customers: (CustomerProduct[] & Customer | null);
+interface ProductWithColorAndSku extends Product {
+  color: Color;
+  skus: SkuWithSize[];
+}
+
+interface CustomerProductWithColor extends CustomerProduct {
+  product: ProductWithColorAndSku;
 }
 
 interface OrderProductListProps {
-  customers: ({
-    customerProduct: CustomerProduct[];
-  } & Customer) | null;
+  customers:
+    | ({
+        customerProduct: CustomerProductWithColor[];
+      } & Customer)
+    | null;
 }
 
-
 export default function OrderProductList({ customers }: OrderProductListProps) {
+  const setCart = useStore((state) => state.setCart);
 
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    console.log(data);
+  };
   return (
-    <div>
-      <Link href={paths.orderCreate()}>
-        <button
-          className="px-3 py-1 bg-blue-500 text-white rounded"
+    <>
+      <div className="flex justify-center gap-6 relative">
+        <Link
+          href={paths.orderCreate()}
+          className="flex items-center gap-3 absolute left-0"
         >
-          工場選択へ戻る
-        </button>
-      </Link>
-      <div className="mt-6">{ }</div>
-      <div>
-        {/* {customers.map((cp => (
-          <div key={cp.id}>{cp.CustomerProduct.map}</div>
-        )))} */}
+          <AiOutlineArrowLeft className="text-xl" />
+          戻る
+        </Link>
+        <div className="font-bold">発注入力</div>
       </div>
-    </div>
+      <div className="mt-6 text-2xl">{customers?.name}</div>
+      <form className="grid grid-cols-2 gap-6 mt-3">
+        {customers?.customerProduct.map((cp) => (
+          <div key={cp.id} className="p-6 rounded-xl bg-white shadow-md">
+            <div className="flex flex-col">
+                  <div>{cp.product.productNumber}</div>
+                  <div>{cp.product.productName}</div>
+              <div className="flex flex-col gap-3">
+                <OrderProductTable skus={cp.product.skus}>
+                  登録
+                </OrderProductTable>
+              </div>
+            </div>
+          </div>
+        ))}
+      </form>
+    </>
   );
 }

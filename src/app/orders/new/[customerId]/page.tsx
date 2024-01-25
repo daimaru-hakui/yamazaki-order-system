@@ -6,27 +6,33 @@ interface OrderCreateCustomerById {
     customerId: string;
   };
 }
-export default async function OrderCreateCustomerById({ params }: OrderCreateCustomerById) {
+export default async function OrderCreateCustomerById({
+  params,
+}: OrderCreateCustomerById) {
   const customers = await db.customer.findFirst({
     where: {
-      id: Number(params.customerId)
+      id: Number(params.customerId),
     },
     include: {
       customerProduct: {
         include: {
           product: {
             include: {
-              color: true
-            }
-          }
-        }
-      }
-    }
+              color: true,
+              skus: {
+                include: {
+                  size: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
   });
   await db.$disconnect();
-  console.log(customers);
   return (
-    <div className="mx-auto max-w-[calc(700px)]">
+    <div className="mx-auto max-w-[calc(600px)]">
       <OrderProductList customers={customers} />
     </div>
   );

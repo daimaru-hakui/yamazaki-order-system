@@ -21,7 +21,7 @@ export default function RootLayout({
       <html lang="en">
         <body className={`${inter.className} relative min-h-screen bg-gray-50`}>
           <Navbar />
-          <div>
+          <div className="p-6">
             <NextUIProviders>{children}</NextUIProviders>
           </div>
         </body>

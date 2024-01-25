@@ -62,7 +62,7 @@ export default function SkuCreateForm({
   const focusHandle = (e: any) => {
     e.target.select();
   };
-  
+
   let result: { errors: {} };
   const onSubmit: SubmitHandler<CreateSkuFormState> = async (data) => {
     startTransition(async () => {
@@ -114,7 +114,7 @@ export default function SkuCreateForm({
                     placeholder="サイズ"
                     isInvalid={!!errors.sizeId}
                     errorMessage={errors.sizeId?.message}
-                    {...register("sizeId", {})}
+                    {...register("sizeId")}
                   >
                     {sizes.map((size) => (
                       <SelectItem key={size.id} value={size.id}>
@@ -129,7 +129,6 @@ export default function SkuCreateForm({
                     label="価格"
                     labelPlacement={"outside"}
                     placeholder="価格"
-                    defaultValue="0"
                     isInvalid={!!errors.price}
                     errorMessage={errors.price?.message}
                     onFocus={(e) => focusHandle(e)}
