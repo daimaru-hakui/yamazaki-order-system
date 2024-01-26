@@ -2,13 +2,14 @@ import { create } from "zustand";
 
 export interface Cart {
   skuId: number | undefined;
+  productId: number;
   productNumber: string;
   productName: string;
   quantity: number;
   price: number;
-};
-
-
+  size: string;
+  displayOrder: number;
+}
 
 interface State {
   cart: Cart[];

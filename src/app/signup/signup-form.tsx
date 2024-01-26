@@ -1,17 +1,17 @@
 "use client";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { User, createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/firebase/client";
-import { signIn } from "next-auth/react";
 import { Button, Input } from "@nextui-org/react";
 
 type Inputs = {
   email: string;
   password: string;
+  key: string;
 };
 
-const LoginForm: FC = () => {
+const SignUpForm: FC = () => {
   const {
     register,
     handleSubmit,
@@ -19,25 +19,33 @@ const LoginForm: FC = () => {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    await signInHandler(data);
+    if (data.key === process.env.NEXT_PUBLIC_SIGNUP_KEY) {
+      await signInHandler(data);
+    }
   };
   const signInHandler = async (data: Inputs) => {
-    const { email, password } = data;
+    const { email, password, key } = data;
     try {
-      const userCredential = await signInWithEmailAndPassword(
+      const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
         password
       );
-      const idToken = await userCredential.user.getIdToken();
-      await signIn("credentials", {
-        idToken,
-        callbackUrl: "/",
-      });
+      const user = userCredential.user;
+      await fetchUserPost(user);
     } catch (error) {
       console.error(error);
-      alert("ログインに失敗しました");
+      alert("サインアップに失敗しました");
     }
+  };
+
+  const fetchUserPost = async (user: User) => {
+    const url = "/api/signup";
+    const res = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify(user),
+    });
+    return await res.json();
   };
 
   return (
@@ -46,8 +54,8 @@ const LoginForm: FC = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
       >
-        <div className="text-center mt-2 text-2xl">Login</div>
-        <div className="flex flex-col gap-6 mt-3">
+        <div className="text-center mt-2 text-2xl">SignUp</div>
+        <div className="flex flex-col gap-6 mt-6">
           <Input
             type="email"
             labelPlacement="outside"
@@ -64,8 +72,16 @@ const LoginForm: FC = () => {
             errorMessage={errors.password && "passwordを入力してください"}
             {...register("password", { required: true })}
           />
+          <Input
+            type="password"
+            labelPlacement="outside"
+            label="key"
+            placeholder="key"
+            errorMessage={errors.key && "keyを入力してください"}
+            {...register("key", { required: true })}
+          />
           <div className="flex items-center justify-between">
-            <Button color="primary" className="w-full" type="submit">
+            <Button type="submit" color="primary" className="w-full">
               Sign In
             </Button>
           </div>
@@ -75,4 +91,4 @@ const LoginForm: FC = () => {
   );
 };
 
-export default LoginForm;
+export default SignUpForm;

@@ -17,5 +17,5 @@ export default withAuth(function middleware(req: NextRequest) {
 });
 
 export const config = {
-  matcher: ['/((?!.*login).*)/'],
+  matcher: ['/((?!.*login|signup|api\/signup).*)/'],
 };

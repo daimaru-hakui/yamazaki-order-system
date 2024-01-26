@@ -13,6 +13,7 @@ import Link from "next/link";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { useForm, SubmitHandler } from "react-hook-form";
 import OrderProductTable from "./order-product-table";
+import { Chip } from "@nextui-org/react";
 
 export type Inputs = {
   customerId: number;
@@ -38,19 +39,29 @@ interface CustomerProductWithColor extends CustomerProduct {
 
 interface OrderProductListProps {
   customers:
-  | ({
-    customerProduct: CustomerProductWithColor[];
-  } & Customer)
-  | null;
+    | ({
+        customerProduct: CustomerProductWithColor[];
+      } & Customer)
+    | null;
 }
 
 export default function OrderProductList({ customers }: OrderProductListProps) {
-  const setCart = useStore((state) => state.setCart);
-  const methods = useForm();
+  const cart = useStore((state) => state.cart);
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
+  const cartArea = (productId: number) => {
+    const newCart = cart
+      .filter((item) => item.productId === productId)
+      .sort((a: { displayOrder: number }, b: { displayOrder: number }) => {
+        return a.displayOrder - b.displayOrder;
+      });
+
+    return newCart.map((item) => (
+      <Chip key={item.skuId} variant="bordered">
+        {item.size}/{item.quantity}
+      </Chip>
+    ));
   };
+
   return (
     <>
       <div className="flex justify-center gap-6 relative">
@@ -58,25 +69,28 @@ export default function OrderProductList({ customers }: OrderProductListProps) {
           href={paths.orderCreate()}
           className="flex items-center gap-3 absolute left-0"
         >
-          <AiOutlineArrowLeft className="text-xl" />
-          戻る
+          <AiOutlineArrowLeft />
+          <div className="text-sm">戻る</div>
         </Link>
-        <div className="font-bold">発注入力</div>
+        <div className="font-bold">数量入力</div>
       </div>
       <div className="mt-6 text-2xl">{customers?.name}</div>
       <form className="grid grid-cols-2 gap-6 mt-3">
         {customers?.customerProduct.map((cp) => (
           <div key={cp.id} className="p-3 rounded-xl bg-white shadow-md">
             <div className="flex flex-col">
-              <div>{cp.product.productNumber}</div>
-              <div>
-                {cp.product.productName}
-                <span className="ml-3">{cp.product.color.name}</span>
+              <div className="flex justify-between items-start gap-5">
+                <div>
+                  <div>{cp.product.productNumber}</div>
+                  <div className="flex gap-3">
+                    <div>{cp.product.productName}</div>
+                    <span>{cp.product.color.name}</span>
+                  </div>
+                </div>
+                <OrderProductTable skus={cp.product.skus} />
               </div>
-              <div className="flex flex-col gap-3">
-                <OrderProductTable skus={cp.product.skus} methods={methods}>
-                  登録
-                </OrderProductTable>
+              <div className="flex flex-wrap gap-1 mt-3">
+                {cartArea(cp.product.id)}
               </div>
             </div>
           </div>

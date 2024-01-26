@@ -1,6 +1,5 @@
 import {
   Button,
-  Input,
   Modal,
   ModalBody,
   ModalContent,
@@ -15,9 +14,8 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { Product, Size, Sku } from "@prisma/client";
-import { ReactNode } from "react";
-import { FieldValues, UseFormReturn } from "react-hook-form";
 import OrderProductTableRow from "./order-product-table-row";
+import { AiFillExclamationCircle } from "react-icons/ai";
 
 interface SkuWithSize extends Sku {
   size: Size;
@@ -25,23 +23,20 @@ interface SkuWithSize extends Sku {
 }
 
 interface OrderProductTableProps {
-  children: ReactNode;
   skus: SkuWithSize[];
-  methods: UseFormReturn<FieldValues, any, undefined>;
 }
 
 export default function OrderProductTable({
-  children,
   skus,
-  methods,
 }: OrderProductTableProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const { register } = methods;
   return (
     <>
-      <Button color="primary" onPress={onOpen} className="mt-3">
-        {children}
-      </Button>
+      <AiFillExclamationCircle
+        onClick={onOpen}
+        className="text-blue-500 cursor-pointer"
+        style={{fontSize:"30px"}}
+      />
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
@@ -58,8 +53,8 @@ export default function OrderProductTable({
                   <TableHeader>
                     <TableColumn className="text-center">サイズ</TableColumn>
                     <TableColumn className="text-center">数量入力</TableColumn>
+                    <TableColumn className="text-center">価格</TableColumn>
                     <TableColumn className="text-center">在庫数</TableColumn>
-                    <TableColumn className="text-center">注文数</TableColumn>
                     <TableColumn className="text-center">
                       入荷予定数
                     </TableColumn>
@@ -73,7 +68,7 @@ export default function OrderProductTable({
                         <TableCell className="flex justify-center">
                           <OrderProductTableRow sku={sku} idx={idx} />
                         </TableCell>
-                        <TableCell className="text-right">1</TableCell>
+                        <TableCell className="text-right">{sku.price}</TableCell>
                         <TableCell className="text-right">1</TableCell>
                         <TableCell className="text-right">1</TableCell>
                       </TableRow>
@@ -82,11 +77,8 @@ export default function OrderProductTable({
                 </Table>
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
-                </Button>
-                <Button color="primary" onPress={onClose}>
-                  カートに入れる
+                <Button color="default" variant="light" onPress={onClose}>
+                  閉じる
                 </Button>
               </ModalFooter>
             </>

@@ -1,14 +1,11 @@
 "use client";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { navbarLinks } from "@/utils/links";
 import Link from "next/link";
-import { Button } from "@nextui-org/react";
+import NavDropdown from "./nav-dropdown";
 
 export default function Navbar() {
   const session = useSession();
-  const logout = async () => {
-    await signOut();
-  };
 
   return (
     <header className="(w-full shadow-sm sticky top-0 z-50 bg-white">
@@ -24,7 +21,7 @@ export default function Navbar() {
                   <button>{name}</button>
                 </Link>
               ))}
-              <Button color="primary" size="sm" onClick={logout}>logout</Button>
+              <NavDropdown />
             </>
           )}
         </div>

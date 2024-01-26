@@ -1,4 +1,5 @@
 import OrderProductList from "@/components/orders/order-product-list";
+import OrderCartButtonArea from "@/components/orders/order-cart-button-area";
 import { db } from "@/db";
 
 interface OrderCreateCustomerById {
@@ -22,7 +23,7 @@ export default async function OrderCreateCustomerById({
               skus: {
                 include: {
                   size: true,
-                  product: true
+                  product: true,
                 },
               },
             },
@@ -35,6 +36,12 @@ export default async function OrderCreateCustomerById({
   return (
     <div className="mx-auto max-w-[calc(600px)]">
       <OrderProductList customers={customers} />
+      <OrderCartButtonArea
+        customer={{
+          customerId: params.customerId,
+          customerName: customers?.name,
+        }}
+      />
     </div>
   );
 }
