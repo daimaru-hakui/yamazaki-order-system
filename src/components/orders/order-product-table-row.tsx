@@ -2,7 +2,7 @@
 import { useStore } from "@/store";
 import { Input, TableCell, TableRow } from "@nextui-org/react";
 import { Product, Size, Sku } from "@prisma/client";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 interface SkuWithSize extends Sku {
   size: Size;
@@ -11,42 +11,73 @@ interface SkuWithSize extends Sku {
 
 interface OrderProductTableRowInputProps {
   sku: SkuWithSize;
+  idx: number;
 }
 
 export default function OrderProductTableRowInput({
   sku,
+  idx
 }: OrderProductTableRowInputProps) {
   const cart = useStore((state) => state.cart);
   const setCart = useStore((state) => state.setCart);
-  const [quantity, setQuantiy] = useState<number>(0);
+  const initQuantiry = cart.find((item) => (
+    item.skuId === sku.id
+  ));
+  const [quantity, setQuantity] = useState(initQuantiry?.quantity);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if(!sku) return
-    const result = cart?.items.find((item) => item.skuId === sku.id);
-    if (!result) {
-      setCart({
-        ...cart,
-        items: [
-          ...cart.items,
-          {
+    const value = Number(e.target.value);
+    setQuantity(value);
+  };
+
+  useEffect(() => {
+    const cartExsist = cart?.find((item) =>
+      item.skuId === sku.id);
+
+    if (Number(quantity) <= 0) {
+      const newCart = cart.filter((item) =>
+        (item.skuId !== sku.id));
+      setCart(newCart);
+      return;
+    };
+
+    if (!cartExsist) {
+      const newCart = [...cart, {
+        skuId: sku.id,
+        productName: sku.product?.productName,
+        productNumber: sku.product?.productNumber,
+        quantity: Number(quantity),
+        price: sku?.price,
+      }];
+      setCart(newCart);
+    } else {
+      const newCart = cart.map((item) => {
+        if (item.skuId == sku.id) {
+          return {
             skuId: sku.id,
             productName: sku.product?.productName,
             productNumber: sku.product?.productNumber,
-            quantity: Number(value),
+            quantity: Number(quantity),
             price: sku?.price,
-          },
-        ],
+          };
+        } else {
+          return item;
+        }
       });
+      setCart(newCart);
     }
-    console.log(cart);
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [quantity]);
+
+  console.log(cart);
+
   return (
     <Input
       type="number"
       size="sm"
       className="w-[calc(80px)]"
-      onChange={(e) => handleChange(e)}
+      value={String(quantity)}
+      onChange={handleChange}
     />
   );
 }

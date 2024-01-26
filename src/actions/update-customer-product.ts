@@ -9,18 +9,18 @@ export async function updateCustomerProduct(
   customerId: number,
   productId: number
 ) {
+  const customerProduct = await db.customerProduct.findFirst({
+    where: {
+      customerId: customerId,
+      productId: productId,
+    },
+  });
   try {
-    const customerProduct = await db.customerProduct.findFirst({
-      where: {
-        customerId: Number(customerId),
-        productId: Number(productId),
-      },
-    });
     if (!customerProduct) {
       await db.customerProduct.create({
         data: {
-          customerId: Number(customerId),
-          productId: Number(productId),
+          customerId: customerId,
+          productId: productId,
         },
       });
     } else {
@@ -32,8 +32,10 @@ export async function updateCustomerProduct(
     }
   } catch (err) {
     if (err instanceof Error) {
+      console.log(err);
       return;
     } else {
+      console.log(err);
       return;
     }
   }
