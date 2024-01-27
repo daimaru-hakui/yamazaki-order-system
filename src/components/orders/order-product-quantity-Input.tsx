@@ -1,23 +1,23 @@
 "use client";
 import { useStore } from "@/store";
 import { Input } from "@nextui-org/react";
-import { Product, Size, Sku } from "@prisma/client";
+import { Sku } from "@prisma/client";
 import { ChangeEvent, useEffect, useState } from "react";
 
-interface SkuWithSize extends Sku {
-  size: Size;
-  product: Product;
+interface OrderProductTableInputProps {
+  sku: Sku & {
+    size: { name: string; };
+    product: {
+      id: number,
+      productNumber: string,
+      productName: string;
+    };
+  };
 }
 
-interface OrderProductTableRowInputProps {
-  sku: SkuWithSize;
-  idx: number;
-}
-
-export default function OrderProductTableRowInput({
+export default function OrderProductQuantityInput({
   sku,
-  idx,
-}: OrderProductTableRowInputProps) {
+}: OrderProductTableInputProps) {
   const cart = useStore((state) => state.cart);
   const setCart = useStore((state) => state.setCart);
   const initQuantiry = cart.find((item) => item.skuId === sku.id);
@@ -28,8 +28,17 @@ export default function OrderProductTableRowInput({
     setQuantity(value);
   };
 
+  const focusHandle = (e: any) => {
+    e.target.select();
+  };
+
+  const keyDownHandler = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const key = e.code;
+    console.log(key);
+  };
+
   useEffect(() => {
-    const cartExsist = cart?.find((item) => item.skuId === sku.id);
+    const cartExists = cart?.find((item) => item.skuId === sku.id);
 
     if (Number(quantity) <= 0 || !quantity) {
       const newCart = cart.filter((item) => item.skuId !== sku.id);
@@ -37,7 +46,7 @@ export default function OrderProductTableRowInput({
       return;
     }
 
-    if (!cartExsist) {
+    if (!cartExists) {
       const newCart = [
         ...cart,
         {
@@ -80,8 +89,10 @@ export default function OrderProductTableRowInput({
     <Input
       type="number"
       size="sm"
-      className="w-[calc(80px)]"
+      className="w-20"
       value={String(quantity)}
+      onKeyDown={keyDownHandler}
+      onFocus={focusHandle}
       onChange={handleChange}
     />
   );

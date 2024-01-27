@@ -10,7 +10,7 @@ interface OrderCreateCustomerById {
 export default async function OrderCreateCustomerById({
   params,
 }: OrderCreateCustomerById) {
-  const customers = await db.customer.findFirst({
+  const customer = await db.customer.findFirst({
     where: {
       id: Number(params.customerId),
     },
@@ -19,11 +19,21 @@ export default async function OrderCreateCustomerById({
         include: {
           product: {
             include: {
-              color: true,
+              color: { select: { name: true } },
               skus: {
                 include: {
-                  size: true,
-                  product: true,
+                  size: {
+                    select: {
+                      name: true,
+                    }
+                  },
+                  product: {
+                    select: {
+                      id: true,
+                      productNumber: true,
+                      productName: true
+                    }
+                  },
                 },
               },
             },
@@ -35,11 +45,11 @@ export default async function OrderCreateCustomerById({
   await db.$disconnect();
   return (
     <div className="mx-auto max-w-[calc(600px)]">
-      <OrderProductList customers={customers} />
+      <OrderProductList customerName={customer?.name} customerProducts={customer?.customerProduct} />
       <OrderCartButtonArea
         customer={{
           customerId: params.customerId,
-          customerName: customers?.name,
+          customerName: customer?.name,
         }}
       />
     </div>

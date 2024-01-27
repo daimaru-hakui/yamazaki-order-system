@@ -13,29 +13,32 @@ import {
   TableRow,
   useDisclosure,
 } from "@nextui-org/react";
-import { Product, Size, Sku } from "@prisma/client";
-import OrderProductTableRow from "./order-product-table-row";
+import type { Sku } from "@prisma/client";
+import OrderProductQuantityInput from "./order-product-quantity-Input";
 import { AiFillExclamationCircle } from "react-icons/ai";
 
-interface SkuWithSize extends Sku {
-  size: Size;
-  product: Product;
-}
-
-interface OrderProductTableProps {
-  skus: SkuWithSize[];
+interface OrderProductModalProps {
+  skus: (Sku & {
+    size: { name: string; };
+    product: {
+      id: number,
+      productNumber: string,
+      productName: string;
+    };
+  })[];
 }
 
 export default function OrderProductTable({
   skus,
-}: OrderProductTableProps) {
+}: OrderProductModalProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
   return (
     <>
       <AiFillExclamationCircle
         onClick={onOpen}
         className="text-blue-500 cursor-pointer"
-        style={{fontSize:"30px"}}
+        style={{ fontSize: "30px" }}
       />
       <Modal
         isOpen={isOpen}
@@ -60,13 +63,13 @@ export default function OrderProductTable({
                     </TableColumn>
                   </TableHeader>
                   <TableBody>
-                    {skus.map((sku, idx) => (
+                    {skus.map((sku) => (
                       <TableRow key={sku.id}>
                         <TableCell className="text-center">
                           <div>{sku.size.name}</div>
                         </TableCell>
                         <TableCell className="flex justify-center">
-                          <OrderProductTableRow sku={sku} idx={idx} />
+                          <OrderProductQuantityInput sku={sku} />
                         </TableCell>
                         <TableCell className="text-right">{sku.price}</TableCell>
                         <TableCell className="text-right">1</TableCell>

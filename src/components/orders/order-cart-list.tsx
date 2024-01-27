@@ -2,6 +2,7 @@
 import paths from "@/paths";
 import { Cart, useStore } from "@/store";
 import {
+  Input,
   Table,
   TableBody,
   TableCell,
@@ -12,11 +13,13 @@ import {
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { AiOutlineArrowLeft } from "react-icons/ai";
+import { AiOutlineArrowLeft, AiFillDelete } from "react-icons/ai";
 import OrderConfButtonArea from "./order-conf-button-area";
+import OrderCartQuantityInput from "./order-cart-quantiy-input";
 
 export default function OrderCartList() {
   const cart = useStore((state) => state.cart);
+  const setCart = useStore((state) => state.setCart);
   const [sum, setSum] = useState(0);
   const [sortCart, setSortCart] = useState<Cart[]>([]);
   const serchParams = useSearchParams();
@@ -33,14 +36,37 @@ export default function OrderCartList() {
 
   useEffect(() => {
     const newCart = cart
-      .sort((a: { displayOrder: number }, b: { displayOrder: number }) => {
-        return a.displayOrder - b.displayOrder;
-      })
-      .sort((a: { productId: number }, b: { productId: number }) => {
-        return a.productId - b.productId;
-      });
+      .sort((a: { displayOrder: number; }, b: { displayOrder: number; }) =>
+        a.displayOrder - b.displayOrder
+      )
+      .sort((a: { productId: number; }, b: { productId: number; }) =>
+        a.productId - b.productId
+      );
     setSortCart(newCart);
   }, [cart]);
+
+  const handleClickDelete = (skuId: number) => {
+    if (!skuId) return;
+    const newCart = cart.filter((item) => item.skuId !== skuId);
+    setCart(newCart);
+  };
+
+  const updateQuantity = (skuId: number, quantity: number) => {
+
+    const newCart = cart.map((item) => {
+      if (item.skuId === skuId) {
+        return {
+          ...item,
+          quantity
+        };
+      } else {
+        return item;
+      }
+    });
+    console.log(newCart);
+    setCart(newCart);
+  };
+
 
   return (
     <div>
@@ -63,6 +89,7 @@ export default function OrderCartList() {
           <TableColumn className="text-center">価格</TableColumn>
           <TableColumn className="text-center">数量</TableColumn>
           <TableColumn className="text-center">合計</TableColumn>
+          <TableColumn className="text-center">削除</TableColumn>
         </TableHeader>
         <TableBody>
           {sortCart.map((item) => (
@@ -74,10 +101,18 @@ export default function OrderCartList() {
                 {item.price.toLocaleString()}
               </TableCell>
               <TableCell className="text-right">
-                {item.quantity.toLocaleString()}
+                <OrderCartQuantityInput
+                  skuId={item.skuId}
+                  quantity={item.quantity}
+                  updateQuantity={updateQuantity}
+                />
               </TableCell>
               <TableCell className="text-right">
                 {(item.quantity * item.price).toLocaleString()}円
+              </TableCell>
+              <TableCell className="text-center">
+                <AiFillDelete className="mx-auto text-lg cursor-pointer"
+                  onClick={() => handleClickDelete(item.skuId)} />
               </TableCell>
             </TableRow>
           ))}

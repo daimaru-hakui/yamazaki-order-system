@@ -111,7 +111,7 @@ model CustomerProduct {
   productId  Int      @map("product_id")
 
   @@unique([customerId, productId])
-  @@map("customer_product")
+  @@map("customer_products")
 }
 
 model Order {
