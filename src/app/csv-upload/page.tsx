@@ -1,4 +1,4 @@
-import FormOrderCsv from "@/components/order-csv/form-order-csv";
+import CsvUploadForm from "@/components/csv-upload/csv-upload-form";
 import { db } from "@/db";
 import { Color, Product, Size, Sku } from "@prisma/client";
 
@@ -10,7 +10,7 @@ export type SkuWithProduct = (Sku & {
 });
 
 
-export default async function OrderCsvPage() {
+export default async function csvUploadPage() {
   const skus = await db.sku.findMany({
     include: {
       product: {
@@ -24,7 +24,7 @@ export default async function OrderCsvPage() {
 
   return (
     <div className="mx-auto max-w-[calc(700px)]">
-      <FormOrderCsv skus={skus} />
+      <CsvUploadForm skus={skus} />
     </div>
   );
 }
