@@ -1,0 +1,29 @@
+-- AlterTable
+ALTER TABLE "categories" ALTER COLUMN "name" SET DATA TYPE TEXT;
+
+-- AlterTable
+ALTER TABLE "colors" ALTER COLUMN "name" SET DATA TYPE TEXT;
+
+-- AlterTable
+ALTER TABLE "customers" ALTER COLUMN "name" SET DATA TYPE TEXT,
+ALTER COLUMN "address" SET DATA TYPE TEXT,
+ALTER COLUMN "tel" SET DATA TYPE TEXT;
+
+-- AlterTable
+ALTER TABLE "order_details" ALTER COLUMN "first_name" SET DATA TYPE TEXT,
+ALTER COLUMN "last_name" SET DATA TYPE TEXT,
+ALTER COLUMN "memo" SET DATA TYPE TEXT;
+
+-- AlterTable
+ALTER TABLE "products" ALTER COLUMN "product_number" SET DATA TYPE TEXT,
+ALTER COLUMN "product_name" SET DATA TYPE TEXT;
+
+-- AlterTable
+ALTER TABLE "sizes" ALTER COLUMN "name" SET DATA TYPE TEXT;
+
+-- AlterTable
+ALTER TABLE "skus" ALTER COLUMN "product_code" SET DATA TYPE TEXT,
+ALTER COLUMN "jan_code" SET DATA TYPE TEXT;
+
+-- AlterTable
+ALTER TABLE "users" ALTER COLUMN "name" SET DATA TYPE TEXT;

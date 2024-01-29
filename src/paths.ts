@@ -26,14 +26,20 @@ const paths = {
   customerEdit(customerId: number) {
     return `/customers/${customerId}/edit`;
   },
+  orderAll() {
+    return `/orders`;
+  },
   orderCreate() {
     return `/orders/new`;
   },
   orderProductCreate(customerId: number) {
     return `/orders/new/${customerId}`;
   },
+  csvCreate() {
+    return `/csv-upload`;
+  },
   cartShow() {
-    return `/orders/cart`
+    return `/orders/cart`;
   }
 };
 

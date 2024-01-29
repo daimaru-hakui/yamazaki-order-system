@@ -19,7 +19,7 @@ export default function OrderCartButtonArea({ customer }: OrderCartButtonAreaPro
     setCart([]);
   };
   return (
-    <div className="fixed left-0 bottom-0 flex justify-center items-center p-3 w-full h-[calc(70px)] bg-white shadow-2xl">
+    <div className="fixed left-0 bottom-0 flex grid place-items-center p-3 w-full h-16 bg-white drop-shadow-2xl">
       <div className="flex justify-center items-center gap-3 w-full mx-auto px-3">
         <Button color="danger" onClick={handleCartClear}>
           クリア
@@ -33,7 +33,7 @@ export default function OrderCartButtonArea({ customer }: OrderCartButtonAreaPro
                 customerName: customer.customerName,
               },
             }}
-            className="flex items-center justify-center w-full h-full"
+            className="grid place-items-center w-full h-full"
           >
             カート確認
           </Link>

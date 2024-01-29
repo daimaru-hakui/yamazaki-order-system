@@ -39,6 +39,7 @@ export async function updateCustomerProduct(
       return;
     }
   }
+  revalidatePath(paths.customerAll());
   revalidatePath(paths.customerEdit(customerId));
   redirect(paths.customerEdit(customerId));
 }

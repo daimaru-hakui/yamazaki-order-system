@@ -3,6 +3,8 @@ import { useSession } from "next-auth/react";
 import { navbarLinks } from "@/utils/links";
 import Link from "next/link";
 import NavDropdown from "./nav-dropdown";
+import paths from "@/paths";
+import { Button } from "@nextui-org/react";
 
 export default function Navbar() {
   const session = useSession();
@@ -16,11 +18,20 @@ export default function Navbar() {
         <div className="flex gap-3 items-center">
           {session.data?.user && (
             <>
-              {navbarLinks.map(({ name, path }) => (
-                <Link href={path} key={name} className="text-sm">
-                  <button>{name}</button>
+              <Button color="primary" variant="bordered" size="sm" className="p-0">
+                <Link
+                  href={paths.orderCreate()}
+                  className="w-full h-full grid place-items-center">
+                  発注
                 </Link>
-              ))}
+              </Button>
+              <Button color="primary" variant="bordered" size="sm" className="p-0">
+                <Link
+                  href={paths.csvCreate()}
+                  className="w-full h-full grid place-items-center">
+                  CSV発注
+                </Link>
+              </Button>
               <NavDropdown />
             </>
           )}

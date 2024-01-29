@@ -1,18 +1,14 @@
 "use client";
 import paths from "@/paths";
 import { useStore } from "@/store";
-import {
-  Color,
-  Customer,
+import type {
   CustomerProduct,
   Product,
-  Size,
   Sku,
 } from "@prisma/client";
 import Link from "next/link";
 import { AiOutlineArrowLeft } from "react-icons/ai";
-import { useForm, SubmitHandler } from "react-hook-form";
-import OrderProductTable from "./order-product-table";
+import OrderProductModal from "./order-product-modal";
 import { Chip } from "@nextui-org/react";
 
 export type Inputs = {
@@ -23,35 +19,31 @@ export type Inputs = {
   }[];
 };
 
-interface SkuWithSize extends Sku {
-  size: Size;
-  product: Product;
-}
-
-interface ProductWithColorAndSku extends Product {
-  color: Color;
-  skus: SkuWithSize[];
-}
-
-interface CustomerProductWithColor extends CustomerProduct {
-  product: ProductWithColorAndSku;
-}
-
 interface OrderProductListProps {
-  customers:
-    | ({
-        customerProduct: CustomerProductWithColor[];
-      } & Customer)
-    | null;
+  customerName: string | undefined,
+  customerProducts: (CustomerProduct & {
+    product: Product & {
+      color: { name: string; };
+      skus: (Sku & {
+        size: { name: string; };
+        product: {
+          id: number,
+          productNumber: string,
+          productName: string;
+        };
+      })[];
+    };
+  })[]
+  | undefined;
 }
 
-export default function OrderProductList({ customers }: OrderProductListProps) {
+export default function OrderProductList({ customerName, customerProducts }: OrderProductListProps) {
   const cart = useStore((state) => state.cart);
 
   const cartArea = (productId: number) => {
     const newCart = cart
       .filter((item) => item.productId === productId)
-      .sort((a: { displayOrder: number }, b: { displayOrder: number }) => {
+      .sort((a: { displayOrder: number; }, b: { displayOrder: number; }) => {
         return a.displayOrder - b.displayOrder;
       });
 
@@ -74,9 +66,9 @@ export default function OrderProductList({ customers }: OrderProductListProps) {
         </Link>
         <div className="font-bold">数量入力</div>
       </div>
-      <div className="mt-6 text-2xl">{customers?.name}</div>
+      <div className="mt-6 text-2xl">{customerName}</div>
       <form className="grid grid-cols-2 gap-6 mt-3">
-        {customers?.customerProduct.map((cp) => (
+        {customerProducts?.map((cp) => (
           <div key={cp.id} className="p-3 rounded-xl bg-white shadow-md">
             <div className="flex flex-col">
               <div className="flex justify-between items-start gap-5">
@@ -87,7 +79,7 @@ export default function OrderProductList({ customers }: OrderProductListProps) {
                     <span>{cp.product.color.name}</span>
                   </div>
                 </div>
-                <OrderProductTable skus={cp.product.skus} />
+                <OrderProductModal skus={cp.product.skus} />
               </div>
               <div className="flex flex-wrap gap-1 mt-3">
                 {cartArea(cp.product.id)}

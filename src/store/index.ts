@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 export interface Cart {
-  skuId: number | undefined;
+  skuId: number;
   productId: number;
   productNumber: string;
   productName: string;
