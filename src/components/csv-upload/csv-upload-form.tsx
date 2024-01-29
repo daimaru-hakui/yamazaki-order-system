@@ -1,6 +1,6 @@
 'use client';
-import { Button, Input } from "@nextui-org/react";
-import { useEffect, useRef, useState } from "react";
+import { Button } from "@nextui-org/react";
+import {  useState } from "react";
 import OrderCsvList from "./csv-upload-list";
 import { SkuWithProduct } from "@/app/csv-upload/page";
 
@@ -33,7 +33,7 @@ export default function CsvUploadForm({ skus }: CsvUploadFormProps) {
       const csvArray = csvSplit.map((item) => {
         return {
           productId: item[0],
-          sizeId: item[1],
+          sizeCode: Number(item[1]),
           quantity: Number(item[2]),
           lastName: item[3],
           firstName: item[4],
@@ -41,7 +41,7 @@ export default function CsvUploadForm({ skus }: CsvUploadFormProps) {
         };
       });
       const csvSkus = csvArray.map((item) => {
-        const sku = findSkus(Number(item.productId), Number(item.sizeId));
+        const sku = findSkus(item.productId, item.sizeCode);
         return {
           ...sku,
           quantity: item.quantity,
@@ -55,9 +55,9 @@ export default function CsvUploadForm({ skus }: CsvUploadFormProps) {
     });
   };
 
-  const findSkus = (productId: number, sizeId: number) => {
+  const findSkus = (productId: string, sizeCode: number) => {
     const sku = skus.find((sku) =>
-      sku.productId === productId && sku.sizeId === sizeId
+      sku.productId === productId && sku.size.code === sizeCode
     );
     return sku;
   };

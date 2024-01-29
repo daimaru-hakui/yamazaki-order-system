@@ -8,6 +8,7 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 const CreateCustomerSchema = z.object({
+  code:z.number(),
   name: z
     .string({ required_error: "名前は必須です" })
     .min(3, { message: "3文字以上の入力をお願いします" }),
@@ -17,6 +18,7 @@ const CreateCustomerSchema = z.object({
 
 interface CreateCustomerFormState {
   errors: {
+    code?:string[]
     name?: string[];
     _form?: string[];
   };
@@ -49,6 +51,7 @@ export async function createCustomer(
   try {
     customer = await db.customer.create({
       data: {
+        code:result.data.code,
         name: result.data.name,
         address: result.data.address,
         tel: result.data.tel

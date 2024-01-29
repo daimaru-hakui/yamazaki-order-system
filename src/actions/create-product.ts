@@ -1,4 +1,4 @@
-"use server"
+"use server";
 import { db } from "@/db";
 import paths from "@/paths";
 import { Product } from "@prisma/client";
@@ -8,17 +8,19 @@ import { z } from "zod";
 const schema = z.object({
   productNumber: z.string().min(1, { message: "品番を入力してください" }),
   productName: z.string(),
-  categoryId: z.number().min(1, { message: "カテゴリーを選択してください" }),
-  colorId: z.number().min(1, { message: "カラーを選択してください" }),
+  categoryId: z.string({ required_error: "カテゴリーを選択してください" }),
+  colorId: z.string({ required_error: "カラーを選択してください" }),
   description: z.string(),
-  items: z.array(
-    z.object({
-      janCode: z.string(),
-      productCode: z.string(),
-      sizeId: z.number().min(1),
-      price: z.number(),
-    })
-  ),
+  items: z
+    .array(
+      z.object({
+        janCode: z.string(),
+        productCode: z.string(),
+        sizeId: z.string({ required_error: "サイズを選択してください" }),
+        price: z.number(),
+      })
+    )
+    .optional(),
 });
 
 export type CreateProductSchema = z.infer<typeof schema>;
@@ -29,6 +31,20 @@ export async function createProduct(data: CreateProductSchema) {
   const categoryId = data.categoryId;
   const colorId = data.colorId;
   const items = data.items;
+
+  const isExists = await db.product.findFirst({
+    where: {
+      productNumber: data.productNumber,
+      colorId: colorId,
+    },
+  });
+  if (isExists) {
+    return {
+      errors: {
+        _form: ["すでに登録済みです。"],
+      },
+    };
+  }
 
   let product: Product;
   await db
@@ -58,6 +74,7 @@ export async function createProduct(data: CreateProductSchema) {
               price: item.price,
               productId: product.id,
               janCode: item.janCode,
+              displayOrder: 0,
             },
           });
         }
@@ -67,12 +84,9 @@ export async function createProduct(data: CreateProductSchema) {
     .catch((err) => {
       console.error(err);
       return { message: "失敗" };
-    }).finally(()=>{
-        revalidatePath(paths.productShow(product?.id));
-        redirect(paths.productShow(product.id));
-      }
-    )
+    })
+    .finally(() => {
+      revalidatePath(paths.productShow(product?.id));
+      redirect(paths.productShow(product?.id));
+    });
 }
-
-  
-

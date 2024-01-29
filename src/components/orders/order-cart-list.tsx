@@ -2,7 +2,6 @@
 import paths from "@/paths";
 import { Cart, useStore } from "@/store";
 import {
-  Input,
   Table,
   TableBody,
   TableCell,
@@ -23,7 +22,7 @@ export default function OrderCartList() {
   const [sum, setSum] = useState(0);
   const [sortCart, setSortCart] = useState<Cart[]>([]);
   const serchParams = useSearchParams();
-  const customerId = serchParams.get("customerId");
+  const customerId = serchParams.get("customerId") as string;
   const customerName = serchParams.get("customerName");
 
   useEffect(() => {
@@ -39,19 +38,19 @@ export default function OrderCartList() {
       .sort((a: { displayOrder: number; }, b: { displayOrder: number; }) =>
         a.displayOrder - b.displayOrder
       )
-      .sort((a: { productId: number; }, b: { productId: number; }) =>
+      .sort((a: { productId: any; }, b: { productId: any; }) =>
         a.productId - b.productId
       );
     setSortCart(newCart);
   }, [cart]);
 
-  const handleClickDelete = (skuId: number) => {
+  const handleClickDelete = (skuId: string) => {
     if (!skuId) return;
     const newCart = cart.filter((item) => item.skuId !== skuId);
     setCart(newCart);
   };
 
-  const updateQuantity = (skuId: number, quantity: number) => {
+  const updateQuantity = (skuId: string, quantity: number) => {
 
     const newCart = cart.map((item) => {
       if (item.skuId === skuId) {
@@ -72,7 +71,7 @@ export default function OrderCartList() {
     <div>
       <div className="flex justify-center gap-6 relative">
         <Link
-          href={paths.orderProductCreate(Number(customerId))}
+          href={paths.orderProductCreate(customerId)}
           className="flex items-center gap-3 absolute left-0"
         >
           <AiOutlineArrowLeft />

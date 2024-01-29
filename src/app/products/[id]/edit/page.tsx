@@ -1,24 +1,24 @@
-import EditProductForm from "@/components/products/product-edit-form";
-import SkuCreateModal from "@/components/products/sku-create-form";
-import ProductEditTable from "@/components/products/product-edit-sku-table";
+import ProductEditForm from "@/components/products/product-edit-form";
+import ProductEditTable from "@/components/products/sku-edit-list";
 import { db } from "@/db";
 import paths from "@/paths";
 import Link from "next/link";
 import { AiOutlineArrowLeft } from "react-icons/ai";
-import SkuCreateForm from "@/components/products/sku-create-form";
+import SkuAddForm from "@/components/products/sku-add-form";
 
-interface ProductMasterShowPage {
+interface ProductEditPageProps {
   params: { id: string };
 }
 
-export default async function ProductMasterEditPage({
+export default async function ProductEditPage({
   params,
-}: ProductMasterShowPage) {
-  const id = parseInt(params.id);
+}: ProductEditPageProps) {
+  const id = params.id;
 
   const product = await db.product.findFirst({
     where: { id: id },
   });
+  if(!product) return
   const colors = await db.color.findMany();
   const categories = await db.category.findMany();
   const sizes = await db.size.findMany();
@@ -54,7 +54,7 @@ export default async function ProductMasterEditPage({
         <div className="font-bold">編集画面</div>
       </div>
       <div className="flex flex-col gap-6 mt-3 p-6 rounded-xl bg-white shadow-md">
-        <EditProductForm
+        <ProductEditForm
           id={id}
           product={product}
           colors={colors}
@@ -62,7 +62,7 @@ export default async function ProductMasterEditPage({
         />
       </div>
       <ProductEditTable skus={skus} sizes={sizes} />
-      <SkuCreateForm productId={id} sizes={sizes} />
+      <SkuAddForm productId={id} sizes={sizes} />
     </div>
   );
 }

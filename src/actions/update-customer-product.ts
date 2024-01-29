@@ -6,8 +6,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function updateCustomerProduct(
-  customerId: number,
-  productId: number
+  customerId: string,
+  productId: string
 ) {
   const customerProduct = await db.customerProduct.findFirst({
     where: {

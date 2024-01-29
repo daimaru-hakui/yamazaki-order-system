@@ -22,12 +22,13 @@ interface CustomerListTableProps {
   customers: CustomerWithCount[];
 }
 
-export default function CustomerListTable({
+export default function CustomerList({
   customers,
 }: CustomerListTableProps) {
   return (
     <Table aria-label="cutomer table" className="mt-3">
       <TableHeader>
+        <TableColumn>顧客コード</TableColumn>
         <TableColumn>顧客名</TableColumn>
         <TableColumn className="text-center">登録商品数</TableColumn>
         <TableColumn className="w-32">action</TableColumn>
@@ -35,6 +36,7 @@ export default function CustomerListTable({
       <TableBody>
         {customers.map((customer) => (
           <TableRow key={customer.id}>
+            <TableCell>{customer.code}</TableCell>
             <TableCell>{customer.name}</TableCell>
             <TableCell className="text-center">{customer._count.customerProduct}</TableCell>
             <TableCell>

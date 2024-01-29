@@ -5,25 +5,25 @@ const paths = {
   productAll() {
     return `/products`;
   },
-  productShow(productId: number) {
+  productShow(productId: string) {
     return `/products/${productId}`;
   },
   productCreate() {
     return `/products/new`;
   },
-  productEdit(productId: number) {
+  productEdit(productId: string) {
     return `/products/${productId}/edit`;
   },
   customerAll() {
     return `/customers`;
   },
-  customerShow(customerId: number) {
+  customerShow(customerId: string) {
     return `/customers/${customerId}`;
   },
   customerCreate() {
     return `/customers/new`;
   },
-  customerEdit(customerId: number) {
+  customerEdit(customerId: string) {
     return `/customers/${customerId}/edit`;
   },
   orderAll() {
@@ -32,7 +32,7 @@ const paths = {
   orderCreate() {
     return `/orders/new`;
   },
-  orderProductCreate(customerId: number) {
+  orderProductCreate(customerId: string) {
     return `/orders/new/${customerId}`;
   },
   csvCreate() {

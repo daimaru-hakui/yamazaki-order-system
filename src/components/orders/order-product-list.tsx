@@ -12,9 +12,9 @@ import OrderProductModal from "./order-product-modal";
 import { Chip } from "@nextui-org/react";
 
 export type Inputs = {
-  customerId: number;
+  customerId: string;
   items: {
-    skuId: number;
+    skuId: string;
     quantity: number;
   }[];
 };
@@ -27,7 +27,7 @@ interface OrderProductListProps {
       skus: (Sku & {
         size: { name: string; };
         product: {
-          id: number,
+          id: string,
           productNumber: string,
           productName: string;
         };
@@ -40,7 +40,7 @@ interface OrderProductListProps {
 export default function OrderProductList({ customerName, customerProducts }: OrderProductListProps) {
   const cart = useStore((state) => state.cart);
 
-  const cartArea = (productId: number) => {
+  const cartArea = (productId: string) => {
     const newCart = cart
       .filter((item) => item.productId === productId)
       .sort((a: { displayOrder: number; }, b: { displayOrder: number; }) => {

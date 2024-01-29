@@ -1,18 +1,27 @@
-'use client';
+"use client";
 import { Input, Textarea } from "@nextui-org/react";
 import FormButton from "../common/form-button";
 import { useFormState } from "react-dom";
-import * as actions from '@/actions';
-
+import * as actions from "@/actions";
 
 export default function CustomerCreateForm() {
   const [formState, action] = useFormState(actions.createCustomer, {
-    errors: {}
+    errors: {},
   });
 
   return (
     <form className="" action={action}>
       <div className="flex flex-col gap-6">
+        <Input
+          isRequired
+          name="code"
+          type="text"
+          label="顧客コード"
+          labelPlacement={"outside"}
+          placeholder="顧客コード"
+          isInvalid={!!formState?.errors.code}
+          errorMessage={formState?.errors.code?.join(", ")}
+        />
         <Input
           isRequired
           name="name"
@@ -21,7 +30,7 @@ export default function CustomerCreateForm() {
           labelPlacement={"outside"}
           placeholder="顧客名"
           isInvalid={!!formState?.errors.name}
-          errorMessage={formState?.errors.name?.join(', ')}
+          errorMessage={formState?.errors.name?.join(", ")}
         />
         <Input
           name="address"
@@ -44,9 +53,7 @@ export default function CustomerCreateForm() {
           className="w-full"
         ></Textarea>
         <div className="text-center">
-          <FormButton>
-            登録
-          </FormButton>
+          <FormButton>登録</FormButton>
         </div>
       </div>
     </form>

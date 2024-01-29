@@ -21,7 +21,7 @@ export default function CustomerEditProductListRow({
 }: CustomerEditProductListRowProps) {
   const [isPending, startTransion] = useTransition();
 
-  const handleClick = async (customerId: number, productId: number) => {
+  const handleClick = async (customerId: string, productId: string) => {
     startTransion(async () => {
       await actions.updateCustomerProduct(customerId, productId);
     });
@@ -37,11 +37,10 @@ export default function CustomerEditProductListRow({
         <Button
           isLoading={isPending}
           color={product.isProduct ? "primary" : "default"}
-          onClick={() => handleClick(Number(customerId), product.id)}
+          onClick={() => handleClick(customerId, product.id)}
         >
           {product.isProduct ? "登録済" : "未登録"}
         </Button>
-        ;
       </TableCell>
     </TableRow>
   );

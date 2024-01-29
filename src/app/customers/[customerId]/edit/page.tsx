@@ -23,7 +23,7 @@ export default async function CustomerEditPage({
       },
       customerProduct: {
         where: {
-          customerId: Number(customerId),
+          customerId: customerId,
         },
       },
     },

@@ -1,8 +1,8 @@
 import { create } from "zustand";
 
 export interface Cart {
-  skuId: number;
-  productId: number;
+  skuId: string;
+  productId: string;
   productNumber: string;
   productName: string;
   quantity: number;

@@ -1,4 +1,4 @@
-import CustomerListTable from "@/components/customers/customer-list-table";
+import CustomerList from "@/components/customers/customer-list";
 import { db } from "@/db";
 
 export default async function CustomersPage() {
@@ -15,7 +15,7 @@ export default async function CustomersPage() {
   return (
     <div className="mx-auto max-w-[calc(600px)]">
       <div className="text-center font-bold">顧客一覧</div>
-      <CustomerListTable customers={customers} />
+      <CustomerList customers={customers} />
     </div>
   );
 }

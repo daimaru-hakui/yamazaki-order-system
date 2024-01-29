@@ -12,7 +12,7 @@ export default async function OrderCreateCustomerById({
 }: OrderCreateCustomerById) {
   const customer = await db.customer.findFirst({
     where: {
-      id: Number(params.customerId),
+      id: params.customerId,
     },
     include: {
       customerProduct: {

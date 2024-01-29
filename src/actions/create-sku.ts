@@ -10,7 +10,7 @@ import { z } from "zod";
 const CreateSkuSchema = z.object({
   janCode: z.string(),
   productCode: z.string(),
-  sizeId: z.string().nullable(),
+  sizeId: z.string(),
   price: z
     .number({
       required_error: "数値を入力してください",
@@ -19,9 +19,9 @@ const CreateSkuSchema = z.object({
     .min(1, { message: "金額を入力してください" }),
 });
 
-type CreateSkuFormState = z.infer<typeof CreateSkuSchema>
+type CreateSkuFormState = z.infer<typeof CreateSkuSchema>;
 
-export async function createSku(productId: number, data: CreateSkuFormState) {
+export async function createSku(productId: string, data: CreateSkuFormState) {
   const result = CreateSkuSchema.safeParse({
     janCode: data.janCode,
     productCode: data.productCode,
@@ -31,7 +31,7 @@ export async function createSku(productId: number, data: CreateSkuFormState) {
 
   if (!result.success) {
     return {
-      errors: { _form: [result.error.flatten().fieldErrors ]},
+      errors: { _form: [result.error.flatten().fieldErrors] },
     };
   }
 
@@ -47,7 +47,7 @@ export async function createSku(productId: number, data: CreateSkuFormState) {
   const registered = await db.sku.findFirst({
     where: {
       productId: productId,
-      sizeId: Number(result.data.sizeId),
+      sizeId: result.data.sizeId,
     },
   });
 
@@ -65,9 +65,9 @@ export async function createSku(productId: number, data: CreateSkuFormState) {
         productId: productId,
         janCode: result.data.janCode,
         productCode: result.data.productCode,
-        sizeId: Number(result.data.sizeId),
-        price: Number(result.data.price),
-        displayOrder: Number(result.data.sizeId),
+        sizeId: result.data.sizeId,
+        price: result.data.price,
+        displayOrder: 0,
       },
     });
   } catch {

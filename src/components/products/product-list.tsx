@@ -18,10 +18,10 @@ interface ProductCategory extends Product {
   color: Color;
 }
 
-interface ProductListTableProps {
+interface ProductListProps {
   products: ProductCategory[];
 }
-export default function ProductListTable({ products }: ProductListTableProps) {
+export default function ProductList({ products }: ProductListProps) {
   return (
     <Table aria-label="product list table" className="mt-3">
       <TableHeader>

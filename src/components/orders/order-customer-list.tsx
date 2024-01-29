@@ -2,7 +2,7 @@ import { Customer } from "@prisma/client";
 import Link from "next/link";
 
 interface CustomerListProps {
-  customers: { id: number, name: string; }[];
+  customers: { id: string, name: string; }[];
 }
 
 export default function OrderCustomerList({ customers }: CustomerListProps) {

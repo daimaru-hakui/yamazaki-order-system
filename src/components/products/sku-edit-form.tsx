@@ -10,16 +10,16 @@ import {
   useDisclosure,
   Input,
 } from "@nextui-org/react";
-import { SkuProductSize } from "./product-edit-sku-table";
+import { SkuProductSize } from "./sku-edit-list";
 import { Sku } from "@prisma/client";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { updateSku } from "@/actions";
+import * as actions from "@/actions";
 
 interface ProductEditSkuModalProps {
   sku: SkuProductSize;
 }
 
-export default function ProductEditSkuModal({ sku }: ProductEditSkuModalProps) {
+export default function SkuEditForm({ sku }: ProductEditSkuModalProps) {
   const { register, handleSubmit } = useForm<Sku>({
     defaultValues: {
       id: sku.id,
@@ -27,13 +27,14 @@ export default function ProductEditSkuModal({ sku }: ProductEditSkuModalProps) {
       productCode: sku.productCode,
       sizeId: sku.sizeId,
       price: sku.price,
+      displayOrder: sku.displayOrder,
     },
   });
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const onSubmit: SubmitHandler<Sku> = async (data: Sku) => {
     console.log(data);
-    await updateSku(data);
+    await actions.updateSku(data);
   };
 
   const focusHandle = (e: any) => {
@@ -82,6 +83,15 @@ export default function ProductEditSkuModal({ sku }: ProductEditSkuModalProps) {
                     defaultValue={String(sku.price)}
                     onFocus={(e) => focusHandle(e)}
                     {...register("price", { valueAsNumber: true })}
+                  />
+                  <Input
+                    type="number"
+                    label="順番"
+                    labelPlacement={"outside"}
+                    placeholder="価格"
+                    defaultValue={String(sku.displayOrder)}
+                    onFocus={(e) => focusHandle(e)}
+                    {...register("displayOrder", { valueAsNumber: true })}
                   />
                 </ModalBody>
                 <ModalFooter>

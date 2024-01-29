@@ -65,7 +65,7 @@ export async function createOrder(data: CreateOrderSchemaState): Promise<CreateO
     const order = await prisma.order.create({
       data: {
         orderNumber: result.data.orderNumber,
-        customerId: result.data.customerId,
+        customerId: String(result.data.customerId),
         userId: result.data.userId,
         comment: result.data.comment
       }

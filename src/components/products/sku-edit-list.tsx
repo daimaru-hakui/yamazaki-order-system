@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@nextui-org/react";
 import { Category, Color, Product, Size, Sku } from "@prisma/client";
-import ProductEditModal from "./product-edit-sku-modal";
+import SkuEditForm from "./sku-edit-form";
 
 interface ProductCategoryColor extends Product {
   category: Category | null;
@@ -26,7 +26,7 @@ interface ProductShowTableProps {
   sizes: Size[];
 }
 
-export default function ProductEditSkuTable({
+export default function SkuEditList({
   skus,
   sizes,
 }: ProductShowTableProps) {
@@ -48,7 +48,7 @@ export default function ProductEditSkuTable({
               <TableCell>{sku.size?.name}</TableCell>
               <TableCell>{sku.price.toLocaleString()}</TableCell>
               <TableCell>
-                <ProductEditModal sku={sku} />
+                <SkuEditForm sku={sku} />
               </TableCell>
             </TableRow>
           ))}

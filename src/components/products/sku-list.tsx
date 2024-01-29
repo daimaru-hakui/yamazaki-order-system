@@ -19,11 +19,11 @@ interface SkuProductSize extends Sku {
     size: Size | null;
 }
 
-interface ProductShowTableProps {
+interface SkuListProps {
   skus:SkuProductSize[];
 }
 
-export default function ProductShowTable({ skus }: ProductShowTableProps) {
+export default function SkuList({ skus }: SkuListProps) {
   return (
     <Table aria-label="product show table"  className="mt-6">
       <TableHeader>

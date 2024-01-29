@@ -21,7 +21,7 @@ interface OrderProductModalProps {
   skus: (Sku & {
     size: { name: string; };
     product: {
-      id: number,
+      id: string,
       productNumber: string,
       productName: string;
     };

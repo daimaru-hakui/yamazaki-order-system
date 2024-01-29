@@ -29,7 +29,8 @@ enum UserRole {
 }
 
 model Size {
-  id          Int     @id @default(autoincrement())
+  id          String  @id @default(uuid())
+  code        Int     @unique
   name        String  @db.Text
   description String?
   skus        Sku[]
@@ -38,7 +39,8 @@ model Size {
 }
 
 model Color {
-  id          Int       @id @default(autoincrement())
+  id          String    @id @default(uuid())
+  code        Int       @unique
   name        String    @db.Text
   description String?
   Products    Product[]
@@ -47,7 +49,8 @@ model Color {
 }
 
 model Category {
-  id          Int       @id @default(autoincrement())
+  id          String    @id @default(uuid())
+  code        Int       @unique
   name        String    @db.Text
   description String?
   products    Product[]
@@ -60,9 +63,9 @@ model Sku {
   productCode  String?       @map("product_code") @db.Text
   janCode      String?       @map("jan_code") @db.Text
   product      Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId    Int           @map("product_id")
+  productId    String           @map("product_id")
   size         Size          @relation(fields: [sizeId], references: [id], onDelete: Cascade)
-  sizeId       Int           @map("size_id")
+  sizeId       String        @map("size_id")
   price        Int           @default(0)
   stock        Int           @default(0)
   displayOrder Int           @default(100) @map("display_order")
@@ -88,14 +91,14 @@ model Price {
 }
 
 model Product {
-  id              Int               @id @default(autoincrement())
+  id              String            @id @default(uuid())
   productNumber   String            @map("product_number") @db.Text
   productName     String            @map("product_name") @db.Text
   description     String?           @db.Text
   category        Category          @relation(fields: [categoryId], references: [id])
-  categoryId      Int               @map("cateogry_id")
+  categoryId      String            @map("cateogry_id")
   color           Color             @relation(fields: [colorId], references: [id])
-  colorId         Int               @map("color_id")
+  colorId         String            @map("color_id")
   skus            Sku[]
   customerProduct CustomerProduct[]
   createdAt       DateTime          @default(now()) @map("created_at")
@@ -106,7 +109,8 @@ model Product {
 }
 
 model Customer {
-  id              Int               @id @default(autoincrement())
+  id              String            @id @default(uuid())
+  code            Int               @unique
   name            String            @db.Text
   address         String?           @db.Text
   tel             String?           @db.Text
@@ -120,10 +124,10 @@ model Customer {
 
 model CustomerProduct {
   id         String   @id @default(uuid())
-  customer   Customer @relation(fields: [customerId], references: [id])
-  customerId Int      @map("customer_id")
-  product    Product  @relation(fields: [productId], references: [id])
-  productId  Int      @map("product_id")
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customerId String   @map("customer_id")
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId  String      @map("product_id")
 
   @@unique([customerId, productId])
   @@map("customer_products")
@@ -133,7 +137,7 @@ model Order {
   id          Int           @id @default(autoincrement())
   orderNumber String?       @map("order_number")
   customer    Customer      @relation(fields: [customerId], references: [id])
-  customerId  Int           @map("customer_id")
+  customerId  String        @map("customer_id")
   comment     String?       @db.Text
   orderDetail OrderDetail[]
   user        User          @relation(fields: [userId], references: [id])
@@ -146,7 +150,7 @@ model Order {
 
 model OrderDetail {
   id        Int      @id @default(autoincrement())
-  order     Order    @relation(fields: [orderId], references: [id])
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   orderId   Int      @map("order_id")
   sku       Sku      @relation(fields: [skuId], references: [id])
   skuId     String   @map("sku_id")

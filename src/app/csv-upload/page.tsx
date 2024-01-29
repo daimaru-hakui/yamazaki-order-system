@@ -23,7 +23,7 @@ export default async function csvUploadPage() {
   });
 
   return (
-    <div className="mx-auto max-w-[calc(700px)]">
+    <div className="mx-auto max-w-[calc(800px)]">
       <CsvUploadForm skus={skus} />
     </div>
   );

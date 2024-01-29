@@ -1,12 +1,10 @@
 'use client';
-import { useStore } from "@/store";
 import { Input } from "@nextui-org/react";
-import { useState } from "react";
 
 interface OrderCartQuantityInputProps {
-  skuId: number;
+  skuId: string;
   quantity: number;
-  updateQuantity: (skuId: number, defaultValue: number) => void;
+  updateQuantity: (skuId: string, defaultValue: number) => void;
 }
 
 export default function OrderCartQuantityInput({
