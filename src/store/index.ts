@@ -11,16 +11,28 @@ export interface Cart {
   displayOrder: number;
 }
 
+export type OrderOption = {
+  orderNumber: string;
+  customerId: string;
+  userId: string;
+  comment: string;
+};
+
 interface State {
   cart: Cart[];
   setCart: (cart: Cart[]) => void;
-  activePage: number;
-  setActivePage: (page: number) => void;
+  orderOption: OrderOption;
+  setOrderOption: (orderOption: OrderOption) => void;
 }
 
 export const useStore = create<State>((set) => ({
   cart: [],
   setCart: (cart) => set({ cart }),
-  activePage: 1,
-  setActivePage: (page) => set({ activePage: page }),
+  orderOption: {
+    orderNumber: "",
+    customerId: "",
+    userId: "",
+    comment: ""
+  },
+  setOrderOption: (orderOption) => set({ orderOption })
 }));

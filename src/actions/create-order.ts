@@ -1,6 +1,8 @@
 'use server';
 import { db } from "@/db";
 import paths from "@/paths";
+import { Cart, OrderOption } from "@/store";
+import { Order } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -8,7 +10,7 @@ import { z } from "zod";
 
 const CreateOrderSchema = z.object({
   orderNumber: z.string().optional(),
-  customerId: z.number(),
+  customerId: z.string(),
   userId: z.string(),
   comment: z.string().optional(),
   items: z.array(
@@ -25,7 +27,7 @@ const CreateOrderSchema = z.object({
 
 type CreateOrderSchemaState = z.infer<typeof CreateOrderSchema>;
 
-type CreateOrderFormState = {
+interface CreateOrderFormState {
   errors?: {
     orderNumber?: string[],
     customerId?: string[];
@@ -36,14 +38,21 @@ type CreateOrderFormState = {
   };
 };
 
-export async function createOrder(data: CreateOrderSchemaState): Promise<CreateOrderFormState> {
+
+export async function createOrder(
+  data: {
+    cart: Cart[],
+    orderOption: OrderOption;
+  },
+  formState: CreateOrderFormState
+): Promise<CreateOrderFormState> {
 
   const result = CreateOrderSchema.safeParse({
-    orderNumber: data.orderNumber,
-    customerId: data.customerId,
-    userId: data.userId,
-    comment: data.comment,
-    items: data.items
+    orderNumber: data.orderOption.orderNumber,
+    customerId: data.orderOption.customerId,
+    userId: data.orderOption.userId,
+    comment: data.orderOption.comment,
+    items: data.cart
   });
 
   if (!result.success) {
@@ -60,12 +69,12 @@ export async function createOrder(data: CreateOrderSchemaState): Promise<CreateO
       }
     };
   }
-
+  let order: Order;
   await db.$transaction(async (prisma) => {
-    const order = await prisma.order.create({
+    order = await prisma.order.create({
       data: {
         orderNumber: result.data.orderNumber,
-        customerId: String(result.data.customerId),
+        customerId: result.data.customerId,
         userId: result.data.userId,
         comment: result.data.comment
       }
@@ -100,7 +109,10 @@ export async function createOrder(data: CreateOrderSchemaState): Promise<CreateO
         }
       };
     };
+  }).finally(() => {
+
   });
   revalidatePath(paths.orderAll());
   redirect(paths.orderAll());
+
 }

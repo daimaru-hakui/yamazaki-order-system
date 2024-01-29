@@ -43,10 +43,12 @@ export default function SkuCreateForm({
   };
   const copyItem = (idx: number) => {
     const items = getValues("items");
-    if(!items) return
+    if (!items) return;
     const obj = items[idx];
+    console.log(obj);
     items.splice(idx, 0, obj);
-    setValue("items", items);
+    console.log(items);
+    setValue("items", [...items]);
   };
 
   const focusHandle = (
@@ -61,9 +63,9 @@ export default function SkuCreateForm({
         <TableColumn>コピー</TableColumn>
         <TableColumn>JANコード</TableColumn>
         <TableColumn>商品コード</TableColumn>
-        <TableColumn>
+        {/* <TableColumn>
           サイズ<span className="text-red-500">*</span>
-        </TableColumn>
+        </TableColumn> */}
         <TableColumn >
           価格<span className="text-red-500">*</span>
         </TableColumn>
@@ -84,8 +86,10 @@ export default function SkuCreateForm({
             <TableCell className="p-1">
               <Input size="sm" {...register(`items.${index}.productCode`)} />
             </TableCell>
-            <TableCell className="p-1 w-[calc(100px)]">
+            {/* <TableCell className="p-1 w-[calc(100px)]">
               <Select
+                aria-label="size"
+                placeholder=""
                 size="sm"
                 {...register(`items.${index}.sizeId`)}
               >
@@ -95,7 +99,7 @@ export default function SkuCreateForm({
                   </SelectItem>
                 ))}
               </Select>
-            </TableCell>
+            </TableCell> */}
             <TableCell className="p-1 w-[calc(100px)]">
               <Input
                 size="sm"
