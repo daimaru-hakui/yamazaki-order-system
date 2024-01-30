@@ -3,6 +3,8 @@ import paths from "@/paths";
 import { useStore } from "@/store";
 import { Button } from "@nextui-org/react";
 import Link from "next/link";
+import * as actions from "@/actions";
+import { useFormState } from "react-dom";
 
 interface OrderCartButtonAreaProps {
   customer: {
@@ -12,7 +14,14 @@ interface OrderCartButtonAreaProps {
 }
 
 export default function OrderCartButtonArea({ customer }: OrderCartButtonAreaProps) {
+  const orderOption = useStore((state) => state.orderOption);
+  const cart = useStore((state) => state.cart);
   const setCart = useStore((state) => state.setCart);
+  const [formState, action] =
+    useFormState(actions.createOrder.bind(null, { cart, orderOption }), {
+      errors: {}
+    });
+
   const handleCartClear = () => {
     const result = confirm("カートを空にして宜しいでしょうか");
     if (!result) return;
@@ -24,20 +33,22 @@ export default function OrderCartButtonArea({ customer }: OrderCartButtonAreaPro
         <Button color="danger" onClick={handleCartClear}>
           クリア
         </Button>
-        <Button color="primary" className="w-full max-w-96 p-0">
-          <Link
-            href={{
-              pathname: paths.cartShow(),
-              query: {
-                customerId: customer.customerId,
-                customerName: customer.customerName,
-              },
-            }}
-            className="grid place-items-center w-full h-full"
-          >
-            カート確認
-          </Link>
-        </Button>
+        <form action={action}>
+          <Button color="primary" className="w-full max-w-96 p-0">
+            <Link
+              href={{
+                pathname: paths.cartShow(),
+                query: {
+                  customerId: customer.customerId,
+                  customerName: customer.customerName,
+                },
+              }}
+              className="grid place-items-center w-full h-full"
+            >
+              カート確認
+            </Link>
+          </Button>
+        </form>
       </div>
     </div>
   );
