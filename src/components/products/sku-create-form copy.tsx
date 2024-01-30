@@ -13,6 +13,12 @@ import {
   Input,
   Select,
   SelectItem,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
 } from "@nextui-org/react";
 
 interface ProductFormItemTableProps {
@@ -23,7 +29,7 @@ interface ProductFormItemTableProps {
   sizes: Size[];
 }
 
-export default function SkuCreateForm({
+export default function SkuCreateFormCopy({
   methods,
   register,
   getValues,
@@ -37,7 +43,7 @@ export default function SkuCreateForm({
   };
   const copyItem = (idx: number) => {
     const items = getValues("items");
-    if (!items) return;
+    if(!items) return
     const obj = items[idx];
     items.splice(idx, 0, obj);
     setValue("items", items);
@@ -50,51 +56,37 @@ export default function SkuCreateForm({
   };
 
   return (
-    <table aria-label="product show table" className="min-w-[calc(600px)]">
-      <thead>
-        <tr>
-          <th></th>
-          <th>JANコード</th>
-          <th>商品コード</th>
-          <th>
-            サイズ<span className="text-red-500">*</span>
-          </th>
-          <th>
-            価格<span className="text-red-500">*</span>
-          </th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
+    <Table aria-label="product show table" className="min-w-[calc(600px)]">
+      <TableHeader>
+        <TableColumn>コピー</TableColumn>
+        <TableColumn>JANコード</TableColumn>
+        <TableColumn>商品コード</TableColumn>
+        <TableColumn>
+          サイズ<span className="text-red-500">*</span>
+        </TableColumn>
+        <TableColumn >
+          価格<span className="text-red-500">*</span>
+        </TableColumn>
+        <TableColumn >削除</TableColumn>
+      </TableHeader>
+      <TableBody>
         {fields.map((field, index) => (
-          <tr key={field.id}>
-            <td className="p-1 w-[calc(30px)]">
+          <TableRow key={field.id}>
+            <TableCell className="p-1 w-[calc(30px)]">
               <AiOutlineCopy
                 className="flex justify-center w-full text-xl cursor-pointer"
                 onClick={() => copyItem(index)}
               />
-            </td>
-            <td className="p-1">
-              <Input
-                size="sm"
-                aria-label="janCode"
-                defaultValue={getValues(`items.${index}.janCode`)}
-                {...register(`items.${index}.janCode`)}
-              />
-            </td>
-            <td className="p-1">
-              <Input
-                size="sm"
-                aria-label="productCode"
-                defaultValue={getValues(`items.${index}.productCode`)}
-                {...register(`items.${index}.productCode`)}
-              />
-            </td>
-            <td className="p-1 w-[calc(100px)]">
+            </TableCell>
+            <TableCell className="p-1">
+              <Input size="sm" {...register(`items.${index}.janCode`)} />
+            </TableCell>
+            <TableCell className="p-1">
+              <Input size="sm" {...register(`items.${index}.productCode`)} />
+            </TableCell>
+            <TableCell className="p-1 w-[calc(100px)]">
               <Select
                 size="sm"
-                aria-label="sizeId"
-                defaultSelectedKeys={[getValues(`items.${index}.sizeId`),""]}
                 {...register(`items.${index}.sizeId`)}
               >
                 {sizes.map((size) => (
@@ -103,28 +95,26 @@ export default function SkuCreateForm({
                   </SelectItem>
                 ))}
               </Select>
-            </td>
-            <td className="p-1 w-[calc(100px)]">
+            </TableCell>
+            <TableCell className="p-1 w-[calc(100px)]">
               <Input
                 size="sm"
-                aria-label="price"
                 type="number"
-                defaultValue={String(getValues(`items.${index}.price`))}
                 {...register(`items.${index}.price`, {
                   valueAsNumber: true,
                 })}
                 onFocus={focusHandle}
               />
-            </td>
-            <td className="p-1 w-[calc(30px)]">
+            </TableCell>
+            <TableCell className="p-1 w-[calc(30px)]">
               <AiFillDelete
                 className="flex justify-center w-full text-xl cursor-pointer"
                 onClick={() => removeItem(index)}
               />
-            </td>
-          </tr>
+            </TableCell>
+          </TableRow>
         ))}
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   );
 }

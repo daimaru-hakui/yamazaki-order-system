@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { AiOutlineArrowLeft, AiFillDelete } from "react-icons/ai";
 import OrderConfButtonArea from "./order-conf-button-area";
 import OrderCartQuantityInput from "./order-cart-quantiy-input";
+import OrderOption from "./order-option";
 
 export default function OrderCartList() {
   const cart = useStore((state) => state.cart);
@@ -121,6 +122,7 @@ export default function OrderCartList() {
         注文金額合計（税抜）:
         <div className="text-2xl">{`￥${sum.toLocaleString()}`}</div>
       </div>
+      <OrderOption />
       <OrderConfButtonArea />
     </div>
   );
