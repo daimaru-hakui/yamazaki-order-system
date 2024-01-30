@@ -9,11 +9,7 @@ import {
 import { Size } from "@prisma/client";
 import { AiOutlineCopy, AiFillDelete } from "react-icons/ai";
 import { CreateProductSchema } from "@/actions/create-product";
-import {
-  Input,
-  Select,
-  SelectItem,
-} from "@nextui-org/react";
+import { Input, Select, SelectItem } from "@nextui-org/react";
 
 interface ProductFormItemTableProps {
   methods: UseFieldArrayReturn<CreateProductSchema>;
@@ -39,8 +35,10 @@ export default function SkuCreateForm({
     const items = getValues("items");
     if (!items) return;
     const obj = items[idx];
+    console.log(obj);
     items.splice(idx, 0, obj);
-    setValue("items", items);
+    console.log(items);
+    setValue("items", [...items]);
   };
 
   const focusHandle = (
@@ -92,13 +90,14 @@ export default function SkuCreateForm({
             </td>
             <td className="p-1 w-[calc(100px)]">
               <Select
+                aria-label="size"
+                placeholder=""
                 size="sm"
-                aria-label="sizeId"
-                defaultSelectedKeys={[getValues(`items.${index}.sizeId`),""]}
+                defaultSelectedKeys={[getValues(`items.${index}.sizeId`), ""]}
                 {...register(`items.${index}.sizeId`)}
               >
                 {sizes.map((size) => (
-                  <SelectItem key={size.id} value={size.id}>
+                  <SelectItem aria-label="sizeId" key={size.id} value={size.id}>
                     {size.name}
                   </SelectItem>
                 ))}

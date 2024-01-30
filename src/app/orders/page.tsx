@@ -1,10 +1,23 @@
-import OfficeList from "@/components/orders/order-customer-list";
+import OrderList from "@/components/orders/order-list";
+import { db } from "@/db";
 
-export default function OrdersPage() {
-
+export default async function OrdersPage() {
+  const orders = await db.order.findMany({
+    include: {
+      user: {
+        select: {
+          name: true,
+        },
+      },
+    },
+    orderBy: {
+      id: "desc",
+    },
+  });
+  
   return (
     <div className="mx-auto max-w-[calc(700px)]">
-      {/* <OfficeList /> */}
+      <OrderList orders={orders} />
     </div>
   );
 }

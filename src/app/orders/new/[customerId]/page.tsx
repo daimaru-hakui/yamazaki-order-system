@@ -1,5 +1,5 @@
 import OrderProductList from "@/components/orders/order-product-list";
-import OrderCartButtonArea from "@/components/orders/order-cart-button-area";
+import OrderConfirmButtonArea from "@/components/orders/order-confirm-button-area";
 import { db } from "@/db";
 
 interface OrderCreateCustomerById {
@@ -25,14 +25,14 @@ export default async function OrderCreateCustomerById({
                   size: {
                     select: {
                       name: true,
-                    }
+                    },
                   },
                   product: {
                     select: {
                       id: true,
                       productNumber: true,
-                      productName: true
-                    }
+                      productName: true,
+                    },
                   },
                 },
               },
@@ -43,14 +43,13 @@ export default async function OrderCreateCustomerById({
     },
   });
   await db.$disconnect();
+
   return (
     <div className="mx-auto max-w-[calc(600px)]">
-      <OrderProductList customerName={customer?.name} customerProducts={customer?.customerProduct} />
-      <OrderCartButtonArea
-        customer={{
-          customerId: params.customerId,
-          customerName: customer?.name,
-        }}
+      <OrderProductList
+        customerId={params.customerId}
+        customerName={customer?.name}
+        customerProducts={customer?.customerProduct}
       />
     </div>
   );

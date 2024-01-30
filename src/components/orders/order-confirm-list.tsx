@@ -13,11 +13,11 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AiOutlineArrowLeft, AiFillDelete } from "react-icons/ai";
-import OrderConfButtonArea from "./order-conf-button-area";
-import OrderCartQuantityInput from "./order-cart-quantiy-input";
+import OrderRegisterButtonArea from "./order-register-button-area";
+import OrderConfirmQuantityInput from "./order-confirm-quantiy-input";
 import OrderOption from "./order-option";
 
-export default function OrderCartList() {
+export default function OrderConfirmList() {
   const cart = useStore((state) => state.cart);
   const setCart = useStore((state) => state.setCart);
   const [sum, setSum] = useState(0);
@@ -36,11 +36,13 @@ export default function OrderCartList() {
 
   useEffect(() => {
     const newCart = cart
-      .sort((a: { displayOrder: number; }, b: { displayOrder: number; }) =>
-        a.displayOrder - b.displayOrder
+      .sort(
+        (a: { displayOrder: number }, b: { displayOrder: number }) =>
+          a.displayOrder - b.displayOrder
       )
-      .sort((a: { productId: any; }, b: { productId: any; }) =>
-        a.productId - b.productId
+      .sort(
+        (a: { productId: any }, b: { productId: any }) =>
+          a.productId - b.productId
       );
     setSortCart(newCart);
   }, [cart]);
@@ -52,12 +54,11 @@ export default function OrderCartList() {
   };
 
   const updateQuantity = (skuId: string, quantity: number) => {
-
     const newCart = cart.map((item) => {
       if (item.skuId === skuId) {
         return {
           ...item,
-          quantity
+          quantity,
         };
       } else {
         return item;
@@ -66,7 +67,6 @@ export default function OrderCartList() {
     console.log(newCart);
     setCart(newCart);
   };
-
 
   return (
     <div>
@@ -101,7 +101,7 @@ export default function OrderCartList() {
                 {item.price.toLocaleString()}
               </TableCell>
               <TableCell className="text-right">
-                <OrderCartQuantityInput
+                <OrderConfirmQuantityInput
                   skuId={item.skuId}
                   quantity={item.quantity}
                   updateQuantity={updateQuantity}
@@ -111,19 +111,24 @@ export default function OrderCartList() {
                 {(item.quantity * item.price).toLocaleString()}円
               </TableCell>
               <TableCell className="text-center">
-                <AiFillDelete className="mx-auto text-lg cursor-pointer"
-                  onClick={() => handleClickDelete(item.skuId)} />
+                <AiFillDelete
+                  className="mx-auto text-lg cursor-pointer"
+                  onClick={() => handleClickDelete(item.skuId)}
+                />
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <div className="flex justify-end items-center p-3 mb-12">
+      <div className="flex justify-end items-center p-3">
         注文金額合計（税抜）:
         <div className="text-2xl">{`￥${sum.toLocaleString()}`}</div>
       </div>
-      <OrderOption />
-      <OrderConfButtonArea />
+      <div className="mt-6 mb-16">
+        <OrderOption customerId={customerId} />
+      </div>
+
+      <OrderRegisterButtonArea />
     </div>
   );
 }

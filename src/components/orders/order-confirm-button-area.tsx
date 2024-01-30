@@ -11,8 +11,11 @@ interface OrderCartButtonAreaProps {
   };
 }
 
-export default function OrderCartButtonArea({ customer }: OrderCartButtonAreaProps) {
+export default function OrderConfirmButtonArea({
+  customer,
+}: OrderCartButtonAreaProps) {
   const setCart = useStore((state) => state.setCart);
+
   const handleCartClear = () => {
     const result = confirm("カートを空にして宜しいでしょうか");
     if (!result) return;
@@ -27,7 +30,7 @@ export default function OrderCartButtonArea({ customer }: OrderCartButtonAreaPro
         <Button color="primary" className="w-full max-w-96 p-0">
           <Link
             href={{
-              pathname: paths.cartShow(),
+              pathname: paths.orderConfirm(),
               query: {
                 customerId: customer.customerId,
                 customerName: customer.customerName,

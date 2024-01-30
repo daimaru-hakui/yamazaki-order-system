@@ -1,7 +1,7 @@
 'use client';
 import { Input } from "@nextui-org/react";
 
-interface OrderCartQuantityInputProps {
+interface OrderConfirmQuantityInputProps {
   skuId: string;
   quantity: number;
   updateQuantity: (skuId: string, defaultValue: number) => void;
@@ -11,7 +11,7 @@ export default function OrderCartQuantityInput({
   skuId,
   quantity,
   updateQuantity
-}: OrderCartQuantityInputProps) {
+}: OrderConfirmQuantityInputProps) {
 
   const handleChangeQuantity = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value);

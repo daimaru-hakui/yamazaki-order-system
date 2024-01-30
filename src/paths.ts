@@ -35,12 +35,15 @@ const paths = {
   orderProductCreate(customerId: string) {
     return `/orders/new/${customerId}`;
   },
+  orderCompleate(orderId: string) {
+    return `/orders/${orderId}/compleate`;
+  },
   csvCreate() {
     return `/csv-upload`;
   },
-  cartShow() {
-    return `/orders/cart`;
-  }
+  orderConfirm() {
+    return `/orders/confirm`;
+  },
 };
 
 export default paths;

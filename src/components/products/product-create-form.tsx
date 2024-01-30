@@ -24,7 +24,7 @@ const schema = z.object({
     z.object({
       janCode: z.string(),
       productCode: z.string(),
-      sizeId: z.string({required_error:"サイズを選択してください"}),
+      sizeId: z.string({ required_error: "サイズを選択してください" }),
       price: z.number(),
     })
   ),
@@ -59,7 +59,7 @@ export default function ProductCreatetForm({
     setValue,
     formState: { errors },
   } = useForm<CreateProductSchema>({
-    defaultValues:defaultValues,
+    defaultValues: defaultValues,
     mode: "onSubmit",
     resolver: zodResolver(schema),
   });
@@ -85,7 +85,7 @@ export default function ProductCreatetForm({
     actions.createProduct(data);
   };
 
-  console.log(errors)
+  console.log(errors);
 
   return (
     <>
@@ -158,12 +158,12 @@ export default function ProductCreatetForm({
           />
         </div>
         <div className="flex justify-center mt-6">
-          <button
+          <Button
             className="px-3 py-1 text-white rounded bg-blue-500"
             onClick={addItem}
           >
             追加
-          </button>
+          </Button>
         </div>
         <div className="mt-6 text-center">
           <Button type="submit" size="sm" color="primary" className="w-full">

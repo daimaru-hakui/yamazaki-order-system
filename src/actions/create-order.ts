@@ -1,6 +1,8 @@
-'use server';
+"use server";
 import { db } from "@/db";
 import paths from "@/paths";
+import { Cart, OrderOption } from "@/store";
+import { Order } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -8,7 +10,7 @@ import { z } from "zod";
 
 const CreateOrderSchema = z.object({
   orderNumber: z.string().optional(),
-  customerId: z.number(),
+  customerId: z.string(),
   userId: z.string(),
   comment: z.string().optional(),
   items: z.array(
@@ -18,37 +20,42 @@ const CreateOrderSchema = z.object({
       quantity: z.number().min(1),
       firstName: z.string().optional(),
       lastName: z.string().optional(),
-      memo: z.string().optional()
+      memo: z.string().optional(),
     })
-  )
+  ),
 });
 
 type CreateOrderSchemaState = z.infer<typeof CreateOrderSchema>;
 
-type CreateOrderFormState = {
+interface CreateOrderFormState {
   errors?: {
-    orderNumber?: string[],
+    orderNumber?: string[];
     customerId?: string[];
     useId?: string[];
     comment?: string[];
     items?: string[];
     _form?: string[];
   };
-};
+}
 
-export async function createOrder(data: CreateOrderSchemaState): Promise<CreateOrderFormState> {
-
+export async function createOrder(
+  data: {
+    cart: Cart[];
+    orderOption: OrderOption;
+  },
+  formState: CreateOrderFormState
+): Promise<CreateOrderFormState> {
   const result = CreateOrderSchema.safeParse({
-    orderNumber: data.orderNumber,
-    customerId: data.customerId,
-    userId: data.userId,
-    comment: data.comment,
-    items: data.items
+    orderNumber: data.orderOption.orderNumber,
+    customerId: data.orderOption.customerId,
+    userId: data.orderOption.userId,
+    comment: data.orderOption.comment,
+    items: data.cart,
   });
-
+  console.log(data.orderOption);
   if (!result.success) {
     return {
-      errors: result.error.flatten().fieldErrors
+      errors: result.error.flatten().fieldErrors,
     };
   }
 
@@ -56,51 +63,44 @@ export async function createOrder(data: CreateOrderSchemaState): Promise<CreateO
   if (!session || !session.user) {
     return {
       errors: {
-        _form: ["ログインしてください"]
-      }
+        _form: ["ログインしてください"],
+      },
     };
   }
 
-  await db.$transaction(async (prisma) => {
-    const order = await prisma.order.create({
+  let order: Order;
+  try {
+    order = await db.order.create({
       data: {
         orderNumber: result.data.orderNumber,
-        customerId: String(result.data.customerId),
+        customerId: result.data.customerId,
         userId: result.data.userId,
-        comment: result.data.comment
-      }
+        comment: result.data.comment,
+        orderDetail: {
+          create: [...result.data.items],
+        },
+      },
     });
-    const details = result.data.items;
-    await Promise.all(
-      details.map(async (detail) => (
-        await prisma.orderDetail.create({
-          data: {
-            orderId: order.id,
-            skuId: detail.skuId,
-            price: detail.price,
-            quantity: detail.quantity,
-            firstName: detail.firstName,
-            lastName: detail.lastName,
-            memo: detail.memo
-          },
-        })
-      ))
-    );
-  }).catch((err) => {
+    if (!order) {
+      throw new Error();
+    }
+  } catch (err) {
+    console.log(err);
     if (err instanceof Error) {
       return {
         errors: {
-          _form: [err.message]
-        }
+          _form: [err.message],
+        },
       };
     } else {
       return {
         errors: {
-          _form: ["登録に失敗しました"]
-        }
+          _form: ["登録に失敗しました"],
+        },
       };
-    };
-  });
+    }
+  }
+
   revalidatePath(paths.orderAll());
-  redirect(paths.orderAll());
+  redirect(paths.orderCompleate(String(order.id)));
 }

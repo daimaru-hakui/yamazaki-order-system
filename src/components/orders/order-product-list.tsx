@@ -1,18 +1,15 @@
 "use client";
 import paths from "@/paths";
 import { useStore } from "@/store";
-import type {
-  CustomerProduct,
-  Product,
-  Sku,
-} from "@prisma/client";
+import type { CustomerProduct, Product, Sku } from "@prisma/client";
 import Link from "next/link";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import OrderProductModal from "./order-product-modal";
 import { Chip } from "@nextui-org/react";
+import OrderConfirmButtonArea from "./order-confirm-button-area";
 
 export type Inputs = {
-  customerId: string;
+  customer: string;
   items: {
     skuId: string;
     quantity: number;
@@ -20,30 +17,36 @@ export type Inputs = {
 };
 
 interface OrderProductListProps {
-  customerName: string | undefined,
-  customerProducts: (CustomerProduct & {
-    product: Product & {
-      color: { name: string; };
-      skus: (Sku & {
-        size: { name: string; };
-        product: {
-          id: string,
-          productNumber: string,
-          productName: string;
+  customerId: string;
+  customerName: string | undefined;
+  customerProducts:
+    | (CustomerProduct & {
+        product: Product & {
+          color: { name: string };
+          skus: (Sku & {
+            size: { name: string };
+            product: {
+              id: string;
+              productNumber: string;
+              productName: string;
+            };
+          })[];
         };
-      })[];
-    };
-  })[]
-  | undefined;
+      })[]
+    | undefined;
 }
 
-export default function OrderProductList({ customerName, customerProducts }: OrderProductListProps) {
+export default function OrderProductList({
+  customerId,
+  customerName,
+  customerProducts,
+}: OrderProductListProps) {
   const cart = useStore((state) => state.cart);
 
   const cartArea = (productId: string) => {
     const newCart = cart
       .filter((item) => item.productId === productId)
-      .sort((a: { displayOrder: number; }, b: { displayOrder: number; }) => {
+      .sort((a: { displayOrder: number }, b: { displayOrder: number }) => {
         return a.displayOrder - b.displayOrder;
       });
 
@@ -88,6 +91,12 @@ export default function OrderProductList({ customerName, customerProducts }: Ord
           </div>
         ))}
       </form>
+      <OrderConfirmButtonArea
+        customer={{
+          customerId,
+          customerName,
+        }}
+      />
     </>
   );
 }
