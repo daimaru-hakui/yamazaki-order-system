@@ -17,9 +17,9 @@ export default async function OrdersPage() {
       orderDetail: {
         include: {
           sku: {
-            select: {
-              price: true,
-            },
+            include: {
+              product: true
+            }
           },
         },
       },

@@ -10,7 +10,10 @@ import {
 import { Order, OrderDetail } from "@prisma/client";
 import { format } from "date-fns";
 import { useEffect } from "react";
-import { AiOutlineEye } from "react-icons/ai";
+import { AiOutlineArrowLeft, AiOutlineEye } from "react-icons/ai";
+import OrderShowModal from "./order-show-modal";
+import Link from "next/link";
+import paths from "@/paths";
 
 interface OrderListProps {
   orders: (Order & {
@@ -34,7 +37,17 @@ export default function OrderList({ orders }: OrderListProps) {
 
   return (
     <div className="w-full max-w-[calc(600px)] mx-auto">
-      <Table aria-label="orders table">
+      <div className="flex justify-center gap-6 relative">
+        <Link
+          href={paths.home()}
+          className="flex items-center gap-3 absolute left-0"
+        >
+          <AiOutlineArrowLeft />
+          <div className="text-sm">戻る</div>
+        </Link>
+        <div className="font-bold">受注一覧</div>
+      </div>
+      <Table aria-label="orders table" className="mt-3">
         <TableHeader>
           <TableColumn>NO.</TableColumn>
           <TableColumn>発注日</TableColumn>
@@ -56,7 +69,10 @@ export default function OrderList({ orders }: OrderListProps) {
               </TableCell>
               <TableCell className="">{order.user.name || "不明"}</TableCell>
               <TableCell>
-                <AiOutlineEye className="cursor-pointer" size="25px" />
+                <OrderShowModal
+                  order={order}
+                  sum={sumCalc(order.orderDetail).toLocaleString()}
+                />
               </TableCell>
             </TableRow>
           ))}
