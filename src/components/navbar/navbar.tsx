@@ -18,17 +18,42 @@ export default function Navbar() {
         <div className="flex gap-3 items-center">
           {session.data?.user && (
             <>
-              <Button color="primary" variant="bordered" size="sm" className="p-0">
+              <Button
+                color="primary"
+                variant="solid"
+                size="sm"
+                className="p-0"
+              >
+                <Link
+                  href={paths.orderAll()}
+                  className="w-full h-full grid place-items-center"
+                >
+                  受注一覧
+                </Link>
+              </Button>
+              <Button
+                color="primary"
+                variant="bordered"
+                size="sm"
+                className="p-0"
+              >
                 <Link
                   href={paths.orderCreate()}
-                  className="w-full h-full grid place-items-center">
+                  className="w-full h-full grid place-items-center"
+                >
                   発注
                 </Link>
               </Button>
-              <Button color="primary" variant="bordered" size="sm" className="p-0">
+              <Button
+                color="primary"
+                variant="bordered"
+                size="sm"
+                className="p-0"
+              >
                 <Link
                   href={paths.csvCreate()}
-                  className="w-full h-full grid place-items-center">
+                  className="w-full h-full grid place-items-center"
+                >
                   CSV発注
                 </Link>
               </Button>

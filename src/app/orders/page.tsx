@@ -9,12 +9,26 @@ export default async function OrdersPage() {
           name: true,
         },
       },
+      customer: {
+        select: {
+          name: true,
+        },
+      },
+      orderDetail: {
+        include: {
+          sku: {
+            select: {
+              price: true,
+            },
+          },
+        },
+      },
     },
     orderBy: {
       id: "desc",
     },
   });
-  
+
   return (
     <div className="mx-auto max-w-[calc(700px)]">
       <OrderList orders={orders} />
