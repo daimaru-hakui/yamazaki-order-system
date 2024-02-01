@@ -14,6 +14,7 @@ import { AiOutlineArrowLeft, AiOutlineEye } from "react-icons/ai";
 import OrderShowModal from "./order-show-modal";
 import Link from "next/link";
 import paths from "@/paths";
+import TitleReturn from "../common/title-return";
 
 interface OrderListProps {
   orders: (Order & {
@@ -37,16 +38,7 @@ export default function OrderList({ orders }: OrderListProps) {
 
   return (
     <div className="w-full max-w-[calc(600px)] mx-auto">
-      <div className="flex justify-center gap-6 relative">
-        <Link
-          href={paths.home()}
-          className="flex items-center gap-3 absolute left-0"
-        >
-          <AiOutlineArrowLeft />
-          <div className="text-sm">戻る</div>
-        </Link>
-        <div className="font-bold">受注一覧</div>
-      </div>
+      <TitleReturn title="受注一覧" path={paths.home()} />
       <Table aria-label="orders table" className="mt-3">
         <TableHeader>
           <TableColumn>NO.</TableColumn>

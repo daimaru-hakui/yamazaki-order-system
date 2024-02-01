@@ -7,6 +7,7 @@ import { AiOutlineArrowLeft } from "react-icons/ai";
 import OrderProductModal from "./order-product-modal";
 import { Chip } from "@nextui-org/react";
 import OrderConfirmButtonArea from "./order-confirm-button-area";
+import TitleReturn from "../common/title-return";
 
 export type Inputs = {
   customer: string;
@@ -59,16 +60,7 @@ export default function OrderProductList({
 
   return (
     <>
-      <div className="flex justify-center gap-6 relative">
-        <Link
-          href={paths.orderCreate()}
-          className="flex items-center gap-3 absolute left-0"
-        >
-          <AiOutlineArrowLeft />
-          <div className="text-sm">戻る</div>
-        </Link>
-        <div className="font-bold">数量入力</div>
-      </div>
+      <TitleReturn title="数量入力" path={paths.orderCreate()} />
       <div className="mt-6 text-2xl">{customerName}</div>
       <form className="grid grid-cols-2 gap-6 mt-3">
         {customerProducts?.map((cp) => (

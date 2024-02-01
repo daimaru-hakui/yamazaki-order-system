@@ -7,6 +7,10 @@ import { z } from "zod";
 import { Button, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
 import ProductFormItemTable from "./sku-create-form";
 import { CreateProductSchema } from "@/actions/create-product";
+import TitleReturn from "../common/title-return";
+import paths from "@/paths";
+import Link from "next/link";
+import { AiOutlinePlus } from "react-icons/ai";
 
 interface ProductCreateFormProps {
   categories: Category[];
@@ -89,88 +93,93 @@ export default function ProductCreatetForm({
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-col gap-6 mt-12">
-          <Input
-            labelPlacement="outside"
-            label="品番"
-            placeholder=" "
-            isRequired
-            errorMessage={errors.productNumber && errors.productNumber.message}
-            {...register("productNumber", { required: true })}
-          />
-          <Input
-            labelPlacement="outside"
-            label="品名"
-            placeholder=" "
-            isRequired
-            errorMessage={errors.productName && errors.productName.message}
-            {...register("productName")}
-          />
-          <Select
-            label="カラー"
-            labelPlacement="outside"
-            placeholder=" "
-            isRequired
-            errorMessage={errors.categoryId && errors.categoryId.message}
-            {...register("colorId", {
-              required: true,
-              valueAsNumber: true,
-            })}
-          >
-            {colors.map((color) => (
-              <SelectItem key={color.id} value={color.id}>
-                {color.name}
-              </SelectItem>
-            ))}
-          </Select>
-          <Select
-            label="カテゴリー"
-            labelPlacement="outside"
-            placeholder=" "
-            isRequired
-            errorMessage={errors.categoryId && errors.categoryId.message}
-            {...register("categoryId", {
-              required: true,
-              valueAsNumber: true,
-            })}
-          >
-            {categories.map((category) => (
-              <SelectItem key={category.id} value={category.id}>
-                {category.name}
-              </SelectItem>
-            ))}
-          </Select>
-          <Textarea
-            labelPlacement="outside"
-            label="備考"
-            placeholder=" "
-            {...register("description")}
-          />
-        </div>
-        <div className="mt-6 overflow-auto">
-          <ProductFormItemTable
-            register={register}
-            methods={methods}
-            getValues={getValues}
-            setValue={setValue}
-            sizes={sizes}
-          />
-        </div>
-        <div className="flex justify-center mt-6">
-          <Button
-            className="px-3 py-1 text-white rounded bg-blue-500"
-            onClick={addItem}
-          >
-            追加
-          </Button>
-        </div>
-        <div className="mt-6 text-center">
-          <Button type="submit" size="sm" color="primary" className="w-full">
-            登録
-          </Button>
-        </div>
-      </form>
+      <TitleReturn title="商品登録" path={paths.productAll()} />
+      <div className="mt-3 p-6 border rounded-xl bg-white">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="flex flex-col gap-6 mt-12">
+            <Input
+              labelPlacement="outside"
+              label="品番"
+              placeholder=" "
+              isRequired
+              errorMessage={
+                errors.productNumber && errors.productNumber.message
+              }
+              {...register("productNumber", { required: true })}
+            />
+            <Input
+              labelPlacement="outside"
+              label="品名"
+              placeholder=" "
+              isRequired
+              errorMessage={errors.productName && errors.productName.message}
+              {...register("productName")}
+            />
+            <Select
+              label="カラー"
+              labelPlacement="outside"
+              placeholder=" "
+              isRequired
+              errorMessage={errors.categoryId && errors.categoryId.message}
+              {...register("colorId", {
+                required: true,
+                valueAsNumber: true,
+              })}
+            >
+              {colors.map((color) => (
+                <SelectItem key={color.id} value={color.id}>
+                  {color.name}
+                </SelectItem>
+              ))}
+            </Select>
+            <Select
+              label="カテゴリー"
+              labelPlacement="outside"
+              placeholder=" "
+              isRequired
+              errorMessage={errors.categoryId && errors.categoryId.message}
+              {...register("categoryId", {
+                required: true,
+                valueAsNumber: true,
+              })}
+            >
+              {categories.map((category) => (
+                <SelectItem key={category.id} value={category.id}>
+                  {category.name}
+                </SelectItem>
+              ))}
+            </Select>
+            <Textarea
+              labelPlacement="outside"
+              label="備考"
+              placeholder=" "
+              {...register("description")}
+            />
+          </div>
+          <div className="mt-6 overflow-auto">
+            <ProductFormItemTable
+              register={register}
+              methods={methods}
+              getValues={getValues}
+              setValue={setValue}
+              sizes={sizes}
+            />
+          </div>
+          <div className="flex justify-center mt-6">
+            <Button
+              className="px-3 py-1 text-white rounded bg-blue-500"
+              onClick={addItem}
+            >
+              追加
+            </Button>
+          </div>
+          <div className="mt-6 text-center">
+            <Button type="submit" size="sm" color="primary" className="w-full">
+              登録
+            </Button>
+          </div>
+        </form>
+      </div>
     </>
   );
 }

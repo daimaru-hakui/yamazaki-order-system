@@ -1,9 +1,9 @@
 import { ReactNode } from "react";
 
-export default function ProductMasterLayout({
+export default function ProductsPageLayout({
   children,
 }: {
   children: ReactNode;
 }) {
-  return <div className="w-full">{children}</div>;
+  return <div className="w-full m-6">{children}</div>;
 }

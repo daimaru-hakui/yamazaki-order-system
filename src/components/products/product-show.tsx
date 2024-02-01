@@ -2,31 +2,25 @@ import paths from "@/paths";
 import { Product, Size } from "@prisma/client";
 import Link from "next/link";
 import { AiOutlineArrowLeft } from "react-icons/ai";
+import TitleReturn from "../common/title-return";
 
 interface ProductShowProps {
-  product: Product & {
-    color: {
-      name: string;
-    };
-    category: {
-      name: string;
-    };
-  } | null;
+  product:
+    | (Product & {
+        color: {
+          name: string;
+        };
+        category: {
+          name: string;
+        };
+      })
+    | null;
 }
 
 export default function ProductShow({ product }: ProductShowProps) {
   return (
     <>
-      <div className="flex justify-center gap-6 relative">
-        <Link
-          href={paths.productAll()}
-          className="flex items-center gap-3 absolute left-0"
-        >
-          <AiOutlineArrowLeft className="text-xl" />
-          戻る
-        </Link>
-        <div className="font-bold">詳細画面</div>
-      </div>
+      <TitleReturn title="商品詳細" path={paths.productAll()} />
       <div className="flex flex-col gap-6 mt-3 p-6 rounded-xl bg-white shadow-md">
         <dl>
           <dt className="text-xs">品番/品名</dt>

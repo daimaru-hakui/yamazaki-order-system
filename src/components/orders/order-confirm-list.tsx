@@ -16,6 +16,7 @@ import { AiOutlineArrowLeft, AiFillDelete } from "react-icons/ai";
 import OrderRegisterButtonArea from "./order-register-button-area";
 import OrderConfirmQuantityInput from "./order-confirm-quantiy-input";
 import OrderOption from "./order-option";
+import TitleReturn from "../common/title-return";
 
 export default function OrderConfirmList() {
   const cart = useStore((state) => state.cart);
@@ -70,16 +71,7 @@ export default function OrderConfirmList() {
 
   return (
     <div>
-      <div className="flex justify-center gap-6 relative">
-        <Link
-          href={paths.orderProductCreate(customerId)}
-          className="flex items-center gap-3 absolute left-0"
-        >
-          <AiOutlineArrowLeft />
-          <div className="text-sm">戻る</div>
-        </Link>
-        <div className="font-bold">明細確認</div>
-      </div>
+      <TitleReturn title="明細確認" path={paths.orderProductCreate(customerId)} />
       <div className="mt-6 text-2xl">{customerName}</div>
       <Table className="mt-3" aria-label="order cart table">
         <TableHeader>

@@ -14,7 +14,6 @@ export default async function CustomersPage() {
   }
   return (
     <div className="mx-auto max-w-[calc(600px)]">
-      <div className="text-center font-bold">顧客一覧</div>
       <CustomerList customers={customers} />
     </div>
   );

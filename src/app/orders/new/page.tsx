@@ -11,9 +11,6 @@ export default async function OrderNewPage() {
   await db.$disconnect();
   return (
     <div className="mx-auto max-w-[calc(600px)]">
-      <div className="text-md font-bold text-center">
-        <div>発注</div>
-      </div>
       <OrderCustomerList customers={customers} />
     </div>
   );
