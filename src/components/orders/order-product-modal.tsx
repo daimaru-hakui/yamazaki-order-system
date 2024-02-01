@@ -15,7 +15,7 @@ import {
 } from "@nextui-org/react";
 import type { Sku } from "@prisma/client";
 import OrderProductQuantityInput from "./order-product-quantity-Input";
-import { AiFillExclamationCircle } from "react-icons/ai";
+import { AiFillExclamationCircle, AiOutlineCalculator } from "react-icons/ai";
 
 interface OrderProductModalProps {
   skus: (Sku & {
@@ -35,11 +35,22 @@ export default function OrderProductTable({
 
   return (
     <>
-      <AiFillExclamationCircle
-        onClick={onOpen}
+      {/* <AiFillExclamationCircle
+       
         className="text-blue-500 cursor-pointer"
         style={{ fontSize: "30px" }}
-      />
+      /> */}
+      <Button
+        size="sm"
+        color="primary"
+        className=""
+        onClick={onOpen}
+      >
+        <AiOutlineCalculator
+          className="cursor-pointer"
+          style={{ fontSize: "20px" }}
+        />
+      </Button>
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}

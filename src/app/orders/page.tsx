@@ -30,7 +30,7 @@ export default async function OrdersPage() {
   });
 
   return (
-    <div className="mx-auto max-w-[calc(700px)]">
+    <div className="mx-auto w-full max-w-[calc(1000px)]">
       <OrderList orders={orders} />
     </div>
   );

@@ -37,7 +37,7 @@ export default function OrderList({ orders }: OrderListProps) {
   };
 
   return (
-    <div className="w-full max-w-[calc(600px)] mx-auto">
+    <>
       <TitleReturn title="受注一覧" path={paths.home()} />
       <Table aria-label="orders table" className="mt-3">
         <TableHeader>
@@ -45,8 +45,8 @@ export default function OrderList({ orders }: OrderListProps) {
           <TableColumn>発注日</TableColumn>
           <TableColumn>発注NO.</TableColumn>
           <TableColumn>工場名</TableColumn>
-          <TableColumn className="text-center">受注金額</TableColumn>
-          <TableColumn>発注者</TableColumn>
+          <TableColumn className="text-right">受注金額（円）</TableColumn>
+          <TableColumn className="text-center">発注者</TableColumn>
           <TableColumn>詳細</TableColumn>
         </TableHeader>
         <TableBody>
@@ -59,7 +59,7 @@ export default function OrderList({ orders }: OrderListProps) {
               <TableCell className="text-right">
                 {sumCalc(order.orderDetail).toLocaleString()}
               </TableCell>
-              <TableCell className="">{order.user.name || "不明"}</TableCell>
+              <TableCell className="text-center">{order.user.name || "不明"}</TableCell>
               <TableCell>
                 <OrderShowModal
                   order={order}
@@ -70,6 +70,6 @@ export default function OrderList({ orders }: OrderListProps) {
           ))}
         </TableBody>
       </Table>
-    </div>
+    </>
   );
 }

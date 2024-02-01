@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/navbar/navbar";
 import SessionProvider from "@/providers/session-provider";
 import NextUIProviders from "@/providers/nextui-provider";
+import SideBar from "@/components/sidebar/sidebar";
 
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
@@ -19,10 +20,16 @@ export default function RootLayout({
   return (
     <SessionProvider>
       <html lang="en">
-        <body className={`${inter.className} relative min-h-screen bg-gray-50`}>
-          <Navbar />
-          <div className="p-6">
-            <NextUIProviders>{children}</NextUIProviders>
+        <body
+          className={`${inter.className} grid grid-colos-1 md:grid-cols-[250px_1fr] min-h-screen bg-gray-50`}>
+          <div className="hidden md:block">
+            <SideBar />
+          </div>
+          <div className="">
+            <Navbar />
+            <div className="px-6">
+              <NextUIProviders>{children}</NextUIProviders>
+            </div>
           </div>
         </body>
       </html>

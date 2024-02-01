@@ -1,8 +1,5 @@
 "use client";
-import { navbarLinks } from "@/utils/links";
 import {
-  Button,
-  Divider,
   Dropdown,
   DropdownItem,
   DropdownMenu,
@@ -22,8 +19,8 @@ export default function NavDropdown() {
     <div className="flex items-center gap-4">
       <Dropdown placement="bottom-end">
         <DropdownTrigger>
-          <div className="flex justify-center items-center p-2 bg-blue-500 rounded cursor-pointer">
-            <AiOutlineMenu color="white"/>
+          <div className="flex justify-center items-center p-2 rounded cursor-pointer">
+            <AiOutlineMenu color="black" />
           </div>
         </DropdownTrigger>
         <DropdownMenu aria-label="Profile Actions" variant="flat">

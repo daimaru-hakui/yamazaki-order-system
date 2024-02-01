@@ -10,53 +10,53 @@ export default function Navbar() {
   const session = useSession();
 
   return (
-    <header className="(w-full shadow-sm sticky top-0 z-50 bg-white">
-      <div className="flex items-center justify-between h-[calc(50px)] p-3">
-        <Link href="/">
-          <div>山崎製パン オーダーシステム</div>
-        </Link>
-        <div className="flex gap-3 items-center">
+    <header className="w-full sticky top-0 z-50">
+      <div className="flex items-center h-12 p-3">
+        <div className="w-full flex items-center justify-between md:justify-end">
+          <div className="flex items-center h-12 md:hidden">山﨑製パン APP</div>
           {session.data?.user && (
             <>
-              <Button
-                color="primary"
-                variant="solid"
-                size="sm"
-                className="p-0"
-              >
-                <Link
-                  href={paths.orderAll()}
-                  className="w-full h-full grid place-items-center"
+              <div className="mr-3 gap-3 hidden md:flex">
+                <Button
+                  color="primary"
+                  variant="solid"
+                  size="sm"
+                  className="p-0"
                 >
-                  受注一覧
-                </Link>
-              </Button>
-              <Button
-                color="primary"
-                variant="bordered"
-                size="sm"
-                className="p-0"
-              >
-                <Link
-                  href={paths.orderCreate()}
-                  className="w-full h-full grid place-items-center"
+                  <Link
+                    href={paths.orderAll()}
+                    className="w-full h-full grid place-items-center"
+                  >
+                    受注一覧
+                  </Link>
+                </Button>
+                <Button
+                  color="primary"
+                  variant="bordered"
+                  size="sm"
+                  className="p-0"
                 >
-                  発注
-                </Link>
-              </Button>
-              <Button
-                color="primary"
-                variant="bordered"
-                size="sm"
-                className="p-0"
-              >
-                <Link
-                  href={paths.csvCreate()}
-                  className="w-full h-full grid place-items-center"
+                  <Link
+                    href={paths.orderCreate()}
+                    className="w-full h-full grid place-items-center"
+                  >
+                    発注
+                  </Link>
+                </Button>
+                <Button
+                  color="primary"
+                  variant="bordered"
+                  size="sm"
+                  className="p-0"
                 >
-                  CSV発注
-                </Link>
-              </Button>
+                  <Link
+                    href={paths.csvCreate()}
+                    className="w-full h-full grid place-items-center"
+                  >
+                    CSV発注
+                  </Link>
+                </Button>
+              </div>
               <NavDropdown />
             </>
           )}
