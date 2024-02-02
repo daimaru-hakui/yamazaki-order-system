@@ -70,27 +70,27 @@ export default function OrderConfirmList() {
   };
 
   return (
-    <div>
+    <div className="w-full">
       <TitleReturn title="明細確認" path={paths.orderProductCreate(customerId)} />
       <div className="mt-6 text-2xl">{customerName}</div>
-      <Table className="mt-3" aria-label="order cart table">
-        <TableHeader>
-          <TableColumn className="text-center">品番</TableColumn>
-          <TableColumn className="text-center">品名</TableColumn>
+        <Table layout="auto" fullWidth className="mt-3" aria-label="order cart table">
+        <TableHeader className="">
+          <TableColumn className="text-center min-w-[calc(100px)]">品番</TableColumn>
+          <TableColumn className="text-center min-w-[calc(200px)]">品名</TableColumn>
           <TableColumn className="text-center">サイズ</TableColumn>
-          <TableColumn className="text-center">価格</TableColumn>
-          <TableColumn className="text-center">数量</TableColumn>
-          <TableColumn className="text-center">合計</TableColumn>
-          <TableColumn className="text-center">削除</TableColumn>
+          <TableColumn className="text-center min-w-[calc(100px)]">価格</TableColumn>
+          <TableColumn className="text-center min-w-[calc(100px)]">数量</TableColumn>
+          <TableColumn className="text-center min-w-[calc(100px)]">合計</TableColumn>
+          <TableColumn className="text-center min-w-[calc(100px)]">削除</TableColumn>
         </TableHeader>
         <TableBody>
           {sortCart.map((item) => (
             <TableRow key={item.skuId}>
-              <TableCell>{item.productNumber}</TableCell>
+              <TableCell >{item.productNumber}</TableCell>
               <TableCell>{item.productName}</TableCell>
               <TableCell className="text-center">{item.size}</TableCell>
               <TableCell className="text-right">
-                {item.price.toLocaleString()}
+                {item.price.toLocaleString()}円
               </TableCell>
               <TableCell className="text-right">
                 <OrderConfirmQuantityInput

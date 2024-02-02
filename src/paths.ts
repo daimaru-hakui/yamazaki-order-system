@@ -42,7 +42,7 @@ const paths = {
     return `/csv-upload`;
   },
   orderConfirm() {
-    return `/orders/confirm`;
+    return `/orders/new/confirm`;
   },
 };
 

@@ -5,5 +5,5 @@ export default function ProductsPageLayout({
 }: {
   children: ReactNode;
 }) {
-  return <div className="w-full m-6">{children}</div>;
+  return <div className="w-full">{children}</div>;
 }

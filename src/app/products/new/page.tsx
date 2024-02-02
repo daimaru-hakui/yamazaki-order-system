@@ -6,7 +6,7 @@ export default async function ProductMasterCreatePage() {
   const colors = await db.color.findMany();
   const sizes = await db.size.findMany();
   return (
-    <div className="max-w-[calc(600px)] mx-auto">
+    <div className="w-full max-w-[calc(600px)] mx-auto">
       <ProductForm categories={categories} colors={colors} sizes={sizes}/>
     </div>
   );
