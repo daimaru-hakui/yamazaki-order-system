@@ -1,5 +1,6 @@
 "use client";
 import {
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -9,12 +10,10 @@ import {
 } from "@nextui-org/react";
 import { Order, OrderDetail } from "@prisma/client";
 import { format } from "date-fns";
-import { useEffect } from "react";
-import { AiOutlineArrowLeft, AiOutlineEye } from "react-icons/ai";
 import OrderShowModal from "./order-show-modal";
-import Link from "next/link";
 import paths from "@/paths";
 import TitleReturn from "../common/title-return";
+import OrderListDropdown from "./order-list-dropdown";
 
 interface OrderListProps {
   orders: (Order & {
@@ -27,18 +26,19 @@ interface OrderListProps {
   })[];
 }
 
+export const sumCalc = (details: OrderDetail[]) => {
+  let sum = 0;
+  details.forEach((detail) => {
+    sum += detail.quantity * detail.sku.price || 0;
+  });
+  return sum;
+};
+
 export default function OrderList({ orders }: OrderListProps) {
-  const sumCalc = (details: any) => {
-    let sum = 0;
-    details.forEach((detail: OrderDetail) => {
-      sum += detail.quantity * detail.sku.price || 0;
-    });
-    return sum;
-  };
 
   return (
     <>
-      <TitleReturn title="受注一覧" path={paths.home()} />
+      <div className="text-xl font-bold">受注一覧</div>
       <Table aria-label="orders table" className="mt-3">
         <TableHeader>
           <TableColumn>NO.</TableColumn>
@@ -47,7 +47,7 @@ export default function OrderList({ orders }: OrderListProps) {
           <TableColumn>工場名</TableColumn>
           <TableColumn className="text-right">受注金額（円）</TableColumn>
           <TableColumn className="text-center">発注者</TableColumn>
-          <TableColumn>詳細</TableColumn>
+          <TableColumn>actions</TableColumn>
         </TableHeader>
         <TableBody>
           {orders.map((order) => (
@@ -60,11 +60,12 @@ export default function OrderList({ orders }: OrderListProps) {
                 {sumCalc(order.orderDetail).toLocaleString()}
               </TableCell>
               <TableCell className="text-center">{order.user.name || "不明"}</TableCell>
-              <TableCell>
+              <TableCell className="flex items-center gap-3">
                 <OrderShowModal
                   order={order}
                   sum={sumCalc(order.orderDetail).toLocaleString()}
                 />
+                <OrderListDropdown orderId={order.id} />
               </TableCell>
             </TableRow>
           ))}

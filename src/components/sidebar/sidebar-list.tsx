@@ -14,6 +14,7 @@ export default function SidebarList() {
       <Listbox aria-label="Actions" color="primary">
         {sidebarLinks.map(({ path, name }) => (
           <ListboxItem
+            textValue={name}
             key={path}
             className={`${path === url ? "bg-gray-100" : ""}`}
           >

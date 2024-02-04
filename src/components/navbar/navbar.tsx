@@ -10,7 +10,7 @@ export default function Navbar() {
   const currentPath = usePathname();
 
   return (
-    <header className="w-full sticky top-0 z-50 bg-white md:bg-inherit">
+    <header className="w-full sticky top-0 z-50 bg-white lg:bg-inherit">
       <div className="flex items-center h-12 p-3">
         <div className="w-full flex items-center justify-between">
           <div>
@@ -24,7 +24,7 @@ export default function Navbar() {
               </button>
             )}
           </div>
-          <div className="flex items-center h-12 md:hidden">山﨑製パン APP</div>
+          <div className="flex items-center h-12 lg:hidden">山﨑製パン APP</div>
           {session.data?.user && (
             <>
               <NavDropdown />

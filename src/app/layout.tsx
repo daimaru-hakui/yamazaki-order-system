@@ -21,8 +21,8 @@ export default function RootLayout({
     <SessionProvider>
       <html lang="en">
         <body
-          className={`${inter.className} block md:grid md:grid-cols-[250px_1fr] min-h-screen bg-gray-50`}>
-          <div className="hidden md:block">
+          className={`${inter.className} block lg:grid lg:grid-cols-[250px_1fr] min-h-screen bg-gray-50`}>
+          <div className="hidden lg:block">
             <MainSideBar />
           </div>
           <div className="">
