@@ -6,19 +6,20 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_DATABASE_URL")
 }
 
 model User {
-  id        String   @id @unique
-  email     String   @unique
-  name      String?  @db.Text
-  role      UserRole @default(USER)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  id        String     @id @unique
+  email     String     @unique
+  name      String?    @db.Text
+  role      UserRole   @default(USER)
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @default(now()) @updatedAt @map("updated_at")
   Order     Order[]
+  Shipping  Shipping[]
 
   @@map("users")
 }
@@ -60,20 +61,21 @@ model Category {
 }
 
 model Sku {
-  id           String        @id @default(uuid())
-  productCode  String?       @map("product_code") @db.Text
-  janCode      String?       @map("jan_code") @db.Text
-  product      Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId    String           @map("product_id")
-  size         Size          @relation(fields: [sizeId], references: [id], onDelete: Cascade)
-  sizeId       String        @map("size_id")
-  price        Int           @default(0)
-  stock        Int           @default(0)
-  displayOrder Int           @default(100) @map("display_order")
-  createdAt    DateTime      @default(now()) @map("created_at")
-  updatedAt    DateTime      @default(now()) @updatedAt @map("updated_at")
-  OrderDetail  OrderDetail[]
-  Price        Price[]
+  id             String           @id @default(uuid())
+  productCode    String?          @map("product_code") @db.Text
+  janCode        String?          @map("jan_code") @db.Text
+  product        Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId      String           @map("product_id")
+  size           Size             @relation(fields: [sizeId], references: [id], onDelete: Cascade)
+  sizeId         String           @map("size_id")
+  price          Int              @default(0)
+  stock          Int              @default(0)
+  displayOrder   Int              @default(100) @map("display_order")
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @default(now()) @updatedAt @map("updated_at")
+  orderDetail    OrderDetail[]
+  Price          Price[]
+  shippingDetail ShippingDetail[]
 
   @@unique([sizeId, productId], name: "skuIdentifier")
   @@map("skus")
@@ -128,7 +130,7 @@ model CustomerProduct {
   customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
   customerId String   @map("customer_id")
   product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId  String      @map("product_id")
+  productId  String   @map("product_id")
 
   @@unique([customerId, productId])
   @@map("customer_products")
@@ -145,6 +147,7 @@ model Order {
   userId      String        @map("user_id")
   createdAt   DateTime      @default(now()) @map("created_at")
   updatedAt   DateTime      @updatedAt @map("updated_at")
+  shipping    Shipping[]
 
   @@map("orders")
 }
@@ -164,4 +167,31 @@ model OrderDetail {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("order_details")
+}
+
+model Shipping {
+  id             Int              @id @default(autoincrement())
+  order          Order            @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId        Int              @map("order_id")
+  user           User             @relation(fields: [userId], references: [id], onDelete: NoAction)
+  userId         String           @map("user_id")
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+  shippingDetail ShippingDetail[]
+
+  @@map("shippings")
+}
+
+model ShippingDetail {
+  id         Int      @id @default(autoincrement())
+  shipping   Shipping @relation(fields: [shippingId], references: [id], onDelete: Cascade)
+  shippingId Int      @map("shipping_id")
+  sku        Sku      @relation(fields: [skuId], references: [id])
+  skuId      String   @map("sku_id")
+  price      Int      @default(0)
+  quantity   Int      @default(0)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@map("shipping_details")
 }

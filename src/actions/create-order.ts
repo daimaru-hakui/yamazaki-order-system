@@ -52,7 +52,6 @@ export async function createOrder(
     comment: data.orderOption.comment,
     items: data.cart,
   });
-  console.log(data.orderOption);
   if (!result.success) {
     return {
       errors: result.error.flatten().fieldErrors,

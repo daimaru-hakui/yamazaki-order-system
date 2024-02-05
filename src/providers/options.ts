@@ -13,9 +13,9 @@ export const options: NextAuthOptions = {
           try {
             const decoded = await auth.verifyIdToken(idToken);
             const user = {
+              ...decoded,
               id: decoded.uid,
               emailVerified: decoded.email_verified,
-              ...decoded,
             };
             return { ...user };
           } catch (err) {
@@ -35,19 +35,6 @@ export const options: NextAuthOptions = {
       return { ...token, ...user };
     },
     async session({ session, token }) {
-      // const data = await db.user.findFirst({
-      //   where: { id: token.uid },
-      // });
-
-      // if (!data) {
-      //   await db.user.create({
-      //     data: {
-      //       id: token.uid,
-      //       email: token.email || "",
-      //     },
-      //   });
-      // }
-
       session.user.emailVerified = token.emailVerified;
       session.user.uid = token.uid;
       return session;

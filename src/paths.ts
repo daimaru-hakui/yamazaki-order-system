@@ -38,11 +38,14 @@ const paths = {
   orderCompleate(orderId: string) {
     return `/orders/${orderId}/compleate`;
   },
-  csvCreate() {
-    return `/csv-upload`;
-  },
   orderConfirm() {
     return `/orders/new/confirm`;
+  },
+  orderAction(orderId: string) {
+    return `/orders/${orderId}/action`;
+  },
+  csvCreate() {
+    return `/csv-upload`;
   },
 };
 

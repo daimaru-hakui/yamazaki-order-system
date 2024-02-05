@@ -71,12 +71,12 @@ export default function OrderShowModal({ sum, order }: OrderShowModal) {
                   }}
                 >
                   <TableHeader>
-                    <TableColumn key="name">品番</TableColumn>
-                    <TableColumn key="height">品名</TableColumn>
-                    <TableColumn key="mass" className="text-center">単価</TableColumn>
-                    <TableColumn key="birth_year" className="text-center">数量</TableColumn>
-                    <TableColumn key="birth_year" className="text-center">合計</TableColumn>
-                    <TableColumn key="birth_year">コメント</TableColumn>
+                    <TableColumn >品番</TableColumn>
+                    <TableColumn >品名</TableColumn>
+                    <TableColumn className="text-center">単価</TableColumn>
+                    <TableColumn className="text-center">数量</TableColumn>
+                    <TableColumn className="text-center">合計</TableColumn>
+                    <TableColumn >コメント</TableColumn>
                   </TableHeader>
                   <TableBody
                     loadingContent={<Spinner color="white" />}

@@ -5,13 +5,14 @@ import { ReactNode } from "react";
 
 interface FormButtonProps {
   children: ReactNode;
-  isPending?:boolean
+  isPending?: boolean;
+  className?: string;
 }
 
-export default function FormButtonClient({ children,isPending }: FormButtonProps) {
+export default function FormButtonClient({ children, isPending, className }: FormButtonProps) {
 
   return (
-    <Button type="submit" color="primary" isLoading={isPending}>
+    <Button type="submit" color="primary" isLoading={isPending} className={className}>
       {children}
     </Button>
   );
