@@ -12,13 +12,16 @@ import { useSession } from "next-auth/react";
 interface OrderActionProps {
   order: Order & {
     user: {
+      name: string | null;
+    };
+    customer: {
       name: string;
     };
     orderDetail: (OrderDetail & {
       sku: Sku & {
         product: Product & {
-          color: Color,
-          category: Category;
+          color: { name: string; },
+          category: { name: string; };
         },
       };
     })[];
@@ -78,7 +81,7 @@ export default function OrderAction({ order }: OrderActionProps) {
               </dl>
               <dl className="grid grid-cols-2 items-center gap-6">
                 <dt className="text-xs text-gray-400">担当者</dt>
-                <dd className="text-sm">{order.uers?.name || "不明"}</dd>
+                <dd className="text-sm">{order.user?.name || "不明"}</dd>
               </dl>
             </div>
             <div className="">
@@ -111,7 +114,7 @@ export default function OrderAction({ order }: OrderActionProps) {
               <TableBody
                 loadingContent={<Spinner color="white" />}
               >
-                {order.orderDetail.map((item: OrderDetail, idx: number) => (
+                {order.orderDetail.map((item, idx: number) => (
                   <TableRow key={item.id}>
                     <TableCell>
                       <input
@@ -130,7 +133,7 @@ export default function OrderAction({ order }: OrderActionProps) {
                           type="number"
                           size="sm"
                           className="w-20"
-                          defaultValue={item.sku.price}
+                          defaultValue={String(item.sku.price)}
                           {...register(`orderDetails.${idx}.price`, { valueAsNumber: true })}
                         />
                       </div>
@@ -149,7 +152,7 @@ export default function OrderAction({ order }: OrderActionProps) {
                             input: "text-center"
 
                           }}
-                          defaultValue={item.quantity}
+                          defaultValue={String(item.quantity)}
                           {...register(`orderDetails.${idx}.quantity`,
                             {
                               valueAsNumber: true,
@@ -163,7 +166,7 @@ export default function OrderAction({ order }: OrderActionProps) {
                     <TableCell className="text-right">
                       {(item.sku.price * item.quantity).toLocaleString()}
                     </TableCell>
-                    <TableCell>{item.sku.productNumber}</TableCell>
+                    <TableCell>{item.sku.product.productNumber}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

@@ -1,14 +1,20 @@
 'use client';
 import { Button } from "@nextui-org/react";
-import {  useState } from "react";
-import OrderCsvList from "./csv-upload-list";
-import { SkuWithProduct } from "@/app/csv-upload/page";
+import { useState } from "react";
+import { CSVLink, CSVDownload } from "react-csv";
 
-interface CsvUploadFormProps {
-  skus: SkuWithProduct[];
+
+interface CsvNoteForm {
+  customers: {
+    id: string;
+    ediCode: string;
+    ediName: string;
+    code: string;
+    name: string;
+  }[];
 }
 
-export default function CsvUploadForm({ skus }: CsvUploadFormProps) {
+export default function CsvNoteForm({ customers }: CsvNoteForm) {
   const [file, setFile] = useState<File | null>(null);
   const [data, setData] = useState<any>([]);
 
@@ -19,6 +25,11 @@ export default function CsvUploadForm({ skus }: CsvUploadFormProps) {
     }
   };
 
+  const handleReset = () => {
+    setData([]);
+    setFile(null);
+  };
+
   const handleFileClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!file) return;
@@ -27,44 +38,35 @@ export default function CsvUploadForm({ skus }: CsvUploadFormProps) {
     reader.addEventListener("load", async function () {
       if (!reader.result) return;
       const csvFile = reader.result.toString();
-      const csvSplit = csvFile.split(/\r?\n/).map((csv) => csv.split(','));
+      const csvSplit = csvFile.replace(/"/g, "").split(/\r?\n/).map((csv) => csv.split(','));
       csvSplit.shift();
 
       const csvArray = csvSplit.map((item) => {
         return {
-          productId: item[0],
-          sizeCode: Number(item[1]),
-          quantity: Number(item[2]),
-          lastName: item[3],
-          firstName: item[4],
-          comment: item[5]
+          "納品日": item[2],
+          "受注番号": item[4],
+          "商品コード": item[8],
+          "商品名": item[12],
+          "受注数量": Number(item[28]),
+          "原価": Number(item[29]),
+          "納品部署コード": item[16]
         };
       });
-      const csvSkus = csvArray.map((item) => {
-        const sku = findSkus(item.productId, item.sizeCode);
+      const object = csvArray.map((item) => {
+        const customer = customers.find((customer) =>
+          (item.納品部署コード === customer.ediCode));
         return {
-          ...sku,
-          quantity: item.quantity,
-          lastName: item.lastName,
-          firstName: item.firstName,
-          comment: item.comment
+          ...item,
+          ...customer
         };
-      }).filter((sku) => sku.id);
-      console.log(csvSkus);
-      setData(csvSkus);
+      });
+      console.log(object);
+      setData(object);
     });
   };
 
-  const findSkus = (productId: string, sizeCode: number) => {
-    const sku = skus.find((sku) =>
-      sku.productId === productId && sku.size.code === sizeCode
-    );
-    return sku;
-  };
-
-
   return (
-    <form className="flex flex-col ">
+    <div className="flex flex-col ">
       {data.length === 0 && (
         <div
           className="flex justify-between items-center mt-6 p-6 bg-white rounded-lg drop-shadow-md"
@@ -83,13 +85,12 @@ export default function CsvUploadForm({ skus }: CsvUploadFormProps) {
       )}
       {data.length > 0 && (
         <div className="flex flex-col gap-6 mt-6">
-          <OrderCsvList data={data} />
           <div className="flex gap-3">
-            <Button color="danger" onClick={() => setData([])}>クリア</Button>
-            <Button color="primary" className="w-full">登録</Button>
+            <Button color="danger" onClick={handleReset}>クリア</Button>
+            <CSVDownload data={data} />
           </div>
         </div>
       )}
-    </form>
+    </div>
   );
 };

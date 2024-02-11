@@ -1,5 +1,5 @@
 "use client";
-import { SkuWithProduct } from "@/app/csv-upload/page";
+import { SkuWithProduct } from "@/app/csv-register/page";
 import { useStore } from "@/store";
 import {
   Table,
@@ -12,7 +12,7 @@ import {
 import { useEffect, useState } from "react";
 import { AiFillDelete } from "react-icons/ai";
 
-interface CsvUploadListProps {
+interface CsvRegisterListProps {
   data: (SkuWithProduct & {
     quantity: number;
     firstName: string;
@@ -20,9 +20,9 @@ interface CsvUploadListProps {
     comment: string;
   })[];
 }
-export default function CsvUploadList({ data }: CsvUploadListProps) {
+export default function CsvRegisterList({ data }: CsvRegisterListProps) {
   const [sum, setSum] = useState(0);
- 
+
   useEffect(() => {
     let total = 0;
     data.forEach((item) => {
@@ -60,7 +60,7 @@ export default function CsvUploadList({ data }: CsvUploadListProps) {
           {/* <TableColumn className="text-center">削除</TableColumn> */}
         </TableHeader>
         <TableBody>
-          {data.map((sku,idx) => (
+          {data.map((sku, idx) => (
             <TableRow key={idx}>
               <TableCell>{sku.product.productNumber}</TableCell>
               <TableCell>{sku.product.productName}</TableCell>
@@ -85,7 +85,7 @@ export default function CsvUploadList({ data }: CsvUploadListProps) {
           ))}
         </TableBody>
       </Table>
-        <div className="flex justify-end items-center p-3">
+      <div className="flex justify-end items-center p-3">
         注文金額合計（税抜）:
         <div className="text-2xl">{`￥${sum.toLocaleString()}`}</div>
       </div>

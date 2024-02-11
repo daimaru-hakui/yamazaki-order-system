@@ -1,4 +1,4 @@
-import CsvUploadForm from "@/components/csv-upload/csv-upload-form";
+import CsvUploadForm from "@/components/csv-register/csv-register-form";
 import { db } from "@/db";
 import { Color, Product, Size, Sku } from "@prisma/client";
 
@@ -10,7 +10,7 @@ export type SkuWithProduct = (Sku & {
 });
 
 
-export default async function csvUploadPage() {
+export default async function csvRegisterPage() {
   const skus = await db.sku.findMany({
     include: {
       product: {
