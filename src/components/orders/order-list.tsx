@@ -8,11 +8,9 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { Order, OrderDetail } from "@prisma/client";
+import { Order, OrderDetail, Sku } from "@prisma/client";
 import { format } from "date-fns";
 import OrderShowModal from "./order-show-modal";
-import paths from "@/paths";
-import TitleReturn from "../common/title-return";
 import OrderListDropdown from "./order-list-dropdown";
 
 interface OrderListProps {
@@ -23,10 +21,11 @@ interface OrderListProps {
     customer: {
       name: string;
     };
+    orderDetail: (OrderDetail & { sku: { price: number; }; })[];
   })[];
 }
 
-export const sumCalc = (details: OrderDetail[]) => {
+export const sumCalc = (details: (OrderDetail & { sku: { price: number; }; })[]) => {
   let sum = 0;
   details.forEach((detail) => {
     sum += detail.quantity * detail.sku.price || 0;

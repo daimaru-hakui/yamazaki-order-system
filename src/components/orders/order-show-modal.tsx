@@ -12,9 +12,7 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Pagination,
   Spinner,
-  getKeyValue
 } from "@nextui-org/react";
 import { Order, OrderDetail, Sku } from "@prisma/client";
 import { format } from "date-fns";
@@ -23,7 +21,9 @@ import { AiOutlineEye } from "react-icons/ai";
 interface OrderShowModal {
   sum: string;
   order: Order & {
-    orderDetail: (OrderDetail & Sku)[];
+    orderDetail: (OrderDetail & { sku: { price: number; }; })[];
+    customer: { name: string; };
+    user: { name: string | null; };
   };
 }
 export default function OrderShowModal({ sum, order }: OrderShowModal) {
@@ -52,7 +52,7 @@ export default function OrderShowModal({ sum, order }: OrderShowModal) {
                     </dl>
                     <dl className="grid grid-cols-2 items-center gap-6">
                       <dt className="text-xs text-gray-400">担当者</dt>
-                      <dd className="text-sm">{order.uers?.name || "不明"}</dd>
+                      <dd className="text-sm">{order.user?.name || "不明"}</dd>
                     </dl>
                   </div>
                   <div className="">

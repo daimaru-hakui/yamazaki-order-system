@@ -26,7 +26,7 @@ export default async function CustomerEditPage({
       },
     },
   });
-  const filterProducts = products.map((product: Product) => {
+  const filterProducts = products.map((product) => {
     const isProduct = product.customerProduct.find(
       (cp: CustomerProduct) => cp.productId === product.id
     );

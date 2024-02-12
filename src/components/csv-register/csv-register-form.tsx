@@ -1,14 +1,14 @@
 'use client';
 import { Button } from "@nextui-org/react";
-import {  useState } from "react";
-import OrderCsvList from "./csv-upload-list";
-import { SkuWithProduct } from "@/app/csv-upload/page";
+import { useState } from "react";
+import OrderCsvList from "./csv-register-list";
+import { SkuWithProduct } from "@/app/csv-register/page";
 
-interface CsvUploadFormProps {
+interface CsvRegisterFormProps {
   skus: SkuWithProduct[];
 }
 
-export default function CsvUploadForm({ skus }: CsvUploadFormProps) {
+export default function CsvRegisterForm({ skus }: CsvRegisterFormProps) {
   const [file, setFile] = useState<File | null>(null);
   const [data, setData] = useState<any>([]);
 

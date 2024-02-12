@@ -4,7 +4,7 @@ import Link from "next/link";
 import { AiOutlineMore } from "react-icons/ai";
 
 interface OrderListDropdownProps {
-  orderId: string;
+  orderId: number;
 }
 export default function OrderListDropdown({ orderId }: OrderListDropdownProps) {
 
@@ -12,7 +12,7 @@ export default function OrderListDropdown({ orderId }: OrderListDropdownProps) {
     {
       key: "action",
       label: "出荷",
-      path: paths.orderAction(orderId)
+      path: paths.orderAction(String(orderId))
     },
     {
       key: "edit",
