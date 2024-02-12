@@ -1,7 +1,9 @@
 'use client';
 import { Button } from "@nextui-org/react";
+import { Product, Sku } from "@prisma/client";
+import { format } from "date-fns";
 import { useState } from "react";
-import { CSVLink, CSVDownload } from "react-csv";
+import { CSVLink } from "react-csv";
 
 
 interface CsvNoteForm {
@@ -12,9 +14,19 @@ interface CsvNoteForm {
     code: string;
     name: string;
   }[];
+  skus: (Sku & {
+    product: Product & {
+      color: {
+        name: string;
+      };
+    };
+    size: {
+      name: string;
+    };
+  })[];
 }
 
-export default function CsvNoteForm({ customers }: CsvNoteForm) {
+export default function CsvNoteForm({ customers, skus }: CsvNoteForm) {
   const [file, setFile] = useState<File | null>(null);
   const [data, setData] = useState<any>([]);
 
@@ -38,7 +50,10 @@ export default function CsvNoteForm({ customers }: CsvNoteForm) {
     reader.addEventListener("load", async function () {
       if (!reader.result) return;
       const csvFile = reader.result.toString();
-      const csvSplit = csvFile.replace(/"/g, "").split(/\r?\n/).map((csv) => csv.split(','));
+      const csvSplit = csvFile
+        .replace(/"/g, "")
+        .split(/\r?\n/)
+        .map((csv) => csv.split(','));
       csvSplit.shift();
 
       const csvArray = csvSplit.map((item) => {
@@ -46,24 +61,30 @@ export default function CsvNoteForm({ customers }: CsvNoteForm) {
           "納品日": item[2],
           "受注番号": item[4],
           "商品コード": item[8],
-          "商品名": item[12],
+          "商品名": item[12]?.replace(/[[Ａ-Ｚａ-ｚ０-９－]/g, charChange),
           "受注数量": Number(item[28]),
           "原価": Number(item[29]),
           "納品部署コード": item[16]
         };
       });
-      const object = csvArray.map((item) => {
+      const customerJoinArray = csvArray.map((item) => {
         const customer = customers.find((customer) =>
           (item.納品部署コード === customer.ediCode));
+        const sku = skus.find((sku) => sku.productCode === item.商品コード);
         return {
           ...item,
-          ...customer
+          ...customer,
+          ...sku
         };
       });
-      console.log(object);
-      setData(object);
+      console.log(customerJoinArray);
+      setData(customerJoinArray);
     });
   };
+
+  function charChange(str: string) {
+    return String.fromCharCode(str.charCodeAt(0) - 0xFEE0);
+  }
 
   return (
     <div className="flex flex-col ">
@@ -87,7 +108,13 @@ export default function CsvNoteForm({ customers }: CsvNoteForm) {
         <div className="flex flex-col gap-6 mt-6">
           <div className="flex gap-3">
             <Button color="danger" onClick={handleReset}>クリア</Button>
-            <CSVDownload data={data} />
+            <CSVLink
+              className="w-full"
+              data={data}
+              filename={`${format(new Date(), "yyyy-MM-dd")}_yamazaki`}
+            >
+              <Button className="w-full">Download</Button>
+            </CSVLink>
           </div>
         </div>
       )}
