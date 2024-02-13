@@ -3,7 +3,7 @@ import fs from "fs";
 import { parse } from "csv-parse/sync";
 import { db } from "@/db";
 
-export default async function CsvNotePage() {
+export default async function EdiCsvUploadPage() {
   const inputData = fs.readFileSync('./customers.csv', { encoding: "utf-8" });
   const customers = parse(inputData, { columns: true, trim: true });
   const skus = await db.sku.findMany({

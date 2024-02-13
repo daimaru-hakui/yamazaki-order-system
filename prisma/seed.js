@@ -8,12 +8,24 @@ async function main() {
 
   const customers = [
     {
-      code: 1,
-      name: "大阪工場",
+      ediCode: "77000720",
+      code: "35728",
+      name: "山パン 安城工場 人事",
     },
     {
-      code: 2,
-      name: "京都工場",
+      ediCode: "77000721",
+      code: "35727",
+      name: "山パン 安城冷生地 事務課",
+    },
+    {
+      ediCode: "05000720",
+      code: "35727",
+      name: "山パン 横浜第一工場 人事",
+    },
+    {
+      ediCode: "12000720",
+      code: "35121",
+      name: "山パン 横浜第二工場 人事",
     },
   ];
 

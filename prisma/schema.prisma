@@ -113,7 +113,8 @@ model Product {
 
 model Customer {
   id              String            @id @default(uuid())
-  code            Int               @unique
+  ediCode         String?           @db.Text
+  code            String?           @db.Text
   name            String            @db.Text
   address         String?           @db.Text
   tel             String?           @db.Text
