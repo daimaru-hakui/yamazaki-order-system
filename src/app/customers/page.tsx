@@ -5,8 +5,11 @@ export default async function CustomersPage() {
   const customers = await db.customer.findMany({
     include: {
       _count: {
-        select: { customerProduct: true }
-      }
+        select: { customerProduct: true },
+      },
+    },
+    orderBy: {
+      code: "asc",
     },
   });
   if (!customers) {

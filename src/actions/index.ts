@@ -7,3 +7,4 @@ export { createCustomer } from "@/actions/create-customer";
 export { updateCustomerProduct } from "@/actions/update-customer-product";
 export { createOrder } from "@/actions/create-order";
 export { createShipping } from "@/actions/create-shipping";
+export { csvCreateCustomer } from "@/actions/csv-create-customer";

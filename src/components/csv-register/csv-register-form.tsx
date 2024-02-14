@@ -1,7 +1,7 @@
 'use client';
 import { Button } from "@nextui-org/react";
 import { useState } from "react";
-import OrderCsvList from "./csv-register-list";
+import CsvRegisterList from "./csv-register-list";
 import { SkuWithProduct } from "@/app/csv-register/page";
 
 interface CsvRegisterFormProps {
@@ -83,7 +83,7 @@ export default function CsvRegisterForm({ skus }: CsvRegisterFormProps) {
       )}
       {data.length > 0 && (
         <div className="flex flex-col gap-6 mt-6">
-          <OrderCsvList data={data} />
+          <CsvRegisterList data={data} />
           <div className="flex gap-3">
             <Button color="danger" onClick={() => setData([])}>クリア</Button>
             <Button color="primary" className="w-full">登録</Button>

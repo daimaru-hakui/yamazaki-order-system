@@ -64,8 +64,8 @@ model Sku {
   id             String           @id @default(uuid())
   productCode    String?          @map("product_code") @db.Text
   janCode        String?          @map("jan_code") @db.Text
-  product        Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId      String           @map("product_id")
+  product        Product         @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId      String          @map("product_id")
   size           Size             @relation(fields: [sizeId], references: [id], onDelete: Cascade)
   sizeId         String           @map("size_id")
   price          Int              @default(0)
@@ -114,7 +114,7 @@ model Product {
 model Customer {
   id              String            @id @default(uuid())
   ediCode         String?           @db.Text
-  code            String?           @db.Text
+  code            String            @unique @db.Text
   name            String            @db.Text
   address         String?           @db.Text
   tel             String?           @db.Text
