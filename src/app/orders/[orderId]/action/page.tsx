@@ -24,6 +24,11 @@ export default async function OrderActionPage({ params }: OrderActionPageProps) 
         }
       },
       orderDetail: {
+        where: {
+          quantity: {
+            gt: 0
+          }
+        },
         include: {
           sku: {
             include: {

@@ -18,6 +18,15 @@ export default function CustomerCreateForm() {
         <form className="" action={action}>
           <div className="flex flex-col gap-6">
             <Input
+              name="ediCode"
+              type="number"
+              label="EDIコード"
+              labelPlacement={"outside"}
+              placeholder="EDIコード"
+              isInvalid={!!formState?.errors.code}
+              errorMessage={formState?.errors.code?.join(", ")}
+            />
+            <Input
               isRequired
               name="code"
               type="text"

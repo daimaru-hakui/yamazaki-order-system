@@ -86,9 +86,9 @@ async function main() {
     },
   ];
 
-  await prisma.customer.createMany({
-    data: customers,
-  });
+  // await prisma.customer.createMany({
+  //   data: customers,
+  // });
 
   await prisma.category.createMany({
     data: categories,

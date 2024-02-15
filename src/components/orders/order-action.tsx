@@ -1,12 +1,12 @@
 'use client';
 import { Input, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@nextui-org/react";
-import { Category, Color, Order, OrderDetail, Product, Sku, User } from "@prisma/client";
+import { Order, OrderDetail, Product, Sku } from "@prisma/client";
 import { format } from "date-fns";
 import { sumCalc } from "./order-list";
 import { useForm, SubmitHandler } from "react-hook-form";
 import OrderActionButtonArea from "./order-action-button-area";
 import * as actions from "@/actions";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import { useSession } from "next-auth/react";
 
 interface OrderActionProps {
@@ -32,8 +32,10 @@ type Inputs = {
   orderId: number,
   userId: string;
   orderDetails: {
+    id: number;
     skuId: string;
     quantity: number;
+    currentQuantity: number;
     price: number;
   }[];
 };
@@ -42,9 +44,12 @@ export default function OrderAction({ order }: OrderActionProps) {
   const [isPending, startTransition] = useTransition();
   const session = useSession();
 
-  const { register, handleSubmit, getValues, setValue, formState: { errors } } = useForm<Inputs>({
+  const { register, handleSubmit, getValues, setValue, watch, formState: { errors } } = useForm<Inputs>({
     defaultValues: {
       orderId: order.id,
+      orderDetails: [
+        ...order.orderDetail
+      ]
     }
   });
 
@@ -118,6 +123,11 @@ export default function OrderAction({ order }: OrderActionProps) {
                   <TableRow key={item.id}>
                     <TableCell>
                       <input
+                        defaultValue={item.quantity}
+                        className="hidden"
+                        {...register(`orderDetails.${idx}.currentQuantity`, { valueAsNumber: true })}
+                      />
+                      <input
                         defaultValue={item.sku.id}
                         className="hidden"
                         {...register(`orderDetails.${idx}.skuId`)}
@@ -138,7 +148,7 @@ export default function OrderAction({ order }: OrderActionProps) {
                         />
                       </div>
                     </TableCell>
-                    <TableCell className="text-right w-[150px]">{item.quantity.toLocaleString()}</TableCell>
+                    <TableCell className="text-right w-[150px]">{item.orderQuantity.toLocaleString()}</TableCell>
                     <TableCell className="text-right w-[150px]">{item.quantity.toLocaleString()}</TableCell>
                     <TableCell className="w-[150px] py-1 px-0">
                       <div className="flex justify-end">
@@ -146,7 +156,7 @@ export default function OrderAction({ order }: OrderActionProps) {
                           type="number"
                           size="sm"
                           color={
-                            getValues(`orderDetails.${idx}.quantity`) > item.quantity || getValues(`orderDetails.${idx}.quantity`) < 0 ? "danger" : "default"}
+                            watch(`orderDetails.${idx}.quantity`) > item.quantity || getValues(`orderDetails.${idx}.quantity`) < 0 ? "danger" : "default"}
                           className="w-20"
                           classNames={{
                             input: "text-center"
@@ -164,9 +174,9 @@ export default function OrderAction({ order }: OrderActionProps) {
                       </div>
                     </TableCell>
                     <TableCell className="text-right">
-                      {(item.sku.price * item.quantity).toLocaleString()}
+                      {(watch(`orderDetails.${idx}.price`) * watch(`orderDetails.${idx}.quantity`)).toLocaleString() || item.price * item.quantity}
                     </TableCell>
-                    <TableCell>{item.sku.product.productNumber}</TableCell>
+                    <TableCell>{item.memo}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

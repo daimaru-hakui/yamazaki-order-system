@@ -21,7 +21,16 @@ import { AiOutlineEye } from "react-icons/ai";
 interface OrderShowModal {
   sum: string;
   order: Order & {
-    orderDetail: (OrderDetail & { sku: { price: number; }; })[];
+    orderDetail: (OrderDetail &
+    {
+      sku: (Sku & {
+        product: {
+          productName: string;
+          productNumber: string;
+        };
+      });
+      shippingQuantity: number;
+    })[];
     customer: { name: string; };
     user: { name: string | null; };
   };
@@ -74,21 +83,25 @@ export default function OrderShowModal({ sum, order }: OrderShowModal) {
                     <TableColumn >品番</TableColumn>
                     <TableColumn >品名</TableColumn>
                     <TableColumn className="text-center">単価</TableColumn>
-                    <TableColumn className="text-center">数量</TableColumn>
+                    <TableColumn className="text-center">注文数</TableColumn>
+                    <TableColumn className="text-center">未出荷数</TableColumn>
+                    <TableColumn className="text-center">出荷数</TableColumn>
                     <TableColumn className="text-center">合計</TableColumn>
                     <TableColumn >コメント</TableColumn>
                   </TableHeader>
                   <TableBody
                     loadingContent={<Spinner color="white" />}
                   >
-                    {order.orderDetail.map((detail: any) => (
+                    {order.orderDetail.map((detail) => (
                       <TableRow key={detail.id}>
                         <TableCell>{detail.sku.product.productNumber}</TableCell>
                         <TableCell>{detail.sku.product.productName}</TableCell>
                         <TableCell className="text-right">{detail.sku.price.toLocaleString()}</TableCell>
+                        <TableCell className="text-right">{detail.orderQuantity.toLocaleString()}</TableCell>
                         <TableCell className="text-right">{detail.quantity.toLocaleString()}</TableCell>
-                        <TableCell className="text-right">{(detail.sku.price * detail.quantity).toLocaleString()}</TableCell>
-                        <TableCell>{detail.sku.productNumber}</TableCell>
+                        <TableCell className="text-right">{detail.shippingQuantity}</TableCell>
+                        <TableCell className="text-right">{(detail.sku.price * detail.orderQuantity).toLocaleString()}</TableCell>
+                        <TableCell>{detail.memo}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

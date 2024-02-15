@@ -11,6 +11,7 @@ import TitleReturn from "../common/title-return";
 import paths from "@/paths";
 import Link from "next/link";
 import { AiOutlinePlus } from "react-icons/ai";
+import { useTransition } from "react";
 
 interface ProductCreateFormProps {
   categories: Category[];
@@ -55,6 +56,7 @@ export default function ProductCreatetForm({
   colors,
   sizes,
 }: ProductCreateFormProps) {
+  const [isPending, startTransition] = useTransition();
   const {
     register,
     control,
@@ -86,14 +88,16 @@ export default function ProductCreatetForm({
     data: CreateProductSchema
   ) => {
     console.log(data);
-    actions.createProduct(data);
+    startTransition(async () => {
+      await actions.createProduct(data);
+    });
   };
 
   console.log(errors);
 
   return (
     <>
-      <TitleReturn title="商品登録" path={paths.productAll()} />
+      <h2 className="text-2xl font-bold">商品登録</h2>
       <div className="mt-3 p-6 border rounded-xl bg-white">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-6 mt-12">
@@ -174,7 +178,7 @@ export default function ProductCreatetForm({
             </Button>
           </div>
           <div className="mt-6 text-center">
-            <Button type="submit" size="sm" color="primary" className="w-full">
+            <Button type="submit" size="sm" color="primary" className="w-full" isLoading={isPending}>
               登録
             </Button>
           </div>

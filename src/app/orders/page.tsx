@@ -18,9 +18,19 @@ export default async function OrdersPage() {
         include: {
           sku: {
             include: {
-              product: true
+              product: {
+                select: {
+                  productName: true,
+                  productNumber: true
+                }
+              }
             }
           },
+          shippingDetail: {
+            select: {
+              quantity: true
+            }
+          }
         },
       },
     },
@@ -29,9 +39,35 @@ export default async function OrdersPage() {
     },
   });
 
+  const newOrders = orders.map((order) => {
+    const newOrderDetail = order.orderDetail.map((detail) => {
+      let sum = 0;
+      detail.shippingDetail.forEach((shipping) => {
+        sum += shipping.quantity;
+      });
+      return {
+        ...detail,
+        shippingQuantity: sum
+      };
+    });
+    let [totalQuantity, totalOrderQuantity] = [0, 0];
+    order.orderDetail.forEach((detail) => {
+      totalQuantity += detail.quantity;
+      totalOrderQuantity += detail.orderQuantity;
+    });
+    return {
+      ...order,
+      orderDetail: newOrderDetail,
+      totalQuantity,
+      totalOrderQuantity
+    };
+  });
+
+  console.log(newOrders);
+
   return (
     <div className="mx-auto w-full max-w-[calc(1000px)]">
-      <OrderList orders={orders} />
+      <OrderList orders={newOrders} />
     </div>
   );
 }
