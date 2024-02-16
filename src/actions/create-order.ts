@@ -18,8 +18,6 @@ const CreateOrderSchema = z.object({
       skuId: z.string(),
       price: z.number().min(1),
       quantity: z.number().min(1),
-      firstName: z.string().optional(),
-      lastName: z.string().optional(),
       memo: z.string().optional(),
     })
   ),
@@ -67,6 +65,10 @@ export async function createOrder(
     };
   }
 
+  const newOrderDetails = result.data.items.map((item) => (
+    { ...item, orderQuantity: item.quantity }
+  ));
+
   let order: Order;
   try {
     order = await db.order.create({
@@ -76,7 +78,7 @@ export async function createOrder(
         userId: result.data.userId,
         comment: result.data.comment,
         orderDetail: {
-          create: [...result.data.items],
+          create: [...newOrderDetails],
         },
       },
     });

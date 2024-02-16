@@ -8,7 +8,8 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 const CreateCustomerSchema = z.object({
-  code: z.number(),
+  ediCode: z.string().nullable(),
+  code: z.string(),
   name: z
     .string({ required_error: "名前は必須です" })
     .min(3, { message: "3文字以上の入力をお願いします" }),
@@ -18,8 +19,11 @@ const CreateCustomerSchema = z.object({
 
 interface CreateCustomerFormState {
   errors: {
+    ediCode?: string[];
     code?: string[];
     name?: string[];
+    address?: string[];
+    tel?: string[];
     _form?: string[];
   };
 }
@@ -29,7 +33,11 @@ export async function createCustomer(
 ): Promise<CreateCustomerFormState> {
 
   const result = CreateCustomerSchema.safeParse({
-    name: formData.get('name')
+    ediCode: formData.get("ediCode"),
+    code: formData.get('code'),
+    name: formData.get('name'),
+    address: formData.get('address'),
+    tel: formData.get('tel')
   });
 
   if (!result.success) {
@@ -51,10 +59,12 @@ export async function createCustomer(
   try {
     customer = await db.customer.create({
       data: {
-        code: result.data.code,
-        name: result.data.name,
-        address: result.data.address,
-        tel: result.data.tel
+        ediCode: result.data.ediCode
+          && (new Array(8).join("0") + result.data.ediCode?.trim()).slice(-8),
+        code: result.data.code.trim(),
+        name: result.data.name.trim(),
+        address: result.data.address?.trim(),
+        tel: result.data.tel?.trim()
       }
     });
   } catch (err) {
