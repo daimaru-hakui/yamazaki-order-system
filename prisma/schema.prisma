@@ -176,6 +176,7 @@ model Shipping {
   orderId        Int              @map("order_id")
   user           User             @relation(fields: [userId], references: [id], onDelete: NoAction)
   userId         String           @map("user_id")
+  shippingDate   DateTime         @map("shipping_date") @db.Date
   createdAt      DateTime         @default(now()) @map("created_at")
   updatedAt      DateTime         @updatedAt @map("updated_at")
   shippingDetail ShippingDetail[]

@@ -5,7 +5,11 @@ export const sidebarLinks = [
   },
   {
     path: "/orders",
-    name: "受注一覧",
+    name: "受注履歴",
+  },
+  {
+    path: "/shippings",
+    name: "出荷履歴",
   },
   {
     path: "/customers",
@@ -14,7 +18,7 @@ export const sidebarLinks = [
   {
     path: "/products",
     name: "商品一覧",
-  },  
+  },
   {
     path: "/edi-csv-upload",
     name: "EDIアップロード",

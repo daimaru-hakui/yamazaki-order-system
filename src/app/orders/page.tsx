@@ -23,6 +23,11 @@ export default async function OrdersPage() {
                   productName: true,
                   productNumber: true
                 }
+              },
+              size: {
+                select: {
+                  name: true
+                }
               }
             }
           },

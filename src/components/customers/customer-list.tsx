@@ -17,7 +17,8 @@ import {
   AiOutlineEye,
   AiOutlinePlus,
 } from "react-icons/ai";
-import TitleReturn from "../common/title-return";
+import TitleWithButton from "../common/title-return";
+import CustomerShowModal from "./customer-show-modal";
 
 interface CustomerListTableProps {
   customers: (Customer & {
@@ -30,7 +31,7 @@ interface CustomerListTableProps {
 export default function CustomerList({ customers }: CustomerListTableProps) {
   return (
     <>
-      <TitleReturn title="工場一覧" path={paths.home()}>
+      <TitleWithButton title="顧客登録">
         <Button color="primary" size="sm" className="p-0">
           <Link
             href={paths.customerCreate()}
@@ -39,7 +40,7 @@ export default function CustomerList({ customers }: CustomerListTableProps) {
             <AiOutlinePlus /> 追加
           </Link>
         </Button>
-      </TitleReturn>
+      </TitleWithButton>
       <Table aria-label="cutomer table" className="mt-3">
         <TableHeader>
           <TableColumn>顧客コード</TableColumn>
@@ -57,9 +58,7 @@ export default function CustomerList({ customers }: CustomerListTableProps) {
               </TableCell>
               <TableCell>
                 <div className="flex gap-3">
-                  <Link href={paths.customerShow(customer.id)}>
-                    <AiOutlineEye className="text-xl cursor-pointer" />
-                  </Link>
+                  <CustomerShowModal customer={customer} />
                   <Link href={paths.customerEdit(customer.id)}>
                     <AiOutlineEdit className="text-xl cursor-pointer" />
                   </Link>

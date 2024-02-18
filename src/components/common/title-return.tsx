@@ -1,28 +1,18 @@
-import { Button } from "@nextui-org/react";
-import Link from "next/link";
 import { ReactNode } from "react";
-import { AiOutlineArrowLeft } from "react-icons/ai";
 
-interface TitleReturnProps {
+interface TitleWithButtonProps {
   title: string;
-  path: string;
+  path?: string;
   children?: ReactNode;
 }
 
-export default function TitleReturn({
+export default function TitleWithButton({
   title,
   path,
   children,
-}: TitleReturnProps) {
+}: TitleWithButtonProps) {
   return (
-    <div className="flex justify-between gap-6 relative">
-      {/* <Link
-        href={path}
-        className="flex items-center gap-3 absolute inset-y-1/2 left-0"
-      >
-        <AiOutlineArrowLeft />
-        <div className="text-sm">戻る</div>
-      </Link> */}
+    <div className="flex justify-between gap-6 mt-6 relative">
       <div className="font-bold text-2xl">{title}</div>
       <div className="absolute top-0 right-0">{children}</div>
     </div>

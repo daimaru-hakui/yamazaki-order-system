@@ -11,6 +11,7 @@ import { z } from "zod";
 const CreateShippingSchema = z.object({
   orderId: z.number({ required_error: "IDは必須です。" }),
   userId: z.string(),
+  shippingDate: z.date(),
   orderDetails: z.array(z.object({
     id: z.number(),
     skuId: z.string(),
@@ -26,6 +27,7 @@ interface CreateShippingFormState {
   errors: {
     orderId?: string[];
     userId?: string[];
+    shippingDate?: string[];
     orderDetails?: string[];
     _form?: string[];
   };
@@ -35,6 +37,7 @@ export async function createShipping(data: CreateShippingProps): Promise<CreateS
   const result = CreateShippingSchema.safeParse({
     orderId: data.orderId,
     userId: data.userId,
+    shippingDate: new Date(data.shippingDate),
     orderDetails: data.orderDetails
   });
 
@@ -80,6 +83,7 @@ export async function createShipping(data: CreateShippingProps): Promise<CreateS
         data: {
           orderId: result.data.orderId,
           userId: result.data.userId,
+          shippingDate: result.data.shippingDate,
           shippingDetail: {
             create: [...orderDetails]
           }
