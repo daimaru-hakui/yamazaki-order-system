@@ -20,7 +20,7 @@ interface ProductShowProps {
 export default function ProductShow({ product }: ProductShowProps) {
   return (
     <>
-      <TitleReturn title="商品詳細" path={paths.productAll()} />
+      <h2>商品詳細</h2>
       <div className="flex flex-col gap-6 mt-3 p-6 rounded-xl bg-white shadow-md">
         <dl>
           <dt className="text-xs">品番/品名</dt>

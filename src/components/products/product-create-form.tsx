@@ -5,12 +5,8 @@ import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
-import ProductFormItemTable from "./sku-create-form";
+import SkuCreateForm from "./sku-create-form";
 import { CreateProductSchema } from "@/actions/create-product";
-import TitleReturn from "../common/title-return";
-import paths from "@/paths";
-import Link from "next/link";
-import { AiOutlinePlus } from "react-icons/ai";
 import { useTransition } from "react";
 
 interface ProductCreateFormProps {
@@ -161,7 +157,7 @@ export default function ProductCreatetForm({
             />
           </div>
           <div className="mt-6 overflow-auto">
-            <ProductFormItemTable
+            <SkuCreateForm
               register={register}
               methods={methods}
               getValues={getValues}
@@ -171,6 +167,7 @@ export default function ProductCreatetForm({
           </div>
           <div className="flex justify-center mt-6">
             <Button
+              size="sm"
               className="px-3 py-1 text-white rounded bg-blue-500"
               onClick={addItem}
             >
@@ -178,7 +175,13 @@ export default function ProductCreatetForm({
             </Button>
           </div>
           <div className="mt-6 text-center">
-            <Button type="submit" size="sm" color="primary" className="w-full" isLoading={isPending}>
+            <Button
+              type="submit"
+              size="sm"
+              color="primary"
+              className="w-full"
+              isLoading={isPending}
+            >
               登録
             </Button>
           </div>

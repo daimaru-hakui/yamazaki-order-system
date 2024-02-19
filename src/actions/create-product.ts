@@ -32,6 +32,8 @@ export async function createProduct(data: CreateProductSchema) {
   const colorId = data.colorId;
   const items = data.items;
 
+  console.log(data)
+
   const isExists = await db.product.findFirst({
     where: {
       productNumber: data.productNumber,
@@ -67,19 +69,21 @@ export async function createProduct(data: CreateProductSchema) {
             },
           },
         });
+        console.log(sku)
         if (!sku) {
           await prisma.sku.create({
             data: {
               sizeId: item.sizeId,
-              price: item.price,
               productId: product.id,
+              price: item.price,
               janCode: item.janCode,
+              productCode:item.productCode,
               displayOrder: 0,
             },
           });
         }
-        return product;
       }
+      return product;
     })
     .catch((err) => {
       console.error(err);

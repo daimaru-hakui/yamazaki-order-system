@@ -53,18 +53,18 @@ export default function OrderShowModal({ sum, order }: OrderShowModal) {
               </ModalHeader>
               <ModalBody>
                 <div className="flex flex-col sm:flex-row justify-between gap-2 px-5">
-                  <div className="w-full sm:w-[calc(200px)] grid gap-2">
-                    <dl className="grid grid-cols-2 items-center gap-6">
-                      <dt className="text-xs text-gray-400">工場名</dt>
-                      <dd className="text-sm">{order.customer.name}</dd>
+                  <div className="w-full sm:w-[calc(400px)] grid gap-2">
+                    <dl className="grid grid-cols-4 items-center gap-6">
+                      <dt className="col-span-1 text-xs text-gray-400">工場名</dt>
+                      <dd className="col-span-3 text-sm">{order.customer.name}</dd>
                     </dl>
-                    <dl className="grid grid-cols-2 items-center gap-6">
-                      <dt className="text-xs text-gray-400">受注日</dt>
-                      <dd className="text-sm">{format(order.createdAt, "yyyy-MM-dd")}</dd>
+                    <dl className="grid grid-cols-4 items-center gap-6">
+                      <dt className="col-span-1 text-xs text-gray-400">受注日</dt>
+                      <dd className="col-span-3 text-sm">{format(order.createdAt, "yyyy-MM-dd")}</dd>
                     </dl>
-                    <dl className="grid grid-cols-2 items-center gap-6">
-                      <dt className="text-xs text-gray-400">担当者</dt>
-                      <dd className="text-sm">{order.user?.name || "不明"}</dd>
+                    <dl className="grid grid-cols-4 items-center gap-6">
+                      <dt className="col-span-1 text-xs text-gray-400">担当者</dt>
+                      <dd className="col-span-3 text-sm">{order.user?.name || "不明"}</dd>
                     </dl>
                   </div>
                   <div className="">
