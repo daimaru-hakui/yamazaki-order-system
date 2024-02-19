@@ -31,6 +31,9 @@ interface OrderListProps {
           productNumber: string;
           productName: string;
         };
+        size: {
+          name: string;
+        };
       });
       shippingQuantity: number;
     })[];
@@ -62,7 +65,7 @@ export default function OrderList({ orders }: OrderListProps) {
 
   return (
     <>
-      <div className="text-xl font-bold">受注一覧</div>
+      <h3 className="text-xl font-bold">受注一覧</h3>
       <Table aria-label="orders table" className="mt-3">
         <TableHeader>
           <TableColumn className="text-center">出荷状況</TableColumn>

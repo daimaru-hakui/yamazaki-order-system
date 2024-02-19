@@ -19,6 +19,7 @@ import {
   AiOutlinePlus,
 } from "react-icons/ai";
 import TitleReturn from "../common/title-return";
+import TitleWithButton from "../common/title-return";
 
 interface ProductListProps {
   products: (Product & {
@@ -29,7 +30,7 @@ interface ProductListProps {
 export default function ProductList({ products }: ProductListProps) {
   return (
     <>
-      <TitleReturn title="商品一覧" path={paths.home()}>
+      <TitleWithButton title="商品登録">
         <Button color="primary" size="sm" className="p-0">
           <Link
             href={paths.productCreate()}
@@ -38,7 +39,7 @@ export default function ProductList({ products }: ProductListProps) {
             <AiOutlinePlus /> 追加
           </Link>
         </Button>
-      </TitleReturn>
+      </TitleWithButton>
       <Table aria-label="product list table" className="mt-3">
         <TableHeader>
           <TableColumn>品番</TableColumn>

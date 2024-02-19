@@ -9,7 +9,7 @@ interface OrderListDropdownProps {
 }
 export default function OrderListDropdown({ orderId, totalQuantity }: OrderListDropdownProps) {
 
-  const items = [
+  const links = [
     {
       key: "action",
       label: "出荷",
@@ -35,7 +35,7 @@ export default function OrderListDropdown({ orderId, totalQuantity }: OrderListD
           <AiOutlineMore size={24} className="cursor-pointer" />
         </div>
       </DropdownTrigger>
-      <DropdownMenu aria-label="Dynamic Actions" items={items}>
+      <DropdownMenu aria-label="Dynamic Actions" items={links}>
         {(item) => (
           <DropdownItem
             key={item.key}

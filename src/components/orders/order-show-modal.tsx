@@ -28,6 +28,9 @@ interface OrderShowModal {
           productName: string;
           productNumber: string;
         };
+        size: {
+          name: string;
+        };
       });
       shippingQuantity: number;
     })[];
@@ -82,6 +85,7 @@ export default function OrderShowModal({ sum, order }: OrderShowModal) {
                   <TableHeader>
                     <TableColumn >品番</TableColumn>
                     <TableColumn >品名</TableColumn>
+                    <TableColumn className="text-center">サイズ</TableColumn>
                     <TableColumn className="text-center">単価</TableColumn>
                     <TableColumn className="text-center">注文数</TableColumn>
                     <TableColumn className="text-center">未出荷数</TableColumn>
@@ -96,6 +100,7 @@ export default function OrderShowModal({ sum, order }: OrderShowModal) {
                       <TableRow key={detail.id}>
                         <TableCell>{detail.sku.product.productNumber}</TableCell>
                         <TableCell>{detail.sku.product.productName}</TableCell>
+                        <TableCell className="text-center">{detail.sku.size.name}</TableCell>
                         <TableCell className="text-right">{detail.sku.price.toLocaleString()}</TableCell>
                         <TableCell className="text-right">{detail.orderQuantity.toLocaleString()}</TableCell>
                         <TableCell className="text-right">{detail.quantity.toLocaleString()}</TableCell>

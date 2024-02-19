@@ -31,6 +31,7 @@ interface OrderActionProps {
 type Inputs = {
   orderId: number,
   userId: string;
+  shippingDate: Date;
   orderDetails: {
     id: number;
     skuId: string;
@@ -96,6 +97,17 @@ export default function OrderAction({ order }: OrderActionProps) {
               </dl>
             </div>
           </div>
+          <div className="mt-3 p-5">
+            <div className="text-sm text-gray-400">出荷日</div>
+            <div className="mt-2">
+              <Input type="date" size="sm"
+                className="md:max-w-[200px]"
+                {...register("shippingDate", { required: true })}
+              />
+            </div>
+          </div>
+
+
           <div className="mt-3 overflow-auto">
             <Table
               isHeaderSticky
