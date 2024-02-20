@@ -10,7 +10,7 @@ interface CustomerListProps {
 export default function OrderCustomerList({ customers }: CustomerListProps) {
   return (
     <>
-      <TitleReturn title="発注" path={paths.home()} />
+      <h3>発注</h3>
       <div className="grid grid-cols-2 gap-3 mt-3">
         {customers?.map((customer) => (
           <Link key={customer.id} href={`/orders/new/${customer.id}`}>

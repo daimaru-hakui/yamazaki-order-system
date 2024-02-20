@@ -35,21 +35,13 @@ export default function OrderProductTable({
 
   return (
     <>
-      {/* <AiFillExclamationCircle
-       
-        className="text-blue-500 cursor-pointer"
-        style={{ fontSize: "30px" }}
-      /> */}
       <Button
         size="sm"
         color="primary"
         className=""
         onClick={onOpen}
       >
-        <AiOutlineCalculator
-          className="cursor-pointer"
-          style={{ fontSize: "20px" }}
-        />
+       数量 
       </Button>
       <Modal
         isOpen={isOpen}
