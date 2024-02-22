@@ -159,6 +159,12 @@ model OrderDetail {
   orderId        Int              @map("order_id")
   sku            Sku              @relation(fields: [skuId], references: [id])
   skuId          String           @map("sku_id")
+  janCode        String?          @map("jan_code")
+  productCode    String?          @map("product_code")
+  productNumber  String?          @map("product_number")
+  productName    String?          @map("product_name")
+  color          String?          @db.Text
+  size           String?          @db.Text
   price          Int              @default(0)
   orderQuantity  Int              @default(0) @map("order_quantity")
   quantity       Int              @default(0)

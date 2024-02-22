@@ -30,6 +30,10 @@ interface OrderProductListProps {
               id: string;
               productNumber: string;
               productName: string;
+              color:{
+                code:number;
+                name:string
+              }
             };
           })[];
         };

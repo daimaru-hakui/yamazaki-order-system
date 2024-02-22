@@ -1,6 +1,15 @@
-'use client';
-import { Input, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@nextui-org/react";
-import { Order, OrderDetail, Product, Sku } from "@prisma/client";
+"use client";
+import {
+  Input,
+  Spinner,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from "@nextui-org/react";
+import { Order } from "@prisma/client";
 import { format } from "date-fns";
 import { sumCalc } from "./order-list";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -8,6 +17,22 @@ import OrderActionButtonArea from "./order-action-button-area";
 import * as actions from "@/actions";
 import { useEffect, useTransition } from "react";
 import { useSession } from "next-auth/react";
+
+interface OrderDetail {
+  id:number;
+  janCode: string | null;
+  productCode: string | null;
+  productNumber: string | null;
+  productName: string | null;
+  size: string | null;
+  price: number;
+  quantity: number;
+  orderQuantity: number;
+  memo:string | null;
+  shippingDetail: {
+    quantity: number;
+  }[];
+}
 
 interface OrderActionProps {
   order: Order & {
@@ -17,19 +42,12 @@ interface OrderActionProps {
     customer: {
       name: string;
     };
-    orderDetail: (OrderDetail & {
-      sku: Sku & {
-        product: Product & {
-          color: { name: string; },
-          category: { name: string; };
-        },
-      };
-    })[];
+    orderDetail:OrderDetail[]
   };
 }
 
 type Inputs = {
-  orderId: number,
+  orderId: number;
   userId: string;
   shippingDate: Date;
   orderDetails: {
@@ -45,15 +63,19 @@ export default function OrderAction({ order }: OrderActionProps) {
   const [isPending, startTransition] = useTransition();
   const session = useSession();
 
-  const { register, handleSubmit, getValues, setValue, watch, formState: { errors } } = useForm<Inputs>({
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<Inputs>({
     defaultValues: {
       orderId: order.id,
-      orderDetails: [
-        ...order.orderDetail
-      ]
-    }
+      orderDetails: [...order.orderDetail],
+    },
   });
-
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     console.log(data);
@@ -69,9 +91,7 @@ export default function OrderAction({ order }: OrderActionProps) {
 
   return (
     <>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-      >
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="text-xl font-bold">出荷処理</div>
         <div className="mt-3 p-3 rounded-xl shadow-sm bg-white">
           <div className="font-bold">受付No.{order.id}</div>
@@ -83,7 +103,9 @@ export default function OrderAction({ order }: OrderActionProps) {
               </dl>
               <dl className="grid grid-cols-2 items-center gap-6">
                 <dt className="text-xs text-gray-400">受注日</dt>
-                <dd className="text-sm">{format(order?.createdAt, "yyyy-MM-dd")}</dd>
+                <dd className="text-sm">
+                  {format(order?.createdAt, "yyyy-MM-dd")}
+                </dd>
               </dl>
               <dl className="grid grid-cols-2 items-center gap-6">
                 <dt className="text-xs text-gray-400">担当者</dt>
@@ -92,21 +114,26 @@ export default function OrderAction({ order }: OrderActionProps) {
             </div>
             <div className="">
               <dl className="grid grid-cols-2 items-center gap-6">
-                <dt className="text-xs sm:text-md text-gray-400 sm:text-right">合　計</dt>
-                <dd className="text-sm sm:text-3xl">￥{sumCalc(order.orderDetail).toLocaleString()}</dd>
+                <dt className="text-xs sm:text-md text-gray-400 sm:text-right">
+                  合　計
+                </dt>
+                <dd className="text-sm sm:text-3xl">
+                  ￥{sumCalc(order.orderDetail).toLocaleString()}
+                </dd>
               </dl>
             </div>
           </div>
           <div className="mt-3 p-5">
             <div className="text-sm text-gray-400">出荷日</div>
             <div className="mt-2">
-              <Input type="date" size="sm"
+              <Input
+                type="date"
+                size="sm"
                 className="md:max-w-[200px]"
                 {...register("shippingDate", { required: true })}
               />
             </div>
           </div>
-
 
           <div className="mt-3 overflow-auto">
             <Table
@@ -128,26 +155,26 @@ export default function OrderAction({ order }: OrderActionProps) {
                 <TableColumn className="text-center">合計金額</TableColumn>
                 <TableColumn>コメント</TableColumn>
               </TableHeader>
-              <TableBody
-                loadingContent={<Spinner color="white" />}
-              >
+              <TableBody loadingContent={<Spinner color="white" />}>
                 {order.orderDetail.map((item, idx: number) => (
                   <TableRow key={item.id}>
                     <TableCell>
                       <input
                         defaultValue={item.quantity}
                         className="hidden"
-                        {...register(`orderDetails.${idx}.currentQuantity`, { valueAsNumber: true })}
+                        {...register(`orderDetails.${idx}.currentQuantity`, {
+                          valueAsNumber: true,
+                        })}
                       />
                       <input
-                        defaultValue={item.sku.id}
+                        defaultValue={item.id}
                         className="hidden"
                         {...register(`orderDetails.${idx}.skuId`)}
                       />
-                      {item.sku.product.productNumber}
+                      {item.productNumber}
                     </TableCell>
                     <TableCell className="min-w-[150px]">
-                      {item.sku.product.productName}
+                      {item.productName}
                     </TableCell>
                     <TableCell className="text-right w-[150px]">
                       <div className="flex justify-end">
@@ -155,38 +182,49 @@ export default function OrderAction({ order }: OrderActionProps) {
                           type="number"
                           size="sm"
                           className="w-20"
-                          defaultValue={String(item.sku.price)}
-                          {...register(`orderDetails.${idx}.price`, { valueAsNumber: true })}
+                          defaultValue={String(item.price)}
+                          {...register(`orderDetails.${idx}.price`, {
+                            valueAsNumber: true,
+                          })}
                         />
                       </div>
                     </TableCell>
-                    <TableCell className="text-right w-[150px]">{item.orderQuantity.toLocaleString()}</TableCell>
-                    <TableCell className="text-right w-[150px]">{item.quantity.toLocaleString()}</TableCell>
+                    <TableCell className="text-right w-[150px]">
+                      {item.orderQuantity.toLocaleString()}
+                    </TableCell>
+                    <TableCell className="text-right w-[150px]">
+                      {item.quantity.toLocaleString()}
+                    </TableCell>
                     <TableCell className="w-[150px] py-1 px-0">
                       <div className="flex justify-end">
                         <Input
                           type="number"
                           size="sm"
                           color={
-                            watch(`orderDetails.${idx}.quantity`) > item.quantity || getValues(`orderDetails.${idx}.quantity`) < 0 ? "danger" : "default"}
+                            watch(`orderDetails.${idx}.quantity`) >
+                              item.quantity ||
+                            getValues(`orderDetails.${idx}.quantity`) < 0
+                              ? "danger"
+                              : "default"
+                          }
                           className="w-20"
                           classNames={{
-                            input: "text-center"
-
+                            input: "text-center",
                           }}
                           defaultValue={String(item.quantity)}
-                          {...register(`orderDetails.${idx}.quantity`,
-                            {
-                              valueAsNumber: true,
-                              max: item.quantity,
-                              required: true
-                            }
-                          )}
+                          {...register(`orderDetails.${idx}.quantity`, {
+                            valueAsNumber: true,
+                            max: item.quantity,
+                            required: true,
+                          })}
                         />
                       </div>
                     </TableCell>
                     <TableCell className="text-right">
-                      {(watch(`orderDetails.${idx}.price`) * watch(`orderDetails.${idx}.quantity`)).toLocaleString() || item.price * item.quantity}
+                      {(
+                        watch(`orderDetails.${idx}.price`) *
+                        watch(`orderDetails.${idx}.quantity`)
+                      ).toLocaleString() || item.price * item.quantity}
                     </TableCell>
                     <TableCell>{item.memo}</TableCell>
                   </TableRow>

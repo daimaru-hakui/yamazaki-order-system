@@ -14,9 +14,7 @@ export default function OrderRegisterButtonArea() {
       errors: {},
     }
   );
-
-  console.log(orderOption)
-
+console.log(formState.errors)
   return (
     <div className="fixed left-0 bottom-0 flex justify-center items-center p-3 w-full h-16 bg-white drop-shadow-2xl">
       <form

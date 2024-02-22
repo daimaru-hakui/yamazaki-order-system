@@ -16,6 +16,11 @@ const CreateOrderSchema = z.object({
   items: z.array(
     z.object({
       skuId: z.string(),
+      janCode:z.string().nullable(),
+      productCode:z.string().nullable(),
+      productNumber:z.string(),
+      productName:z.string(),
+      size:z.string(),
       price: z.number().min(1),
       quantity: z.number().min(1),
       memo: z.string().optional(),

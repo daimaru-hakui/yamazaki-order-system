@@ -3,11 +3,14 @@ import { create } from "zustand";
 export interface Cart {
   skuId: string;
   productId: string;
+  janCode:string | null;
+  productCode:string | null;
   productNumber: string;
   productName: string;
-  quantity: number;
-  price: number;
+  color:string;
   size: string;
+  price: number;
+  quantity: number;
   displayOrder: number;
 }
 

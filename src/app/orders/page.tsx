@@ -15,27 +15,22 @@ export default async function OrdersPage() {
         },
       },
       orderDetail: {
-        include: {
-          sku: {
-            include: {
-              product: {
-                select: {
-                  productName: true,
-                  productNumber: true
-                }
-              },
-              size: {
-                select: {
-                  name: true
-                }
-              }
-            }
-          },
+        select: {
+          id: true,
+          janCode: true,
+          productCode: true,
+          productNumber: true,
+          productName: true,
+          size: true,
+          price: true,
+          quantity: true,
+          orderQuantity: true,
+          memo:true,
           shippingDetail: {
             select: {
-              quantity: true
-            }
-          }
+              quantity: true,
+            },
+          },
         },
       },
     },
@@ -52,7 +47,7 @@ export default async function OrdersPage() {
       });
       return {
         ...detail,
-        shippingQuantity: sum
+        shippingQuantity: sum,
       };
     });
     let [totalQuantity, totalOrderQuantity] = [0, 0];
@@ -64,7 +59,7 @@ export default async function OrdersPage() {
       ...order,
       orderDetail: newOrderDetail,
       totalQuantity,
-      totalOrderQuantity
+      totalOrderQuantity,
     };
   });
 

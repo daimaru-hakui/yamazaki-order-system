@@ -1,5 +1,4 @@
 import OrderProductList from "@/components/orders/order-product-list";
-import OrderConfirmButtonArea from "@/components/orders/order-confirm-button-area";
 import { db } from "@/db";
 
 interface OrderCreateCustomerById {
@@ -32,6 +31,12 @@ export default async function OrderCreateCustomerById({
                       id: true,
                       productNumber: true,
                       productName: true,
+                      color: {
+                        select: {
+                          code: true,
+                          name: true,
+                        },
+                      },
                     },
                   },
                 },

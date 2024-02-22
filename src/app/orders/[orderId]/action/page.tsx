@@ -7,50 +7,49 @@ interface OrderActionPageProps {
   };
 }
 
-export default async function OrderActionPage({ params }: OrderActionPageProps) {
+export default async function OrderActionPage({
+  params,
+}: OrderActionPageProps) {
   const order = await db.order.findFirst({
     where: {
-      id: Number(params.orderId)
+      id: Number(params.orderId),
     },
     include: {
       user: {
         select: {
-          name: true
-        }
+          name: true,
+        },
       },
       customer: {
         select: {
-          name: true
-        }
+          name: true,
+        },
       },
       orderDetail: {
         where: {
           quantity: {
-            gt: 0
-          }
+            gt: 0,
+          },
         },
-        include: {
-          sku: {
-            include: {
-              product: {
-                include: {
-                  color: {
-                    select: {
-                      name: true
-                    }
-                  },
-                  category: {
-                    select: {
-                      name: true
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+        select: {
+          id: true,
+          janCode: true,
+          productCode: true,
+          productNumber: true,
+          productName: true,
+          size: true,
+          price: true,
+          quantity: true,
+          orderQuantity: true,
+          memo: true,
+          shippingDetail: {
+            select: {
+              quantity: true,
+            },
+          },
+        },
+      },
+    },
   });
   if (!order) return;
   return (

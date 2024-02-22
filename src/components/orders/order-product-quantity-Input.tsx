@@ -6,11 +6,15 @@ import { ChangeEvent, useEffect, useState } from "react";
 
 interface OrderProductTableInputProps {
   sku: Sku & {
-    size: { name: string; };
+    size: { name: string };
     product: {
-      id: string,
-      productNumber: string,
+      id: string;
+      productNumber: string;
       productName: string;
+      color: {
+        code: number;
+        name: string;
+      };
     };
   };
 }
@@ -52,11 +56,14 @@ export default function OrderProductQuantityInput({
         {
           skuId: sku.id,
           productId: sku.productId,
+          janCode: sku?.janCode,
+          productCode: sku?.productCode,
           productName: sku.product?.productName,
           productNumber: sku.product?.productNumber,
-          quantity: Number(quantity),
-          price: sku?.price,
+          color: sku.product.color.name,
           size: sku.size.name,
+          price: sku?.price,
+          quantity: Number(quantity),
           displayOrder: sku.displayOrder,
         },
       ];
@@ -67,11 +74,14 @@ export default function OrderProductQuantityInput({
           return {
             skuId: sku.id,
             productId: sku.productId,
+            janCode: sku?.janCode,
+            productCode: sku?.productCode,
             productName: sku.product?.productName,
             productNumber: sku.product?.productNumber,
-            quantity: Number(quantity),
-            price: sku?.price,
+            color:sku.product.color.name,
             size: sku.size.name,
+            price: sku?.price,
+            quantity: Number(quantity),
             displayOrder: sku.displayOrder,
           };
         } else {

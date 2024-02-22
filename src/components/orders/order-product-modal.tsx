@@ -15,33 +15,29 @@ import {
 } from "@nextui-org/react";
 import type { Sku } from "@prisma/client";
 import OrderProductQuantityInput from "./order-product-quantity-Input";
-import { AiFillExclamationCircle, AiOutlineCalculator } from "react-icons/ai";
 
 interface OrderProductModalProps {
   skus: (Sku & {
-    size: { name: string; };
+    size: { name: string };
     product: {
-      id: string,
-      productNumber: string,
+      id: string;
+      productNumber: string;
       productName: string;
+      color: {
+        code: number;
+        name: string;
+      };
     };
   })[];
 }
 
-export default function OrderProductTable({
-  skus,
-}: OrderProductModalProps) {
+export default function OrderProductTable({ skus }: OrderProductModalProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
     <>
-      <Button
-        size="sm"
-        color="primary"
-        className=""
-        onClick={onOpen}
-      >
-       数量 
+      <Button size="sm" color="primary" className="" onClick={onOpen}>
+        数量
       </Button>
       <Modal
         isOpen={isOpen}
@@ -74,7 +70,9 @@ export default function OrderProductTable({
                         <TableCell className="flex justify-center">
                           <OrderProductQuantityInput sku={sku} />
                         </TableCell>
-                        <TableCell className="text-right">{sku.price}</TableCell>
+                        <TableCell className="text-right">
+                          {sku.price}
+                        </TableCell>
                         <TableCell className="text-right">1</TableCell>
                         <TableCell className="text-right">1</TableCell>
                       </TableRow>

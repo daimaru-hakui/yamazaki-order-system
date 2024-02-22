@@ -9,10 +9,26 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { Order, OrderDetail, Shipping, Sku } from "@prisma/client";
+import { Order } from "@prisma/client";
 import { format } from "date-fns";
 import OrderShowModal from "./order-show-modal";
 import OrderListDropdown from "./order-list-dropdown";
+
+interface OrderDetail {
+  id:number;
+  janCode: string | null;
+  productCode: string | null;
+  productNumber: string | null;
+  productName: string | null;
+  size: string | null;
+  price: number;
+  quantity: number;
+  orderQuantity: number;
+  memo:string | null;
+  shippingDetail: {
+    quantity: number;
+  }[];
+}
 
 interface OrderListProps {
   orders: (Order & {
@@ -24,45 +40,35 @@ interface OrderListProps {
     };
     totalQuantity: number;
     totalOrderQuantity: number;
-    orderDetail: (OrderDetail &
-    {
-      sku: (Sku & {
-        product: {
-          productNumber: string;
-          productName: string;
-        };
-        size: {
-          name: string;
-        };
-      });
-      shippingQuantity: number;
-    })[];
+    orderDetail: OrderDetail[];
   })[];
 }
 
-export const sumCalc = (details: (OrderDetail & { sku: { price: number; }; })[]) => {
+export const sumCalc = (details: OrderDetail[]) => {
   let sum = 0;
   details.forEach((detail) => {
-    sum += detail.orderQuantity * detail.sku.price || 0;
+    sum += detail.orderQuantity * detail.price || 0;
   });
   return sum;
 };
 
-const statusLabel = (totalOrderQuantity: number, totalQuantity: number,) => {
+const statusLabel = (totalOrderQuantity: number, totalQuantity: number) => {
   if (totalOrderQuantity === totalQuantity) {
     return <Chip color="default">未手配</Chip>;
   }
   if (totalQuantity === 0) {
-    return <Chip color="success" className="text-white">出荷済</Chip>;
+    return (
+      <Chip color="success" className="text-white">
+        出荷済
+      </Chip>
+    );
   }
   if (totalOrderQuantity > totalQuantity) {
     return <Chip color="primary">注文残</Chip>;
   }
 };
 
-
 export default function OrderList({ orders }: OrderListProps) {
-
   return (
     <>
       <h3 className="text-xl font-bold">受注一覧</h3>
@@ -80,7 +86,8 @@ export default function OrderList({ orders }: OrderListProps) {
         <TableBody>
           {orders.map((order) => (
             <TableRow key={order.id}>
-              <TableCell width={50}>{statusLabel(order.totalOrderQuantity, order.totalQuantity)}
+              <TableCell width={50}>
+                {statusLabel(order.totalOrderQuantity, order.totalQuantity)}
               </TableCell>
               <TableCell>{order.id}</TableCell>
               <TableCell>{format(order.createdAt, "yyyy-MM-dd")}</TableCell>
@@ -89,13 +96,18 @@ export default function OrderList({ orders }: OrderListProps) {
               <TableCell className="text-right">
                 {sumCalc(order.orderDetail).toLocaleString()}
               </TableCell>
-              <TableCell className="text-center">{order.user.name || "不明"}</TableCell>
+              <TableCell className="text-center">
+                {order.user.name || "不明"}
+              </TableCell>
               <TableCell className="flex items-center gap-3">
                 <OrderShowModal
                   order={order}
                   sum={sumCalc(order.orderDetail).toLocaleString()}
                 />
-                <OrderListDropdown orderId={order.id} totalQuantity={order.totalQuantity} />
+                <OrderListDropdown
+                  orderId={order.id}
+                  totalQuantity={order.totalQuantity}
+                />
               </TableCell>
             </TableRow>
           ))}
