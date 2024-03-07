@@ -1,10 +1,10 @@
 "use server";
 import { db } from "@/db";
 
-export const getProducts = async (id: string) => {
+export const getProducts = async (customer: { id: string; name: string }) => {
   const customerProducts = await db.customerProduct.findMany({
     where: {
-      customerId: id,
+      customerId: customer.id,
     },
     include: {
       product: {
@@ -19,13 +19,17 @@ export const getProducts = async (id: string) => {
           },
           skus: {
             select: {
-              janCode: true,
+              id: true,
+              productId: true,
               productCode: true,
+              janCode: true,
+              price: true,
               size: {
                 select: {
                   name: true,
                 },
               },
+              displayOrder: true,
             },
           },
         },

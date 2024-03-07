@@ -9,6 +9,7 @@ interface ShippingListProps {
       id: number;
       shippingDate: Date;
       order: {
+        id:number,
         createdAt: Date;
         customer: {
           name: string;
@@ -31,13 +32,13 @@ interface ShippingListProps {
 }
 
 export default function ShippingList({ shippingDetails }: ShippingListProps) {
-  console.log(shippingDetails);
   return (
     <>
       <h3 className="text-xl font-bold">出荷履歴</h3>
       <Table aria-label="shippings table" className="mt-3">
         <TableHeader>
-          <TableColumn>受付番号</TableColumn>
+          <TableColumn>受付NO.</TableColumn>
+          <TableColumn>出荷NO.</TableColumn>
           <TableColumn>受注日</TableColumn>
           <TableColumn>品番</TableColumn>
           <TableColumn>商品名</TableColumn>
@@ -51,6 +52,7 @@ export default function ShippingList({ shippingDetails }: ShippingListProps) {
           {shippingDetails.map((detail) => (
             <TableRow key={detail.id}>
               <TableCell>{detail.shipping.id}</TableCell>
+              <TableCell>{detail.shipping.order.id}</TableCell>
               <TableCell>{format(detail.shipping.order.createdAt, "yyyy-MM-dd")}</TableCell>
               <TableCell>{detail.sku.product.productNumber}</TableCell>
               <TableCell>{detail.sku.product.productName}</TableCell>

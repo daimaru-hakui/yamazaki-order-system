@@ -1,4 +1,3 @@
-import OrderCustomerList from "@/components/orders/order-customer-list";
 import OrderCreate from "@/components/orders/order-create";
 import { db } from "@/db";
 
@@ -11,9 +10,8 @@ export default async function OrderNewPage() {
   });
   await db.$disconnect();
   return (
-    <div className="mx-auto max-w-[calc(900px)]">
+    <div className="mx-auto max-w-[calc(1500px)]">
       <OrderCreate customers={customers} />
-      {/* <OrderCustomerList customers={customers} /> */}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 "use server";
 import { db } from "@/db";
 import paths from "@/paths";
-import { Cart, OrderOption } from "@/store";
+import { Cart, OrderOptions } from "@/store";
 import { Order } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
@@ -44,15 +44,15 @@ interface CreateOrderFormState {
 export async function createOrder(
   data: {
     cart: Cart[];
-    orderOption: OrderOption;
+    orderOptions: OrderOptions;
   },
   formState: CreateOrderFormState
 ): Promise<CreateOrderFormState> {
   const result = CreateOrderSchema.safeParse({
-    orderNumber: data.orderOption.orderNumber,
-    customerId: data.orderOption.customerId,
-    userId: data.orderOption.userId,
-    comment: data.orderOption.comment,
+    orderNumber: data.orderOptions.orderNumber,
+    customerId: data.orderOptions.customer.id,
+    userId: data.orderOptions.userId,
+    comment: data.orderOptions.comment,
     items: data.cart,
   });
   if (!result.success) {

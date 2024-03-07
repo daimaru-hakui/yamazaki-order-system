@@ -3,20 +3,23 @@ import { create } from "zustand";
 export interface Cart {
   skuId: string;
   productId: string;
-  janCode:string | null;
-  productCode:string | null;
+  janCode: string | null;
+  productCode: string | null;
   productNumber: string;
   productName: string;
-  color:string;
+  color: string;
   size: string;
   price: number;
   quantity: number;
   displayOrder: number;
 }
 
-export type OrderOption = {
+export type OrderOptions = {
   orderNumber: string;
-  customerId: string;
+  customer: {
+    id: string;
+    name: string;
+  };
   userId: string;
   comment: string;
 };
@@ -24,18 +27,44 @@ export type OrderOption = {
 interface State {
   cart: Cart[];
   setCart: (cart: Cart[]) => void;
-  orderOption: OrderOption;
-  setOrderOption: (orderOption: OrderOption) => void;
+  removeCart: (id: string) => void;
+  resetCart: () => void;
+  orderOptions: OrderOptions;
+  setOrderOptions: (orderOptions: OrderOptions) => void;
+  resetOrderOptions: () => void;
 }
 
 export const useStore = create<State>((set) => ({
   cart: [],
   setCart: (cart) => set({ cart }),
-  orderOption: {
+  removeCart: (id) =>
+    set((state) => {
+      const newCart = state.cart.filter((item) => item.skuId !== id);
+      return {
+        cart: newCart,
+      };
+    }),
+  resetCart: () => set({ cart: [] }),
+  orderOptions: {
     orderNumber: "",
-    customerId: "",
+    customer: {
+      id: "",
+      name: "",
+    },
     userId: "",
-    comment: ""
+    comment: "",
   },
-  setOrderOption: (orderOption) => set({ orderOption })
+  setOrderOptions: (orderOptions) => set({ orderOptions }),
+  resetOrderOptions: () =>
+    set({
+      orderOptions: {
+        orderNumber: "",
+        customer: {
+          id: "",
+          name: "",
+        },
+        userId: "",
+        comment: "",
+      },
+    }),
 }));

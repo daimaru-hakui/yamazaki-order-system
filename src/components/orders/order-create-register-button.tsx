@@ -4,12 +4,12 @@ import * as actions from "@/actions";
 import { useFormState } from "react-dom";
 import FormButton from "../common/form-button";
 
-export default function OrderRegisterButtonArea() {
+export default function OrderCreateRegisterButtonArea() {
   const cart = useStore((state) => state.cart);
-  const orderOption = useStore((state) => state.orderOption);
+  const orderOptions = useStore((state) => state.orderOptions);
 
   const [formState, action] = useFormState(
-    actions.createOrder.bind(null, { cart, orderOption }),
+    actions.createOrder.bind(null, { cart, orderOptions }),
     {
       errors: {},
     }

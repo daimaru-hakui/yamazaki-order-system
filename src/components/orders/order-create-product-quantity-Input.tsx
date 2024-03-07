@@ -1,25 +1,29 @@
 "use client";
 import { useStore } from "@/store";
 import { Input } from "@nextui-org/react";
-import { Sku } from "@prisma/client";
 import { ChangeEvent, useEffect, useState } from "react";
 
 interface OrderProductTableInputProps {
-  sku: Sku & {
-    size: { name: string };
-    product: {
-      id: string;
-      productNumber: string;
-      productName: string;
-      color: {
-        code: number;
-        name: string;
-      };
+  sku: {
+    id: string;
+    productId: string;
+    janCode: string | null;
+    productCode: string | null;
+    price: number;
+    displayOrder: number;
+    size: {
+      name: string;
     };
+  };
+  product: {
+    productNumber: string;
+    productName: string;
+    color: string;
   };
 }
 
-export default function OrderProductQuantityInput({
+export default function OrderCreateProductQuantityInput({
+  product,
   sku,
 }: OrderProductTableInputProps) {
   const cart = useStore((state) => state.cart);
@@ -58,9 +62,9 @@ export default function OrderProductQuantityInput({
           productId: sku.productId,
           janCode: sku?.janCode,
           productCode: sku?.productCode,
-          productName: sku.product?.productName,
-          productNumber: sku.product?.productNumber,
-          color: sku.product.color.name,
+          productName: product?.productName,
+          productNumber: product?.productNumber,
+          color: product.color,
           size: sku.size.name,
           price: sku?.price,
           quantity: Number(quantity),
@@ -76,9 +80,9 @@ export default function OrderProductQuantityInput({
             productId: sku.productId,
             janCode: sku?.janCode,
             productCode: sku?.productCode,
-            productName: sku.product?.productName,
-            productNumber: sku.product?.productNumber,
-            color:sku.product.color.name,
+            productName: product?.productName,
+            productNumber: product?.productNumber,
+            color: product.color,
             size: sku.size.name,
             price: sku?.price,
             quantity: Number(quantity),

@@ -4,16 +4,16 @@ import { useStore } from "@/store";
 import { Button } from "@nextui-org/react";
 import Link from "next/link";
 
-interface OrderCartButtonAreaProps {
+interface OrderCreateConfirmButtonProps {
   customer: {
-    customerId: string;
-    customerName: string | undefined;
+    id: string;
+    name: string | undefined;
   };
 }
 
-export default function OrderConfirmButtonArea({
+export default function OrderCreateConfirmButton({
   customer,
-}: OrderCartButtonAreaProps) {
+}: OrderCreateConfirmButtonProps) {
   const setCart = useStore((state) => state.setCart);
 
   const handleCartClear = () => {
@@ -32,8 +32,8 @@ export default function OrderConfirmButtonArea({
             href={{
               pathname: paths.orderConfirm(),
               query: {
-                customerId: customer.customerId,
-                customerName: customer.customerName,
+                customerId: customer.id,
+                customerName: customer.name,
               },
             }}
             className="grid place-items-center w-full h-full"

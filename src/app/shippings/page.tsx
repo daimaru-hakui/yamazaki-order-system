@@ -15,6 +15,7 @@ export default async function ShippingsPage() {
           shippingDate: true,
           order: {
             select: {
+              id:true,
               createdAt: true,
               customer: {
                 select: {

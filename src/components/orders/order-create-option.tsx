@@ -3,12 +3,9 @@ import { Input, Textarea } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 
-interface OrderOption {
-  customerId: string;
-}
-export default function OrderOption({ customerId }: OrderOption) {
-  const orderOption = useStore((state) => state.orderOption);
-  const setOrderOption = useStore((state) => state.setOrderOption);
+export default function OrderCreateOption() {
+  const orderOption = useStore((state) => state.orderOptions);
+  const setOrderOption = useStore((state) => state.setOrderOptions);
   const userId = useSession().data?.user.uid || "";
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -17,10 +14,9 @@ export default function OrderOption({ customerId }: OrderOption) {
     setOrderOption({ ...orderOption, [name]: value });
   };
 
-  useEffect(() => {
-    setOrderOption({ ...orderOption, customerId, userId });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [customerId, setOrderOption, userId]);
+  useEffect(()=>{
+    setOrderOption({ ...orderOption, userId });
+  },[])
 
   return (
     <div className="flex flex-col gap-6 p-6 bg-white rounded-xl drop-shadow-md">

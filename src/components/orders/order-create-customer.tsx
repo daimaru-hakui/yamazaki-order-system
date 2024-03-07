@@ -1,36 +1,42 @@
 "use client";
-import { Button } from "@nextui-org/react";
-import * as actions from "@/actions";
+
+import { useStore } from "@/store";
+import { CSSProperties } from "react";
 
 interface OrderCreateCustomerProps {
   customers: {
     id: string;
     name: string;
   }[];
-  getProducts: (id: string) => void;
+  getProducts: (customer: { id: string; name: string }) => void;
 }
 
 export default function OrderCreateCustomer({
   customers,
-  getProducts
+  getProducts,
 }: OrderCreateCustomerProps) {
-//   const getProducts = async (id: string) => {
-//     const data = await actions.getProducts(id);
-//     console.log(data);
-//   };
+  const orderOptions = useStore((state) => state.orderOptions);
+
+  const bgStyle: CSSProperties = {
+    backgroundColor: "#eee",
+  };
 
   return (
-    <div className="overflow-auto h-[calc(100vh-200px)] px-3">
-      <div className="grid gap-3">
-        {customers.map((customer) => (
-          <Button
-            key={customer.id}
-            className="text-sm cursor-pointer"
-            onClick={() => getProducts(customer.id)}
-          >
-            {customer.name}
-          </Button>
-        ))}
+    <div className="col-span-3">
+      <div className="p-3 bg-gray-100">工場名を選択</div>
+      <div className="overflow-auto h-[calc(100vh-220px)]">
+        <div className="grid">
+          {customers.map((customer) => (
+            <div
+              key={customer.id}
+              style={customer.id === orderOptions.customer.id ? bgStyle : {}}
+              className="text-sm cursor-pointer px-3 py-1 hover:bg-gray-200"
+              onClick={() => getProducts(customer)}
+            >
+              {customer.name}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

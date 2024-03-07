@@ -75,7 +75,7 @@ export default function OrderList({ orders }: OrderListProps) {
       <Table aria-label="orders table" className="mt-3">
         <TableHeader>
           <TableColumn className="text-center">出荷状況</TableColumn>
-          <TableColumn>NO.</TableColumn>
+          <TableColumn>受付NO.</TableColumn>
           <TableColumn>発注日</TableColumn>
           <TableColumn>発注NO.</TableColumn>
           <TableColumn>工場名</TableColumn>

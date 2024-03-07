@@ -9,23 +9,20 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { AiOutlineArrowLeft, AiFillDelete } from "react-icons/ai";
-import OrderRegisterButtonArea from "./order-register-button-area";
-import OrderConfirmQuantityInput from "./order-confirm-quantiy-input";
-import OrderOption from "./order-option";
+import {AiFillDelete } from "react-icons/ai";
+import OrderRegisterButtonArea from "./order-create-register-button";
+import OrderConfirmQuantityInput from "./order-create-quantiy-input";
+import OrderCreateOption from "./order-create-option";
 import TitleReturn from "../common/title-return";
 
-export default function OrderConfirmList() {
+export default function OrderCreateConfirmList() {
   const cart = useStore((state) => state.cart);
   const setCart = useStore((state) => state.setCart);
+  const orderOptions = useStore((state) => state.orderOptions);
+
   const [sum, setSum] = useState(0);
   const [sortCart, setSortCart] = useState<Cart[]>([]);
-  const serchParams = useSearchParams();
-  const customerId = serchParams.get("customerId") as string;
-  const customerName = serchParams.get("customerName");
 
   useEffect(() => {
     let total = 0;
@@ -70,23 +67,43 @@ export default function OrderConfirmList() {
   };
 
   return (
-    <div className="w-full">
-      <TitleReturn title="明細確認" path={paths.orderProductCreate(customerId)} />
-      <div className="mt-6 text-2xl">{customerName}</div>
-        <Table layout="auto" fullWidth className="mt-3" aria-label="order cart table">
+    <div className="w-full mb-24">
+      <TitleReturn
+        title="明細確認"
+        path={paths.orderProductCreate(orderOptions.customer.id)}
+      />
+      <div className="mt-6 text-2xl">{orderOptions.customer.name}</div>
+      <Table
+        layout="auto"
+        fullWidth
+        className="mt-3"
+        aria-label="order cart table"
+      >
         <TableHeader className="">
-          <TableColumn className="text-center min-w-[calc(100px)]">品番</TableColumn>
-          <TableColumn className="text-center min-w-[calc(200px)]">品名</TableColumn>
+          <TableColumn className="text-center min-w-[calc(100px)]">
+            品番
+          </TableColumn>
+          <TableColumn className="text-center min-w-[calc(200px)]">
+            品名
+          </TableColumn>
           <TableColumn className="text-center">サイズ</TableColumn>
-          <TableColumn className="text-center min-w-[calc(100px)]">価格</TableColumn>
-          <TableColumn className="text-center min-w-[calc(100px)]">数量</TableColumn>
-          <TableColumn className="text-center min-w-[calc(100px)]">合計</TableColumn>
-          <TableColumn className="text-center min-w-[calc(100px)]">削除</TableColumn>
+          <TableColumn className="text-center min-w-[calc(100px)]">
+            価格
+          </TableColumn>
+          <TableColumn className="text-center min-w-[calc(100px)]">
+            数量
+          </TableColumn>
+          <TableColumn className="text-center min-w-[calc(100px)]">
+            合計
+          </TableColumn>
+          <TableColumn className="text-center min-w-[calc(100px)]">
+            削除
+          </TableColumn>
         </TableHeader>
         <TableBody>
           {sortCart.map((item) => (
             <TableRow key={item.skuId}>
-              <TableCell >{item.productNumber}</TableCell>
+              <TableCell>{item.productNumber}</TableCell>
               <TableCell>{item.productName}</TableCell>
               <TableCell className="text-center">{item.size}</TableCell>
               <TableCell className="text-right">
@@ -117,7 +134,7 @@ export default function OrderConfirmList() {
         <div className="text-2xl">{`￥${sum.toLocaleString()}`}</div>
       </div>
       <div className="mt-6 mb-16">
-        <OrderOption customerId={customerId} />
+        <OrderCreateOption />
       </div>
 
       <OrderRegisterButtonArea />
