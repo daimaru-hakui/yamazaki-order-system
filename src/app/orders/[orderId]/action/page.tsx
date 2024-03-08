@@ -42,6 +42,7 @@ export default async function OrderActionPage({
           quantity: true,
           orderQuantity: true,
           memo: true,
+          skuId:true,
           shippingDetail: {
             select: {
               quantity: true,

@@ -44,6 +44,9 @@ const paths = {
   orderAction(orderId: string) {
     return `/orders/${orderId}/action`;
   },
+  shippingCompleate(shippingId:string){
+    return `/shippings/${shippingId}/compleate`
+  },
   csvCreate() {
     return `/csv-upload`;
   },

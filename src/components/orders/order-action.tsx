@@ -19,7 +19,7 @@ import { useEffect, useTransition } from "react";
 import { useSession } from "next-auth/react";
 
 interface OrderDetail {
-  id:number;
+  id: number;
   janCode: string | null;
   productCode: string | null;
   productNumber: string | null;
@@ -27,8 +27,9 @@ interface OrderDetail {
   size: string | null;
   price: number;
   quantity: number;
+  skuId: string;
   orderQuantity: number;
-  memo:string | null;
+  memo: string | null;
   shippingDetail: {
     quantity: number;
   }[];
@@ -42,7 +43,7 @@ interface OrderActionProps {
     customer: {
       name: string;
     };
-    orderDetail:OrderDetail[]
+    orderDetail: OrderDetail[];
   };
 }
 
@@ -167,7 +168,7 @@ export default function OrderAction({ order }: OrderActionProps) {
                         })}
                       />
                       <input
-                        defaultValue={item.id}
+                        defaultValue={item.skuId}
                         className="hidden"
                         {...register(`orderDetails.${idx}.skuId`)}
                       />

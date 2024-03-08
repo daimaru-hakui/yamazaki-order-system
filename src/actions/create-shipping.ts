@@ -12,13 +12,15 @@ const CreateShippingSchema = z.object({
   orderId: z.number({ required_error: "IDは必須です。" }),
   userId: z.string(),
   shippingDate: z.date(),
-  orderDetails: z.array(z.object({
-    id: z.number(),
-    skuId: z.string(),
-    quantity: z.number(),
-    currentQuantity: z.number(),
-    price: z.number()
-  }))
+  orderDetails: z.array(
+    z.object({
+      id: z.number(),
+      skuId: z.string(),
+      quantity: z.number(),
+      currentQuantity: z.number(),
+      price: z.number(),
+    })
+  ),
 });
 
 type CreateShippingProps = z.infer<typeof CreateShippingSchema>;
@@ -33,17 +35,19 @@ interface CreateShippingFormState {
   };
 }
 
-export async function createShipping(data: CreateShippingProps): Promise<CreateShippingFormState> {
+export async function createShipping(
+  data: CreateShippingProps
+): Promise<CreateShippingFormState> {
   const result = CreateShippingSchema.safeParse({
     orderId: data.orderId,
     userId: data.userId,
     shippingDate: new Date(data.shippingDate),
-    orderDetails: data.orderDetails
+    orderDetails: data.orderDetails,
   });
 
   if (!result.success) {
     return {
-      errors: result.error.flatten().fieldErrors
+      errors: result.error.flatten().fieldErrors,
     };
   }
 
@@ -55,8 +59,8 @@ export async function createShipping(data: CreateShippingProps): Promise<CreateS
   if (sum === 0 || !sum) {
     return {
       errors: {
-        _form: ["数値を入力してください"]
-      }
+        _form: ["数値を入力してください"],
+      },
     };
   }
 
@@ -64,8 +68,8 @@ export async function createShipping(data: CreateShippingProps): Promise<CreateS
   if (!session || !session.user) {
     return {
       errors: {
-        _form: ["ログインしてください"]
-      }
+        _form: ["ログインしてください"],
+      },
     };
   }
 
@@ -73,7 +77,7 @@ export async function createShipping(data: CreateShippingProps): Promise<CreateS
     orderDetailId: detail.id,
     skuId: detail.skuId,
     quantity: detail.quantity,
-    price: detail.price
+    price: detail.price,
   }));
 
   let shipping: Shipping;
@@ -85,42 +89,53 @@ export async function createShipping(data: CreateShippingProps): Promise<CreateS
           userId: result.data.userId,
           shippingDate: result.data.shippingDate,
           shippingDetail: {
-            create: [...orderDetails]
-          }
-        }
+            create: [...orderDetails],
+          },
+        },
       });
       if (!shipping) {
-        throw new Error;
+        throw new Error();
       }
-      for await (const order of result.data.orderDetails) {
+      result.data.orderDetails.forEach(async(order)=>{
         await prisma.orderDetail.update({
-          where: {
-            id: order.id
+          where:{
+            id:order.id
           },
-          data: {
-            quantity: order.currentQuantity - order.quantity
+          data:{
+            quantity:order.currentQuantity - order.quantity
           }
-        });
-      }
+        })
+      })
+      // for await (const order of result.data.orderDetails) {
+      //   await prisma.orderDetail.update({
+      //     where: {
+      //       id: order.id,
+      //     },
+      //     data: {
+      //       quantity: order.currentQuantity - order.quantity,
+      //     },
+      //   });
+      // }
     });
+    
   } catch (err) {
     if (err instanceof Error) {
       console.log(err);
       return {
         errors: {
-          _form: [err.message]
-        }
+          _form: [err.message],
+        },
       };
     } else {
       return {
         errors: {
-          _form: ["登録に失敗しました"]
-        }
+          _form: ["登録に失敗しました"],
+        },
       };
     }
-  }
+  } 
 
   revalidatePath(paths.orderAll());
   redirect(paths.orderAll());
-
+  // redirect(paths.shippingCompleate(String(shipping?.id)));
 }
