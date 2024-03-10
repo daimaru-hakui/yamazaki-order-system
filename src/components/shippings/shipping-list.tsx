@@ -9,7 +9,7 @@ interface ShippingListProps {
       id: number;
       shippingDate: Date;
       order: {
-        id:number,
+        id: number,
         createdAt: Date;
         customer: {
           name: string;
@@ -37,8 +37,8 @@ export default function ShippingList({ shippingDetails }: ShippingListProps) {
       <h3 className="text-xl font-bold">出荷履歴</h3>
       <Table aria-label="shippings table" className="mt-3">
         <TableHeader>
-          <TableColumn>受付NO.</TableColumn>
           <TableColumn>出荷NO.</TableColumn>
+          <TableColumn>受付NO.</TableColumn>
           <TableColumn>受注日</TableColumn>
           <TableColumn>品番</TableColumn>
           <TableColumn>商品名</TableColumn>

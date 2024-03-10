@@ -32,9 +32,9 @@ const paths = {
   orderCreate() {
     return `/orders/new`;
   },
-  orderProductCreate(customerId: string) {
-    return `/orders/new/${customerId}`;
-  },
+  // orderProductCreate(customerId: string) {
+  //   return `/orders/new/${customerId}`;
+  // },
   orderCompleate(orderId: string) {
     return `/orders/${orderId}/compleate`;
   },
@@ -44,8 +44,11 @@ const paths = {
   orderAction(orderId: string) {
     return `/orders/${orderId}/action`;
   },
-  shippingCompleate(shippingId:string){
-    return `/shippings/${shippingId}/compleate`
+  shippingAll() {
+    return `/shippings`;
+  },
+  shippingCompleate(shippingId: string) {
+    return `/shippings/${shippingId}/compleate`;
   },
   csvCreate() {
     return `/csv-upload`;

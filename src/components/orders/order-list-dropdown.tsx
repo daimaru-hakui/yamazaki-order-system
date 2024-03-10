@@ -1,13 +1,25 @@
 import paths from "@/paths";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
 import Link from "next/link";
+import { useTransition } from "react";
 import { AiOutlineMore } from "react-icons/ai";
+import * as actions from "@/actions";
 
 interface OrderListDropdownProps {
   orderId: number;
   totalQuantity: number;
 }
 export default function OrderListDropdown({ orderId, totalQuantity }: OrderListDropdownProps) {
+  const [isPending, startTransition] = useTransition();
+
+  const deleteOrder = async (id: number) => {
+    const result = confirm("削除して宜しいでしょうか");
+    if (!result) return;
+    startTransition(async () => {
+      const error = await actions.deleteOrder(id);
+      console.log(error);
+    });
+  };
 
   const links = [
     {
@@ -24,7 +36,8 @@ export default function OrderListDropdown({ orderId, totalQuantity }: OrderListD
     {
       key: "delete",
       label: "削除",
-      isExist: true
+      isExist: true,
+      onClick: () => deleteOrder(orderId)
     }
   ];
 
@@ -45,10 +58,11 @@ export default function OrderListDropdown({ orderId, totalQuantity }: OrderListD
           >
             {item.path ?
               <Link href={item.path}
-                className={`block w-full h-full p-2 ${!item.isExist && "hidden"}`}>
+                className={`block w-full h-full p-2 ${!item.isExist && "hidden"}`}
+              >
                 {item.label}
               </Link> :
-              <div className="block p-2">{item.label}</div>
+              <div className="block p-2" onClick={item.onClick}>{item.label}</div>
             }
           </DropdownItem>
         )}

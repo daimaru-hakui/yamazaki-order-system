@@ -47,7 +47,7 @@ interface OrderActionProps {
   };
 }
 
-type Inputs = {
+interface Inputs {
   orderId: number;
   userId: string;
   shippingDate: Date;
@@ -79,7 +79,6 @@ export default function OrderAction({ order }: OrderActionProps) {
   });
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log(data);
     startTransition(async () => {
       const error = await actions.createShipping(data);
       console.log(error);
@@ -131,6 +130,7 @@ export default function OrderAction({ order }: OrderActionProps) {
                 type="date"
                 size="sm"
                 className="md:max-w-[200px]"
+                defaultValue={format(new Date(), "yyyy-MM-dd")}
                 {...register("shippingDate", { required: true })}
               />
             </div>
@@ -204,7 +204,7 @@ export default function OrderAction({ order }: OrderActionProps) {
                           color={
                             watch(`orderDetails.${idx}.quantity`) >
                               item.quantity ||
-                            getValues(`orderDetails.${idx}.quantity`) < 0
+                              getValues(`orderDetails.${idx}.quantity`) < 0
                               ? "danger"
                               : "default"
                           }

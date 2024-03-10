@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
-import {AiFillDelete } from "react-icons/ai";
+import { AiFillDelete } from "react-icons/ai";
 import OrderRegisterButtonArea from "./order-create-register-button";
 import OrderConfirmQuantityInput from "./order-create-quantiy-input";
 import OrderCreateOption from "./order-create-option";
@@ -35,11 +35,11 @@ export default function OrderCreateConfirmList() {
   useEffect(() => {
     const newCart = cart
       .sort(
-        (a: { displayOrder: number }, b: { displayOrder: number }) =>
+        (a: { displayOrder: number; }, b: { displayOrder: number; }) =>
           a.displayOrder - b.displayOrder
       )
       .sort(
-        (a: { productId: any }, b: { productId: any }) =>
+        (a: { productId: any; }, b: { productId: any; }) =>
           a.productId - b.productId
       );
     setSortCart(newCart);
@@ -68,10 +68,7 @@ export default function OrderCreateConfirmList() {
 
   return (
     <div className="w-full mb-24">
-      <TitleReturn
-        title="明細確認"
-        path={paths.orderProductCreate(orderOptions.customer.id)}
-      />
+      <h3>明細確認</h3>
       <div className="mt-6 text-2xl">{orderOptions.customer.name}</div>
       <Table
         layout="auto"
