@@ -25,9 +25,9 @@ export default function RootLayout({
           <div className="hidden lg:block">
             <MainSideBar />
           </div>
-          <div className="">
+          <div>
             <Navbar />
-            <div className="px-6">
+            <div className="w-full">
               <NextUIProviders>{children}</NextUIProviders>
             </div>
           </div>

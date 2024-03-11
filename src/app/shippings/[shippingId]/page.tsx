@@ -1,28 +1,43 @@
-import ShippingCompleate from "@/components/shippings/shipping-compleate";
+import ShippingShow from "@/components/shippings/shipping-show";
 import { db } from "@/db";
 import React from "react";
 
-interface ShippingCompleatePageProps {
+interface ShippingShowPageProps {
   params: {
     shippingId: number;
   };
 }
 
-export default async function ShippingCompleatePage({
+export default async function ShippingShowPage({
   params,
-}: ShippingCompleatePageProps) {
-  const shippingId = Number(params.shippingId);
-
+}: ShippingShowPageProps) {
+  const shippingId = params.shippingId;
   const shipping = await db.shipping.findFirst({
     where: {
-      id: shippingId,
+      id: Number(shippingId),
     },
     select: {
       id: true,
       orderId: true,
       shippingDate: true,
+      user: {
+        select: {
+          name: true,
+        },
+      },
+      order: {
+        select: {
+          id: true,
+          customer: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
       shippingDetail: {
         select: {
+          id: true,
           price: true,
           quantity: true,
           orderDetail: {
@@ -42,14 +57,14 @@ export default async function ShippingCompleatePage({
   if (!shipping) {
     return (
       <div className="w-full max-w-[calc(600px)] mx-auto p-6">
-        見つかりません
+        記事がありません。
       </div>
     );
   }
 
   return (
-    <div className="w-full max-w-[calc(600px)] mx-auto p-6">
-      <ShippingCompleate shipping={shipping} />
+    <div className="w-full max-w-[calc(900px)] mx-auto p-6">
+      <ShippingShow shipping={shipping} />
     </div>
   );
 }

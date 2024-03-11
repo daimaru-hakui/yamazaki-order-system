@@ -10,7 +10,7 @@ export default async function OrderNewPage() {
   });
   await db.$disconnect();
   return (
-    <div className="mx-auto max-w-[calc(1500px)]">
+    <div className="mx-auto p-6 max-w-[calc(1500px)]">
       <OrderCreate customers={customers} />
     </div>
   );

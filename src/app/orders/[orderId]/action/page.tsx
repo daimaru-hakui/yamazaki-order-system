@@ -54,7 +54,7 @@ export default async function OrderActionPage({
   });
   if (!order) return;
   return (
-    <div className="w-full max-w-[900px] mx-auto">
+    <div className="w-full max-w-[900px] mx-auto p-6 pb-24">
       <OrderAction order={order} />
     </div>
   );

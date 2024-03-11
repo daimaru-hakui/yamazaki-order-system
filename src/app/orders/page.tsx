@@ -3,7 +3,13 @@ import { db } from "@/db";
 
 export default async function OrdersPage() {
   const orders = await db.order.findMany({
-    include: {
+    orderBy: {
+      id: "desc",
+    },
+    select: {
+      id: true,
+      orderNumber: true,
+      comment: true,
       user: {
         select: {
           name: true,
@@ -34,9 +40,6 @@ export default async function OrdersPage() {
         },
       },
     },
-    orderBy: {
-      id: "desc",
-    },
   });
 
   const newOrders = orders.map((order) => {
@@ -63,9 +66,8 @@ export default async function OrdersPage() {
     };
   });
 
-
   return (
-    <div className="mx-auto w-full max-w-[calc(1000px)]">
+    <div className="mx-auto w-full p-6 max-w-[calc(1000px)]">
       <OrderList orders={newOrders} />
     </div>
   );

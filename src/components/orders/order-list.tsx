@@ -15,7 +15,7 @@ import OrderShowModal from "./order-show-modal";
 import OrderListDropdown from "./order-list-dropdown";
 
 interface OrderDetail {
-  id:number;
+  id: number;
   janCode: string | null;
   productCode: string | null;
   productNumber: string | null;
@@ -24,14 +24,17 @@ interface OrderDetail {
   price: number;
   quantity: number;
   orderQuantity: number;
-  memo:string | null;
+  memo: string | null;
   shippingDetail: {
     quantity: number;
   }[];
 }
 
 interface OrderListProps {
-  orders: (Order & {
+  orders: {
+    id: number;
+    orderNumber: string | null;
+    comment: string|null;
     user: {
       name: string | null;
     };
@@ -41,7 +44,7 @@ interface OrderListProps {
     totalQuantity: number;
     totalOrderQuantity: number;
     orderDetail: OrderDetail[];
-  })[];
+  }[];
 }
 
 export const sumCalc = (details: OrderDetail[]) => {

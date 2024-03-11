@@ -50,6 +50,9 @@ const paths = {
   shippingCompleate(shippingId: string) {
     return `/shippings/${shippingId}/compleate`;
   },
+  shippingShow(shippingId: string) {
+    return `/shippings/${shippingId}`;
+  },
   csvCreate() {
     return `/csv-upload`;
   },

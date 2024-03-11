@@ -12,7 +12,7 @@ export default function TitleWithButton({
   children,
 }: TitleWithButtonProps) {
   return (
-    <div className="flex justify-between gap-6 mt-6 relative">
+    <div className="flex justify-between gap-6 relative">
       <div className="font-bold text-2xl">{title}</div>
       <div className="absolute top-0 right-0">{children}</div>
     </div>

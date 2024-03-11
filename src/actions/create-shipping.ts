@@ -37,7 +37,7 @@ interface CreateShippingFormState {
 
 export async function createShipping(
   data: CreateShippingProps
-): Promise<CreateShippingFormState> {
+): Promise<CreateShippingFormState | undefined> {
   const result = CreateShippingSchema.safeParse({
     orderId: data.orderId,
     userId: data.userId,
@@ -81,8 +81,8 @@ export async function createShipping(
   }));
 
   let shipping: Shipping;
-  try {
-    await db.$transaction(async (prisma) => {
+  await db
+    .$transaction(async (prisma) => {
       shipping = await prisma.shipping.create({
         data: {
           orderId: result.data.orderId,
@@ -107,23 +107,26 @@ export async function createShipping(
           },
         });
       }
+    })
+    .catch((err) => {
+      if (err instanceof Error) {
+        console.log(err);
+        return {
+          errors: {
+            _form: [err.message],
+          },
+        };
+      } else {
+        return {
+          errors: {
+            _form: ["登録に失敗しました"],
+          },
+        };
+      }
+    })
+    .finally(() => {
+      revalidatePath(paths.orderAll());
+      console.log(shipping);
+      redirect(paths.shippingCompleate(String(shipping.id)));
     });
-  } catch (err) {
-    if (err instanceof Error) {
-      console.log(err);
-      return {
-        errors: {
-          _form: [err.message],
-        },
-      };
-    } else {
-      return {
-        errors: {
-          _form: ["登録に失敗しました"],
-        },
-      };
-    }
-  }
-  revalidatePath(paths.orderAll());
-  redirect(paths.shippingAll());
 }
