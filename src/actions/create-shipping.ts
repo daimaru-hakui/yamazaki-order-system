@@ -96,28 +96,18 @@ export async function createShipping(
       if (!shipping) {
         throw new Error();
       }
-      result.data.orderDetails.forEach(async(order)=>{
+
+      for await (const order of result.data.orderDetails) {
         await prisma.orderDetail.update({
-          where:{
-            id:order.id
+          where: {
+            id: order.id,
           },
-          data:{
-            quantity:order.currentQuantity - order.quantity
-          }
-        })
-      })
-      // for await (const order of result.data.orderDetails) {
-      //   await prisma.orderDetail.update({
-      //     where: {
-      //       id: order.id,
-      //     },
-      //     data: {
-      //       quantity: order.currentQuantity - order.quantity,
-      //     },
-      //   });
-      // }
+          data: {
+            quantity: order.currentQuantity - order.quantity,
+          },
+        });
+      }
     });
-    
   } catch (err) {
     if (err instanceof Error) {
       console.log(err);
@@ -133,9 +123,7 @@ export async function createShipping(
         },
       };
     }
-  } 
-
+  }
   revalidatePath(paths.orderAll());
-  redirect(paths.orderAll());
-  // redirect(paths.shippingCompleate(String(shipping?.id)));
+  redirect(paths.shippingAll());
 }

@@ -6,6 +6,7 @@ export { updateSku } from "@/actions/update-sku";
 export { createCustomer } from "@/actions/create-customer";
 export { updateCustomerProduct } from "@/actions/update-customer-product";
 export { createOrder } from "@/actions/create-order";
+export { deleteOrder } from "@/actions/delete-order";
 export { getProducts } from "@/actions/get-products";
 export { createShipping } from "@/actions/create-shipping";
 export { csvCreateCustomer } from "@/actions/csv-create-customer";

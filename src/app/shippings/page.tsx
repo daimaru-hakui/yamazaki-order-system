@@ -15,7 +15,7 @@ export default async function ShippingsPage() {
           shippingDate: true,
           order: {
             select: {
-              id:true,
+              id: true,
               createdAt: true,
               customer: {
                 select: {
@@ -48,7 +48,6 @@ export default async function ShippingsPage() {
       }
     }
   });
-  console.log(shippingDedails);
   return (
     <div className="mt-6 mx-auto w-full max-w-[calc(1000px)]">
       <ShippingList shippingDetails={shippingDedails} />

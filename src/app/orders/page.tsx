@@ -25,7 +25,7 @@ export default async function OrdersPage() {
           price: true,
           quantity: true,
           orderQuantity: true,
-          memo:true,
+          memo: true,
           shippingDetail: {
             select: {
               quantity: true,
@@ -63,7 +63,6 @@ export default async function OrdersPage() {
     };
   });
 
-  console.log(newOrders);
 
   return (
     <div className="mx-auto w-full max-w-[calc(1000px)]">
