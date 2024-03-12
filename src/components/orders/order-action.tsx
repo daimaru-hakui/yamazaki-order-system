@@ -96,28 +96,29 @@ export default function OrderAction({ order }: OrderActionProps) {
         <div className="mt-3 p-3 rounded-xl shadow-sm bg-white">
           <div className="font-bold">受付No.{order.id}</div>
           <div className="flex flex-col sm:flex-row justify-between gap-2 mt-6 px-5">
-            <div className="w-full sm:w-[calc(200px)] grid gap-2">
-              <dl className="grid grid-cols-2 items-center gap-6">
-                <dt className="text-xs text-gray-400">工場名</dt>
-                <dd className="text-sm">{order.customer?.name}</dd>
+            <div className="w-full sm:max-w-[calc(280px)] grid gap-2">
+              <dl className="grid grid-cols-3 items-center gap-6">
+                <dt className="col-span-1 text-xs text-gray-400">工場名</dt>
+                <dd className="col-span-2 text-sm">{order.customer?.name}</dd>
               </dl>
-              <dl className="grid grid-cols-2 items-center gap-6">
-                <dt className="text-xs text-gray-400">受注日</dt>
-                <dd className="text-sm">
+              <dl className="grid grid-cols-3 items-center gap-6">
+                <dt className="col-span-1 text-xs text-gray-400">受注日</dt>
+                <dd className="col-span-2 text-sm">
                   {format(order?.createdAt, "yyyy-MM-dd")}
                 </dd>
               </dl>
-              <dl className="grid grid-cols-2 items-center gap-6">
-                <dt className="text-xs text-gray-400">担当者</dt>
-                <dd className="text-sm">{order.user?.name || "不明"}</dd>
+              <dl className="grid grid-cols-3 items-center gap-6">
+                <dt className="col-span-1 text-xs text-gray-400">担当者</dt>
+                <dd className="col-span-2 text-sm">{order.user?.name || "不明"}</dd>
               </dl>
             </div>
-            <div className="">
-              <dl className="grid grid-cols-2 items-center gap-6">
-                <dt className="text-xs sm:text-md text-gray-400 sm:text-right">
+
+            <div>
+              <dl className="grid grid-cols-3 items-center gap-6">
+                <dt className="col-span-1 text-xs sm:text-md text-gray-400 sm:text-right">
                   合　計
                 </dt>
-                <dd className="text-sm sm:text-3xl">
+                <dd className="col-span-2 text-sm sm:text-3xl">
                   ￥{sumCalc(order.orderDetail).toLocaleString()}
                 </dd>
               </dl>
@@ -139,6 +140,8 @@ export default function OrderAction({ order }: OrderActionProps) {
           <div className="mt-3 overflow-auto">
             <Table
               isHeaderSticky
+              layout="fixed"
+              isCompact
               fullWidth
               aria-label="order table"
               shadow="none"
@@ -147,14 +150,14 @@ export default function OrderAction({ order }: OrderActionProps) {
               }}
             >
               <TableHeader>
-                <TableColumn>品番</TableColumn>
-                <TableColumn>品名</TableColumn>
-                <TableColumn className="text-center">単価</TableColumn>
-                <TableColumn className="text-center">受注数量</TableColumn>
-                <TableColumn className="text-center">未出荷数量</TableColumn>
-                <TableColumn className="text-center">出荷数量</TableColumn>
-                <TableColumn className="text-center">合計金額</TableColumn>
-                <TableColumn>コメント</TableColumn>
+                <TableColumn width={100}>品番</TableColumn>
+                <TableColumn width={250}>品名</TableColumn>
+                <TableColumn width={100} className="text-center">単価</TableColumn>
+                <TableColumn width={80} className="text-center">受注数量</TableColumn>
+                <TableColumn width={80} className="text-center">未出荷数量</TableColumn>
+                <TableColumn width={80} className="text-center">出荷数量</TableColumn>
+                <TableColumn width={100} className="text-center">合計金額</TableColumn>
+                <TableColumn width={120}>コメント</TableColumn>
               </TableHeader>
               <TableBody loadingContent={<Spinner color="white" />}>
                 {order.orderDetail.map((item, idx: number) => (

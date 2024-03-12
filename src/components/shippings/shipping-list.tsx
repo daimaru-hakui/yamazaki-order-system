@@ -1,6 +1,7 @@
 "use client";
 import paths from "@/paths";
 import {
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -73,7 +74,7 @@ export default function ShippingList({ shippingDetails }: ShippingListProps) {
             <TableRow key={detail.id}>
               <TableCell>
                 <Link href={paths.shippingShow(String(detail.shipping.id))}>
-                  {detail.shipping.id}
+                  <div className="underline text-blue-500 hover:no-underline">{detail.shipping.id}</div>
                 </Link>
               </TableCell>
               <TableCell>{detail.shipping.order.id}</TableCell>

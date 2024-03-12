@@ -35,6 +35,7 @@ interface OrderListProps {
     id: number;
     orderNumber: string | null;
     comment: string|null;
+    createdAt:Date,
     user: {
       name: string | null;
     };

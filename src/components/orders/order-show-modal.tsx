@@ -20,7 +20,17 @@ import { AiOutlineEye } from "react-icons/ai";
 
 interface OrderShowModal {
   sum: string;
-  order: Order & {
+  order: {
+    id: number;
+    orderNumber: string | null;
+    comment: string | null;
+    createdAt: Date;
+    user: {
+      name: string | null;
+    };
+    customer: {
+      name: string;
+    };
     orderDetail: {
       id: number;
       janCode: string | null;
@@ -36,8 +46,6 @@ interface OrderShowModal {
         quantity: number;
       }[];
     }[];
-    customer: { name: string };
-    user: { name: string | null };
   };
 }
 export default function OrderShowModal({ sum, order }: OrderShowModal) {
@@ -48,6 +56,7 @@ export default function OrderShowModal({ sum, order }: OrderShowModal) {
     shippingDetail.forEach((shipping) => (sum += shipping.quantity));
     return sum;
   };
+  
   return (
     <>
       <AiOutlineEye onClick={onOpen} className="cursor-pointer" size="25px" />

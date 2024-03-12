@@ -10,6 +10,7 @@ export default async function OrdersPage() {
       id: true,
       orderNumber: true,
       comment: true,
+      createdAt:true,
       user: {
         select: {
           name: true,
